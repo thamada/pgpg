@@ -1,0 +1,3 @@
+cpp $1 tmp.cpp
+/usr2/fukushig/pgpg1.0/bin/pgpgvt tmp.cpp
+/usr2/fukushig/pgpg1.0/bin/pgpgvm tmp.cpp

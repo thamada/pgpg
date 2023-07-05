@@ -1,0 +1,6 @@
+vhw : Hardware specific VHDL source and .csf
+v_h : pgpgv VHDL generator source by T.Hamada
+v_f : pgpgv VHDL generator source by T.Fukushige
+ct_h pgpgc emulator generator (top) by T.Hamada
+ct_f : pgpgc emulator generator (top) by T.Fukushige
+cm_h : pgpgc emulator generator (module) by T.Hamada

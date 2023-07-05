@@ -1,0 +1,716 @@
+ -- Copyright (C) 1991-2002 Altera Corporation
+ -- Any  megafunction  design,  and related netlist (encrypted  or  decrypted),
+ -- support information,  device programming or simulation file,  and any other
+ -- associated  documentation or information  provided by  Altera  or a partner
+ -- under  Altera's   Megafunction   Partnership   Program  may  be  used  only
+ -- to program  PLD  devices (but not masked  PLD  devices) from  Altera.   Any
+ -- other  use  of such  megafunction  design,  netlist,  support  information,
+ -- device programming or simulation file,  or any other  related documentation
+ -- or information  is prohibited  for  any  other purpose,  including, but not
+ -- limited to  modification,  reverse engineering,  de-compiling, or use  with
+ -- any other  silicon devices,  unless such use is  explicitly  licensed under
+ -- a separate agreement with  Altera  or a megafunction partner.  Title to the
+ -- intellectual property,  including patents,  copyrights,  trademarks,  trade
+ -- secrets,  or maskworks,  embodied in any such megafunction design, netlist,
+ -- support  information,  device programming or simulation file,  or any other
+ -- related documentation or information provided by  Altera  or a megafunction
+ -- partner, remains with Altera, the megafunction partner, or their respective
+ -- licensors. No other licenses, including any licenses needed under any third
+ -- party's intellectual property, are provided herein.
+ ------------------------------------------------------------------------------
+
+
+
+ ------------------------------------------------------------------------------
+ -- NC         : No Connect. This pin has no internal connection to the device.
+ -- VCC_INT    : Dedicated power pin, which MUST be connected to VCC  (2.5V).
+ -- VCC_IO     : Dedicated power pin, which MUST be connected to VCC  (Refer to
+ --              the table below for voltage).
+ -- GND        : Dedicated ground pin, which MUST be connected to GND.
+ -- GND+       : Unused input. This pin should be connected to GND. It may also
+ --              be connected  to a  valid signal  on the board  (low, high, or
+ --              toggling)  if that signal is required for a different revision
+ --              of the design.
+ -- GND*       : Unused  I/O  pin.   This pin can either be left unconnected or
+ --              connected to GND.  Connecting this pin to GND will improve the
+ --              device's immunity to noise.
+ ------------------------------------------------------------------------------
+
+
+Quartus II Version 2.2 Build 146 11/21/2002 SJ Full Version
+CHIP  "pgfpga"  ASSIGNED TO AN: EP20K400FC672-2X
+
+Pin Name/Usage               : Location  : Dir.   : I/O Standard      : Voltage : I/O Bank  : User Assignment
+-------------------------------------------------------------------------------------------------------------
+GND                          : A2        : gnd    :                   :         :           :                
+VCC_INT                      : A3        : power  :                   : 2.5V    :           :                
+GND*                         : A4        :        :                   :         :           :                
+GND*                         : A5        :        :                   :         :           :                
+VCC_IO                       : A6        : power  :                   : 3.3V    :           :                
+GND*                         : A7        :        :                   :         :           :                
+GND                          : A8        : gnd    :                   :         :           :                
+GND*                         : A9        :        :                   :         :           :                
+GND*                         : A10       :        :                   :         :           :                
+GND*                         : A11       :        :                   :         :           :                
+GND*                         : A12       :        :                   :         :           :                
+VCC_IO                       : A13       : power  :                   : 3.3V    :           :                
+GND                          : A14       : gnd    :                   :         :           :                
+NC                           : A15       :        :                   :         :           :                
+NC                           : A16       :        :                   :         :           :                
+GND*                         : A17       :        :                   :         :           :                
+GND*                         : A18       :        :                   :         :           :                
+GND                          : A19       : gnd    :                   :         :           :                
+GND*                         : A20       :        :                   :         :           :                
+VCC_IO                       : A21       : power  :                   : 3.3V    :           :                
+GND*                         : A22       :        :                   :         :           :                
+GND*                         : A23       :        :                   :         :           :                
+VCC_INT                      : A24       : power  :                   : 2.5V    :           :                
+GND                          : A25       : gnd    :                   :         :           :                
+GND                          : B1        : gnd    :                   :         :           :                
+GND                          : B2        : gnd    :                   :         :           :                
+VCC_INT                      : B3        : power  :                   : 2.5V    :           :                
+GND*                         : B4        :        :                   :         :           :                
+GND*                         : B5        :        :                   :         :           :                
+GND                          : B6        : gnd    :                   :         :           :                
+GND*                         : B7        :        :                   :         :           :                
+VCC_INT                      : B8        : power  :                   : 2.5V    :           :                
+GND*                         : B9        :        :                   :         :           :                
+GND*                         : B10       :        :                   :         :           :                
+GND*                         : B11       :        :                   :         :           :                
+GND*                         : B12       :        :                   :         :           :                
+NC                           : B13       :        :                   :         :           :                
+NC                           : B14       :        :                   :         :           :                
+NC                           : B15       :        :                   :         :           :                
+NC                           : B16       :        :                   :         :           :                
+GND*                         : B17       :        :                   :         :           :                
+GND*                         : B18       :        :                   :         :           :                
+VCC_INT                      : B19       : power  :                   : 2.5V    :           :                
+GND*                         : B20       :        :                   :         :           :                
+GND                          : B21       : gnd    :                   :         :           :                
+GND*                         : B22       :        :                   :         :           :                
+GND*                         : B23       :        :                   :         :           :                
+VCC_INT                      : B24       : power  :                   : 2.5V    :           :                
+GND                          : B25       : gnd    :                   :         :           :                
+GND                          : B26       : gnd    :                   :         :           :                
+VCC_INT                      : C1        : power  :                   : 2.5V    :           :                
+VCC_INT                      : C2        : power  :                   : 2.5V    :           :                
+GND                          : C3        : gnd    :                   :         :           :                
+GND*                         : C4        :        :                   :         :           :                
+GND*                         : C5        :        :                   :         :           :                
+GND*                         : C6        :        :                   :         :           :                
+GND*                         : C7        :        :                   :         :           :                
+GND*                         : C8        :        :                   :         :           :                
+GND*                         : C9        :        :                   :         :           :                
+GND*                         : C10       :        :                   :         :           :                
+NC                           : C11       :        :                   :         :           :                
+NC                           : C12       :        :                   :         :           :                
+GND                          : C13       : gnd    :                   :         :           :                
+NC                           : C14       :        :                   :         :           :                
+NC                           : C15       :        :                   :         :           :                
+NC                           : C16       :        :                   :         :           :                
+GND*                         : C17       :        :                   :         :           :                
+GND*                         : C18       :        :                   :         :           :                
+GND*                         : C19       :        :                   :         :           :                
+GND*                         : C20       :        :                   :         :           :                
+GND*                         : C21       :        :                   :         :           :                
+GND*                         : C22       :        :                   :         :           :                
+GND*                         : C23       :        :                   :         :           :                
+GND                          : C24       : gnd    :                   :         :           :                
+VCC_INT                      : C25       : power  :                   : 2.5V    :           :                
+VCC_INT                      : C26       : power  :                   : 2.5V    :           :                
+GND*                         : D1        :        :                   :         :           :                
+GND*                         : D2        :        :                   :         :           :                
+VCC_INT                      : D3        : power  :                   : 2.5V    :           :                
+GND                          : D4        : gnd    :                   :         :           :                
+GND*                         : D5        :        :                   :         :           :                
+GND*                         : D6        :        :                   :         :           :                
+GND*                         : D7        :        :                   :         :           :                
+e_fod[21]                    : D8        : output : LVTTL/LVCMOS      :         :           : Y              
+e_fod[20]                    : D9        : output : LVTTL/LVCMOS      :         :           : Y              
+e_fod[25]                    : D10       : output : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : D11       :        :                   :         :           :                
+GND*                         : D12       :        :                   :         :           :                
+GND*                         : D13       :        :                   :         :           :                
+m_dh[8]                      : D14       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dl[18]                     : D15       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : D16       :        :                   :         :           :                
+GND*                         : D17       :        :                   :         :           :                
+GND*                         : D18       :        :                   :         :           :                
+GND*                         : D19       :        :                   :         :           :                
+GND*                         : D20       :        :                   :         :           :                
+GND*                         : D21       :        :                   :         :           :                
+GND*                         : D22       :        :                   :         :           :                
+GND                          : D23       : gnd    :                   :         :           :                
+VCC_INT                      : D24       : power  :                   : 2.5V    :           :                
+GND*                         : D25       :        :                   :         :           :                
+m_ah[5]                      : D26       : output : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : E1        :        :                   :         :           :                
+GND*                         : E2        :        :                   :         :           :                
+GND*                         : E3        :        :                   :         :           :                
+GND*                         : E4        :        :                   :         :           :                
+e_fod[13]                    : E5        : output : LVTTL/LVCMOS      :         :           : Y              
+e_fod[14]                    : E6        : output : LVTTL/LVCMOS      :         :           : Y              
+e_fod[15]                    : E7        : output : LVTTL/LVCMOS      :         :           : Y              
+e_fod[18]                    : E8        : output : LVTTL/LVCMOS      :         :           : Y              
+e_fod[22]                    : E9        : output : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : E10       :        :                   :         :           :                
+e_fod[30]                    : E11       : output : LVTTL/LVCMOS      :         :           : Y              
+e_fod[33]                    : E12       : output : LVTTL/LVCMOS      :         :           : Y              
+e_fod[35]                    : E13       : output : LVTTL/LVCMOS      :         :           : Y              
+m_dh[11]                     : E14       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dh[10]                     : E15       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dh[22]                     : E16       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dh[31]                     : E17       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : E18       :        :                   :         :           :                
+GND*                         : E19       :        :                   :         :           :                
+GND*                         : E20       :        :                   :         :           :                
+GND*                         : E21       :        :                   :         :           :                
+GND*                         : E22       :        :                   :         :           :                
+GND*                         : E23       :        :                   :         :           :                
+GND*                         : E24       :        :                   :         :           :                
+GND*                         : E25       :        :                   :         :           :                
+GND*                         : E26       :        :                   :         :           :                
+GND*                         : F1        :        :                   :         :           :                
+GND*                         : F2        :        :                   :         :           :                
+GND*                         : F3        :        :                   :         :           :                
+GND*                         : F4        :        :                   :         :           :                
+e_fod[10]                    : F5        : output : LVTTL/LVCMOS      :         :           : Y              
+e_fod[11]                    : F6        : output : LVTTL/LVCMOS      :         :           : Y              
+e_fod[12]                    : F7        : output : LVTTL/LVCMOS      :         :           : Y              
+e_fod[17]                    : F8        : output : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : F9        :        :                   :         :           :                
+e_fod[26]                    : F10       : output : LVTTL/LVCMOS      :         :           : Y              
+e_fod[29]                    : F11       : output : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : F12       :        :                   :         :           :                
+e_sysclk                     : F13       : input  : LVTTL/LVCMOS      :         :           : Y              
+TRST                         : F14       : input  :                   :         :           :                
+GND*                         : F15       :        :                   :         :           :                
+m_dh[26]                     : F16       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dh[30]                     : F17       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : F18       :        :                   :         :           :                
+GND*                         : F19       :        :                   :         :           :                
+m_ah[4]                      : F20       : output : LVTTL/LVCMOS      :         :           : Y              
+m_ah[6]                      : F21       : output : LVTTL/LVCMOS      :         :           : Y              
+m_ah[7]                      : F22       : output : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : F23       :        :                   :         :           :                
+m_ah[9]                      : F24       : output : LVTTL/LVCMOS      :         :           : Y              
+m_ah[10]                     : F25       : output : LVTTL/LVCMOS      :         :           : Y              
+m_ah[11]                     : F26       : output : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : G1        :        :                   :         :           :                
+GND*                         : G2        :        :                   :         :           :                
+GND*                         : G3        :        :                   :         :           :                
+GND*                         : G4        :        :                   :         :           :                
+e_fod[7]                     : G5        : output : LVTTL/LVCMOS      :         :           : Y              
+e_fod[8]                     : G6        : output : LVTTL/LVCMOS      :         :           : Y              
+e_fod[9]                     : G7        : output : LVTTL/LVCMOS      :         :           : Y              
+e_fod[16]                    : G8        : output : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : G9        :        :                   :         :           :                
+e_fod[24]                    : G10       : output : LVTTL/LVCMOS      :         :           : Y              
+e_fod[28]                    : G11       : output : LVTTL/LVCMOS      :         :           : Y              
+e_fod[32]                    : G12       : output : LVTTL/LVCMOS      :         :           : Y              
+TDO                          : G13       : output :                   :         :           :                
+nCEO                         : G14       : output :                   :         :           :                
+m_dh[14]                     : G15       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dh[24]                     : G16       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dh[29]                     : G17       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dh[32]                     : G18       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : G19       :        :                   :         :           :                
+GND*                         : G20       :        :                   :         :           :                
+GND*                         : G21       :        :                   :         :           :                
+GND*                         : G22       :        :                   :         :           :                
+GND*                         : G23       :        :                   :         :           :                
+m_ah[8]                      : G24       : output : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : G25       :        :                   :         :           :                
+GND*                         : G26       :        :                   :         :           :                
+GND*                         : H1        :        :                   :         :           :                
+GND*                         : H2        :        :                   :         :           :                
+GND*                         : H3        :        :                   :         :           :                
+GND*                         : H4        :        :                   :         :           :                
+e_fod[4]                     : H5        : output : LVTTL/LVCMOS      :         :           : Y              
+e_fod[5]                     : H6        : output : LVTTL/LVCMOS      :         :           : Y              
+e_fod[6]                     : H7        : output : LVTTL/LVCMOS      :         :           : Y              
+GND                          : H8        : gnd    :                   :         :           :                
+e_fod[19]                    : H9        : output : LVTTL/LVCMOS      :         :           : Y              
+e_fod[23]                    : H10       : output : LVTTL/LVCMOS      :         :           : Y              
+e_fod[27]                    : H11       : output : LVTTL/LVCMOS      :         :           : Y              
+e_fod[31]                    : H12       : output : LVTTL/LVCMOS      :         :           : Y              
+e_fod[34]                    : H13       : output : LVTTL/LVCMOS      :         :           : Y              
+e_rst                        : H14       : input  : LVTTL/LVCMOS      :         :           : Y              
+m_dh[19]                     : H15       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dh[28]                     : H16       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dh[34]                     : H17       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dh[35]                     : H18       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+GND                          : H19       : gnd    :                   :         :           :                
+m_ah[12]                     : H20       : output : LVTTL/LVCMOS      :         :           : Y              
+m_ah[17]                     : H21       : output : LVTTL/LVCMOS      :         :           : Y              
+m_ah[18]                     : H22       : output : LVTTL/LVCMOS      :         :           : Y              
+m_ah[1]                      : H23       : output : LVTTL/LVCMOS      :         :           : Y              
+m_ah[0]                      : H24       : output : LVTTL/LVCMOS      :         :           : Y              
+m_ah[13]                     : H25       : output : LVTTL/LVCMOS      :         :           : Y              
+m_ah[14]                     : H26       : output : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : J1        :        :                   :         :           :                
+GND*                         : J2        :        :                   :         :           :                
+GND*                         : J3        :        :                   :         :           :                
+GND*                         : J4        :        :                   :         :           :                
+e_fod[0]                     : J5        : output : LVTTL/LVCMOS      :         :           : Y              
+e_fod[1]                     : J6        : output : LVTTL/LVCMOS      :         :           : Y              
+e_fod[2]                     : J7        : output : LVTTL/LVCMOS      :         :           : Y              
+e_fod[3]                     : J8        : output : LVTTL/LVCMOS      :         :           : Y              
+GND                          : J9        : gnd    :                   :         :           :                
+VCC_IO                       : J10       : power  :                   : 3.3V    :           :                
+GND*                         : J11       :        :                   :         :           :                
+GND*                         : J12       :        :                   :         :           :                
+GND*                         : J13       :        :                   :         :           :                
+m_dh[15]                     : J14       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dh[18]                     : J15       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dh[27]                     : J16       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : J17       :        :                   :         :           :                
+GND                          : J18       : gnd    :                   :         :           :                
+m_dh[6]                      : J19       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : J20       :        :                   :         :           :                
+GND*                         : J21       :        :                   :         :           :                
+GND*                         : J22       :        :                   :         :           :                
+GND*                         : J23       :        :                   :         :           :                
+GND*                         : J24       :        :                   :         :           :                
+GND*                         : J25       :        :                   :         :           :                
+GND*                         : J26       :        :                   :         :           :                
+GND*                         : K1        :        :                   :         :           :                
+GND*                         : K2        :        :                   :         :           :                
+GND*                         : K3        :        :                   :         :           :                
+GND*                         : K4        :        :                   :         :           :                
+e_vd                         : K5        : output : LVTTL/LVCMOS      :         :           : Y              
+e_ipd[11]                    : K6        : input  : LVTTL/LVCMOS      :         :           : Y              
+e_sts                        : K7        : output : LVTTL/LVCMOS      :         :           : Y              
+e_active                     : K8        : output : LVTTL/LVCMOS      :         :           : Y              
+VCC_IO                       : K9        : power  :                   : 3.3V    :           :                
+GND                          : K10       : gnd    :                   :         :           :                
+VCC_INT                      : K11       : power  :                   : 2.5V    :           :                
+GND*                         : K12       :        :                   :         :           :                
+GND*                         : K13       :        :                   :         :           :                
+GND*                         : K14       :        :                   :         :           :                
+GND*                         : K15       :        :                   :         :           :                
+VCC_IO                       : K16       : power  :                   : 3.3V    :           :                
+GND                          : K17       : gnd    :                   :         :           :                
+GND*                         : K18       :        :                   :         :           :                
+m_dh[9]                      : K19       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dh[1]                      : K20       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dh[7]                      : K21       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dh[2]                      : K22       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_ah[15]                     : K23       : output : LVTTL/LVCMOS      :         :           : Y              
+m_ah[16]                     : K24       : output : LVTTL/LVCMOS      :         :           : Y              
+m_ah[3]                      : K25       : output : LVTTL/LVCMOS      :         :           : Y              
+m_ah[2]                      : K26       : output : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : L1        :        :                   :         :           :                
+GND*                         : L2        :        :                   :         :           :                
+GND*                         : L3        :        :                   :         :           :                
+GND*                         : L4        :        :                   :         :           :                
+e_nd                         : L5        : output : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : L6        :        :                   :         :           :                
+e_wd                         : L7        : input  : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : L8        :        :                   :         :           :                
+e_jpwe                       : L9        : input  : LVTTL/LVCMOS      :         :           : Y              
+VCC_INT                      : L10       : power  :                   : 2.5V    :           :                
+GND                          : L11       : gnd    :                   :         :           :                
+VCC_IO                       : L12       : power  :                   : 3.3V    :           :                
+GND                          : L13       : gnd    :                   :         :           :                
+m_dl[15]                     : L14       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+VCC_INT                      : L15       : power  :                   : 2.5V    :           :                
+GND                          : L16       : gnd    :                   :         :           :                
+VCC_IO                       : L17       : power  :                   : 3.3V    :           :                
+m_dh[0]                      : L18       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dh[4]                      : L19       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dh[13]                     : L20       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dh[3]                      : L21       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dh[5]                      : L22       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_we[1]                      : L23       : output : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : L24       :        :                   :         :           :                
+GND*                         : L25       :        :                   :         :           :                
+GND*                         : L26       :        :                   :         :           :                
+GND*                         : M1        :        :                   :         :           :                
+GND*                         : M2        :        :                   :         :           :                
+GND*                         : M3        :        :                   :         :           :                
+GND*                         : M4        :        :                   :         :           :                
+GND*                         : M5        :        :                   :         :           :                
+GND*                         : M6        :        :                   :         :           :                
+GND*                         : M7        :        :                   :         :           :                
+GND*                         : M8        :        :                   :         :           :                
+GND*                         : M9        :        :                   :         :           :                
+GND*                         : M10       :        :                   :         :           :                
+VCC_IO                       : M11       : power  :                   : 3.3V    :           :                
+GND                          : M12       : gnd    :                   :         :           :                
+VCC_INT                      : M13       : power  :                   : 2.5V    :           :                
+VCC_IO                       : M14       : power  :                   : 3.3V    :           :                
+GND                          : M15       : gnd    :                   :         :           :                
+VCC_INT                      : M16       : power  :                   : 2.5V    :           :                
+GND*                         : M17       :        :                   :         :           :                
+m_dh[20]                     : M18       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dh[23]                     : M19       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dh[16]                     : M20       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dh[21]                     : M21       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dh[12]                     : M22       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : M23       :        :                   :         :           :                
+m_oe[1]                      : M24       : output : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : M25       :        :                   :         :           :                
+m_clk[1]                     : M26       : output : LVTTL/LVCMOS      :         :           : Y              
+GND                          : N1        : gnd    :                   :         :           :                
+VCC_INT                      : N2        : power  :                   : 2.5V    :           :                
+VCC_IO                       : N3        : power  :                   : 3.3V    :           :                
+GND                          : N4        : gnd    :                   :         :           :                
+GND*                         : N5        :        :                   :         :           :                
+DATA0                        : N6        : input  :                   :         :           :                
+DCLK                         : N7        : bidir  :                   :         :           :                
+e_clk                        : N8        : input  : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : N9        :        :                   :         :           :                
+GND*                         : N10       :        :                   :         :           :                
+VCC_CKLK                     : N11       : power  :                   : 2.5V    :           :                
+VCC_INT                      : N12       : power  :                   : 2.5V    :           :                
+GND                          : N13       : gnd    :                   :         :           :                
+GND                          : N14       : gnd    :                   :         :           :                
+VCC_IO                       : N15       : power  :                   : 3.3V    :           :                
+GND*                         : N16       :        :                   :         :           :                
+GND*                         : N17       :        :                   :         :           :                
+m_dh[33]                     : N18       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dh[25]                     : N19       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+MSEL1                        : N20       : input  :                   :         :           :                
+MSEL0                        : N21       : input  :                   :         :           :                
+m_dh[17]                     : N22       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : N23       :        :                   :         :           :                
+VCC_IO                       : N24       : power  :                   : 3.3V    :           :                
+GND                          : N25       : gnd    :                   :         :           :                
+GND                          : N26       : gnd    :                   :         :           :                
+GND                          : P1        : gnd    :                   :         :           :                
+GND                          : P2        : gnd    :                   :         :           :                
+GND                          : P3        : gnd    :                   :         :           :                
+GND*                         : P4        :        :                   :         :           :                
+GND*                         : P5        :        :                   :         :           :                
+nCE                          : P6        : input  :                   :         :           :                
+TDI                          : P7        : input  :                   :         :           :                
+GND*                         : P8        :        :                   :         :           :                
+GND*                         : P9        :        :                   :         :           :                
+GND*                         : P10       :        :                   :         :           :                
+GND_CKLK                     : P11       : gnd    :                   :         :           :                
+VCC_IO                       : P12       : power  :                   : 3.3V    :           :                
+GND                          : P13       : gnd    :                   :         :           :                
+GND                          : P14       : gnd    :                   :         :           :                
+VCC_INT                      : P15       : power  :                   : 2.5V    :           :                
+VCC_INT                      : P16       : power  :                   : 2.5V    :           :                
+GND*                         : P17       :        :                   :         :           :                
+GND*                         : P18       :        :                   :         :           :                
+m_dl[8]                      : P19       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+GND+                         : P20       :        :                   :         :           :                
+NCONFIG                      : P21       : input  :                   :         :           :                
+m_dl[11]                     : P22       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+GND                          : P23       : gnd    :                   :         :           :                
+VCC_INT                      : P24       : power  :                   : 2.5V    :           :                
+VCC_INT                      : P25       : power  :                   : 2.5V    :           :                
+GND                          : P26       : gnd    :                   :         :           :                
+GND*                         : R1        :        :                   :         :           :                
+GND*                         : R2        :        :                   :         :           :                
+GND*                         : R3        :        :                   :         :           :                
+GND*                         : R4        :        :                   :         :           :                
+GND*                         : R5        :        :                   :         :           :                
+GND*                         : R6        :        :                   :         :           :                
+GND*                         : R7        :        :                   :         :           :                
+GND*                         : R8        :        :                   :         :           :                
+GND*                         : R9        :        :                   :         :           :                
+GND*                         : R10       :        :                   :         :           :                
+VCC_INT                      : R11       : power  :                   : 2.5V    :           :                
+GND                          : R12       : gnd    :                   :         :           :                
+VCC_IO                       : R13       : power  :                   : 3.3V    :           :                
+VCC_INT                      : R14       : power  :                   : 2.5V    :           :                
+GND                          : R15       : gnd    :                   :         :           :                
+VCC_IO                       : R16       : power  :                   : 3.3V    :           :                
+m_dl[4]                      : R17       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dl[22]                     : R18       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : R19       :        :                   :         :           :                
+m_dl[19]                     : R20       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dl[14]                     : R21       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dl[10]                     : R22       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_we[0]                      : R23       : output : LVTTL/LVCMOS      :         :           : Y              
+m_oe[0]                      : R24       : output : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : R25       :        :                   :         :           :                
+GND*                         : R26       :        :                   :         :           :                
+GND*                         : T1        :        :                   :         :           :                
+GND*                         : T2        :        :                   :         :           :                
+GND*                         : T3        :        :                   :         :           :                
+GND*                         : T4        :        :                   :         :           :                
+e_pid[5]                     : T5        : input  : LVTTL/LVCMOS      :         :           : Y              
+e_pid[6]                     : T6        : input  : LVTTL/LVCMOS      :         :           : Y              
+e_pid[7]                     : T7        : input  : LVTTL/LVCMOS      :         :           : Y              
+e_pid[8]                     : T8        : input  : LVTTL/LVCMOS      :         :           : Y              
+e_pid[9]                     : T9        : input  : LVTTL/LVCMOS      :         :           : Y              
+VCC_IO                       : T10       : power  :                   : 3.3V    :           :                
+GND                          : T11       : gnd    :                   :         :           :                
+VCC_INT                      : T12       : power  :                   : 2.5V    :           :                
+GND*                         : T13       :        :                   :         :           :                
+GND*                         : T14       :        :                   :         :           :                
+VCC_IO                       : T15       : power  :                   : 3.3V    :           :                
+GND                          : T16       : gnd    :                   :         :           :                
+VCC_INT                      : T17       : power  :                   : 2.5V    :           :                
+m_dl[31]                     : T18       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dl[27]                     : T19       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dl[28]                     : T20       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dl[24]                     : T21       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dl[26]                     : T22       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : T23       :        :                   :         :           :                
+GND*                         : T24       :        :                   :         :           :                
+GND*                         : T25       :        :                   :         :           :                
+m_clk[0]                     : T26       : output : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : U1        :        :                   :         :           :                
+GND*                         : U2        :        :                   :         :           :                
+GND*                         : U3        :        :                   :         :           :                
+GND*                         : U4        :        :                   :         :           :                
+e_pid[1]                     : U5        : input  : LVTTL/LVCMOS      :         :           : Y              
+e_pid[2]                     : U6        : input  : LVTTL/LVCMOS      :         :           : Y              
+e_pid[3]                     : U7        : input  : LVTTL/LVCMOS      :         :           : Y              
+e_pid[4]                     : U8        : input  : LVTTL/LVCMOS      :         :           : Y              
+VCC_INT                      : U9        : power  :                   : 2.5V    :           :                
+GND                          : U10       : gnd    :                   :         :           :                
+VCC_IO                       : U11       : power  :                   : 3.3V    :           :                
+GND*                         : U12       :        :                   :         :           :                
+GND*                         : U13       :        :                   :         :           :                
+GND*                         : U14       :        :                   :         :           :                
+GND*                         : U15       :        :                   :         :           :                
+VCC_INT                      : U16       : power  :                   : 2.5V    :           :                
+GND                          : U17       : gnd    :                   :         :           :                
+VCC_IO                       : U18       : power  :                   : 3.3V    :           :                
+m_dl[35]                     : U19       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dl[29]                     : U20       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dl[32]                     : U21       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dl[30]                     : U22       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_al[5]                      : U23       : output : LVTTL/LVCMOS      :         :           : Y              
+m_al[4]                      : U24       : output : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : U25       :        :                   :         :           :                
+m_al[7]                      : U26       : output : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : V1        :        :                   :         :           :                
+GND*                         : V2        :        :                   :         :           :                
+GND*                         : V3        :        :                   :         :           :                
+GND*                         : V4        :        :                   :         :           :                
+e_ipd[35]                    : V5        : input  : LVTTL/LVCMOS      :         :           : Y              
+e_ipd[30]                    : V6        : input  : LVTTL/LVCMOS      :         :           : Y              
+e_ipwe                       : V7        : input  : LVTTL/LVCMOS      :         :           : Y              
+e_pid[0]                     : V8        : input  : LVTTL/LVCMOS      :         :           : Y              
+GND                          : V9        : gnd    :                   :         :           :                
+VCC_IO                       : V10       : power  :                   : 3.3V    :           :                
+GND*                         : V11       :        :                   :         :           :                
+e_ipd[8]                     : V12       : input  : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : V13       :        :                   :         :           :                
+GND*                         : V14       :        :                   :         :           :                
+e_ipd[1]                     : V15       : input  : LVTTL/LVCMOS      :         :           : Y              
+m_dl[23]                     : V16       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+VCC_IO                       : V17       : power  :                   : 3.3V    :           :                
+GND                          : V18       : gnd    :                   :         :           :                
+m_dl[34]                     : V19       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : V20       :        :                   :         :           :                
+GND*                         : V21       :        :                   :         :           :                
+GND*                         : V22       :        :                   :         :           :                
+GND*                         : V23       :        :                   :         :           :                
+GND*                         : V24       :        :                   :         :           :                
+GND*                         : V25       :        :                   :         :           :                
+m_al[6]                      : V26       : output : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : W1        :        :                   :         :           :                
+GND*                         : W2        :        :                   :         :           :                
+GND*                         : W3        :        :                   :         :           :                
+GND*                         : W4        :        :                   :         :           :                
+e_ipd[34]                    : W5        : input  : LVTTL/LVCMOS      :         :           : Y              
+e_ipd[29]                    : W6        : input  : LVTTL/LVCMOS      :         :           : Y              
+e_ipd[26]                    : W7        : input  : LVTTL/LVCMOS      :         :           : Y              
+GND                          : W8        : gnd    :                   :         :           :                
+e_ipd[19]                    : W9        : input  : LVTTL/LVCMOS      :         :           : Y              
+e_ipd[17]                    : W10       : input  : LVTTL/LVCMOS      :         :           : Y              
+e_ipd[14]                    : W11       : input  : LVTTL/LVCMOS      :         :           : Y              
+e_ipd[10]                    : W12       : input  : LVTTL/LVCMOS      :         :           : Y              
+e_ipd[6]                     : W13       : input  : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : W14       :        :                   :         :           :                
+e_ipd[3]                     : W15       : input  : LVTTL/LVCMOS      :         :           : Y              
+m_dl[20]                     : W16       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dl[0]                      : W17       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dl[6]                      : W18       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+GND                          : W19       : gnd    :                   :         :           :                
+m_al[8]                      : W20       : output : LVTTL/LVCMOS      :         :           : Y              
+m_al[9]                      : W21       : output : LVTTL/LVCMOS      :         :           : Y              
+m_al[10]                     : W22       : output : LVTTL/LVCMOS      :         :           : Y              
+m_al[11]                     : W23       : output : LVTTL/LVCMOS      :         :           : Y              
+m_al[12]                     : W24       : output : LVTTL/LVCMOS      :         :           : Y              
+m_al[17]                     : W25       : output : LVTTL/LVCMOS      :         :           : Y              
+m_al[18]                     : W26       : output : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : Y1        :        :                   :         :           :                
+GND*                         : Y2        :        :                   :         :           :                
+GND*                         : Y3        :        :                   :         :           :                
+GND*                         : Y4        :        :                   :         :           :                
+e_ipd[33]                    : Y5        : input  : LVTTL/LVCMOS      :         :           : Y              
+e_ipd[28]                    : Y6        : input  : LVTTL/LVCMOS      :         :           : Y              
+e_ipd[25]                    : Y7        : input  : LVTTL/LVCMOS      :         :           : Y              
+e_ipd[22]                    : Y8        : input  : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : Y9        :        :                   :         :           :                
+e_ipd[16]                    : Y10       : input  : LVTTL/LVCMOS      :         :           : Y              
+e_ipd[13]                    : Y11       : input  : LVTTL/LVCMOS      :         :           : Y              
+e_ipd[9]                     : Y12       : input  : LVTTL/LVCMOS      :         :           : Y              
+GND+                         : Y13       :        :                   :         :           :                
+GND+                         : Y14       :        :                   :         :           :                
+e_ipd[2]                     : Y15       : input  : LVTTL/LVCMOS      :         :           : Y              
+m_dl[17]                     : Y16       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dl[12]                     : Y17       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dl[7]                      : Y18       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dl[2]                      : Y19       : bidir  : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : Y20       :        :                   :         :           :                
+GND*                         : Y21       :        :                   :         :           :                
+GND*                         : Y22       :        :                   :         :           :                
+GND*                         : Y23       :        :                   :         :           :                
+GND*                         : Y24       :        :                   :         :           :                
+GND*                         : Y25       :        :                   :         :           :                
+GND*                         : Y26       :        :                   :         :           :                
+GND*                         : AA1       :        :                   :         :           :                
+GND*                         : AA2       :        :                   :         :           :                
+GND*                         : AA3       :        :                   :         :           :                
+GND*                         : AA4       :        :                   :         :           :                
+e_ipd[32]                    : AA5       : input  : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : AA6       :        :                   :         :           :                
+e_ipd[24]                    : AA7       : input  : LVTTL/LVCMOS      :         :           : Y              
+e_ipd[21]                    : AA8       : input  : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : AA9       :        :                   :         :           :                
+GND*                         : AA10      :        :                   :         :           :                
+e_ipd[12]                    : AA11      : input  : LVTTL/LVCMOS      :         :           : Y              
+CONF_DONE                    : AA12      : bidir  :                   :         :           :                
+NSTATUS                      : AA13      : bidir  :                   :         :           :                
+TCK                          : AA14      : input  :                   :         :           :                
+TMS                          : AA15      : input  :                   :         :           :                
+m_dl[25]                     : AA16      : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dl[21]                     : AA17      : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dl[9]                      : AA18      : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dl[1]                      : AA19      : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_al[1]                      : AA20      : output : LVTTL/LVCMOS      :         :           : Y              
+m_al[0]                      : AA21      : output : LVTTL/LVCMOS      :         :           : Y              
+m_al[13]                     : AA22      : output : LVTTL/LVCMOS      :         :           : Y              
+m_al[14]                     : AA23      : output : LVTTL/LVCMOS      :         :           : Y              
+m_al[15]                     : AA24      : output : LVTTL/LVCMOS      :         :           : Y              
+m_al[16]                     : AA25      : output : LVTTL/LVCMOS      :         :           : Y              
+m_al[3]                      : AA26      : output : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : AB1       :        :                   :         :           :                
+GND*                         : AB2       :        :                   :         :           :                
+GND*                         : AB3       :        :                   :         :           :                
+GND*                         : AB4       :        :                   :         :           :                
+e_ipd[31]                    : AB5       : input  : LVTTL/LVCMOS      :         :           : Y              
+e_ipd[27]                    : AB6       : input  : LVTTL/LVCMOS      :         :           : Y              
+e_ipd[23]                    : AB7       : input  : LVTTL/LVCMOS      :         :           : Y              
+e_ipd[20]                    : AB8       : input  : LVTTL/LVCMOS      :         :           : Y              
+e_ipd[18]                    : AB9       : input  : LVTTL/LVCMOS      :         :           : Y              
+e_ipd[15]                    : AB10      : input  : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : AB11      :        :                   :         :           :                
+e_ipd[7]                     : AB12      : input  : LVTTL/LVCMOS      :         :           : Y              
+e_ipd[5]                     : AB13      : input  : LVTTL/LVCMOS      :         :           : Y              
+e_ipd[4]                     : AB14      : input  : LVTTL/LVCMOS      :         :           : Y              
+e_ipd[0]                     : AB15      : input  : LVTTL/LVCMOS      :         :           : Y              
+m_dl[33]                     : AB16      : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dl[16]                     : AB17      : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dl[13]                     : AB18      : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dl[3]                      : AB19      : bidir  : LVTTL/LVCMOS      :         :           : Y              
+m_dl[5]                      : AB20      : bidir  : LVTTL/LVCMOS      :         :           : Y              
+GND*                         : AB21      :        :                   :         :           :                
+GND*                         : AB22      :        :                   :         :           :                
+GND*                         : AB23      :        :                   :         :           :                
+GND*                         : AB24      :        :                   :         :           :                
+GND*                         : AB25      :        :                   :         :           :                
+GND*                         : AB26      :        :                   :         :           :                
+GND*                         : AC1       :        :                   :         :           :                
+GND*                         : AC2       :        :                   :         :           :                
+VCC_INT                      : AC3       : power  :                   : 2.5V    :           :                
+GND                          : AC4       : gnd    :                   :         :           :                
+GND*                         : AC5       :        :                   :         :           :                
+GND*                         : AC6       :        :                   :         :           :                
+GND*                         : AC7       :        :                   :         :           :                
+GND*                         : AC8       :        :                   :         :           :                
+GND*                         : AC9       :        :                   :         :           :                
+GND*                         : AC10      :        :                   :         :           :                
+GND*                         : AC11      :        :                   :         :           :                
+GND*                         : AC12      :        :                   :         :           :                
+GND*                         : AC13      :        :                   :         :           :                
+GND*                         : AC14      :        :                   :         :           :                
+GND*                         : AC15      :        :                   :         :           :                
+GND*                         : AC16      :        :                   :         :           :                
+GND*                         : AC17      :        :                   :         :           :                
+GND*                         : AC18      :        :                   :         :           :                
+GND*                         : AC19      :        :                   :         :           :                
+GND*                         : AC20      :        :                   :         :           :                
+GND*                         : AC21      :        :                   :         :           :                
+GND*                         : AC22      :        :                   :         :           :                
+GND                          : AC23      : gnd    :                   :         :           :                
+VCC_INT                      : AC24      : power  :                   : 2.5V    :           :                
+GND*                         : AC25      :        :                   :         :           :                
+m_al[2]                      : AC26      : output : LVTTL/LVCMOS      :         :           : Y              
+VCC_INT                      : AD1       : power  :                   : 2.5V    :           :                
+VCC_INT                      : AD2       : power  :                   : 2.5V    :           :                
+GND                          : AD3       : gnd    :                   :         :           :                
+GND*                         : AD4       :        :                   :         :           :                
+GND*                         : AD5       :        :                   :         :           :                
+GND*                         : AD6       :        :                   :         :           :                
+GND*                         : AD7       :        :                   :         :           :                
+GND*                         : AD8       :        :                   :         :           :                
+GND*                         : AD9       :        :                   :         :           :                
+GND*                         : AD10      :        :                   :         :           :                
+NC                           : AD11      :        :                   :         :           :                
+NC                           : AD12      :        :                   :         :           :                
+GND                          : AD13      : gnd    :                   :         :           :                
+NC                           : AD14      :        :                   :         :           :                
+NC                           : AD15      :        :                   :         :           :                
+NC                           : AD16      :        :                   :         :           :                
+GND*                         : AD17      :        :                   :         :           :                
+GND*                         : AD18      :        :                   :         :           :                
+GND*                         : AD19      :        :                   :         :           :                
+GND*                         : AD20      :        :                   :         :           :                
+GND*                         : AD21      :        :                   :         :           :                
+GND*                         : AD22      :        :                   :         :           :                
+GND*                         : AD23      :        :                   :         :           :                
+GND                          : AD24      : gnd    :                   :         :           :                
+VCC_INT                      : AD25      : power  :                   : 2.5V    :           :                
+VCC_INT                      : AD26      : power  :                   : 2.5V    :           :                
+GND                          : AE1       : gnd    :                   :         :           :                
+GND                          : AE2       : gnd    :                   :         :           :                
+VCC_INT                      : AE3       : power  :                   : 2.5V    :           :                
+GND*                         : AE4       :        :                   :         :           :                
+GND*                         : AE5       :        :                   :         :           :                
+GND                          : AE6       : gnd    :                   :         :           :                
+GND*                         : AE7       :        :                   :         :           :                
+VCC_INT                      : AE8       : power  :                   : 2.5V    :           :                
+GND*                         : AE9       :        :                   :         :           :                
+GND*                         : AE10      :        :                   :         :           :                
+GND*                         : AE11      :        :                   :         :           :                
+NC                           : AE12      :        :                   :         :           :                
+NC                           : AE13      :        :                   :         :           :                
+NC                           : AE14      :        :                   :         :           :                
+NC                           : AE15      :        :                   :         :           :                
+GND*                         : AE16      :        :                   :         :           :                
+GND*                         : AE17      :        :                   :         :           :                
+GND*                         : AE18      :        :                   :         :           :                
+VCC_INT                      : AE19      : power  :                   : 2.5V    :           :                
+GND*                         : AE20      :        :                   :         :           :                
+GND                          : AE21      : gnd    :                   :         :           :                
+GND*                         : AE22      :        :                   :         :           :                
+GND*                         : AE23      :        :                   :         :           :                
+VCC_INT                      : AE24      : power  :                   : 2.5V    :           :                
+GND                          : AE25      : gnd    :                   :         :           :                
+GND                          : AE26      : gnd    :                   :         :           :                
+GND                          : AF2       : gnd    :                   :         :           :                
+VCC_INT                      : AF3       : power  :                   : 2.5V    :           :                
+GND*                         : AF4       :        :                   :         :           :                
+GND*                         : AF5       :        :                   :         :           :                
+VCC_IO                       : AF6       : power  :                   : 3.3V    :           :                
+GND*                         : AF7       :        :                   :         :           :                
+GND                          : AF8       : gnd    :                   :         :           :                
+GND*                         : AF9       :        :                   :         :           :                
+GND*                         : AF10      :        :                   :         :           :                
+GND*                         : AF11      :        :                   :         :           :                
+NC                           : AF12      :        :                   :         :           :                
+VCC_IO                       : AF13      : power  :                   : 3.3V    :           :                
+GND                          : AF14      : gnd    :                   :         :           :                
+NC                           : AF15      :        :                   :         :           :                
+GND*                         : AF16      :        :                   :         :           :                
+GND*                         : AF17      :        :                   :         :           :                
+GND*                         : AF18      :        :                   :         :           :                
+GND                          : AF19      : gnd    :                   :         :           :                
+GND*                         : AF20      :        :                   :         :           :                
+VCC_IO                       : AF21      : power  :                   : 3.3V    :           :                
+GND*                         : AF22      :        :                   :         :           :                
+GND*                         : AF23      :        :                   :         :           :                
+VCC_INT                      : AF24      : power  :                   : 2.5V    :           :                
+GND                          : AF25      : gnd    :                   :         :           :                

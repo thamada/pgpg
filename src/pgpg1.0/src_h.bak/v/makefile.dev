@@ -1,0 +1,39 @@
+DFLAGS= -DSTRATIX -DLCROM
+CC = gcc
+
+#DFLAGS= -DLCROM -DSTRATIX
+#DFLAGS= -DCYCLONE
+#DFLAGS= -DAPEX20KC
+#DFLAGS= -DAPEX20KE
+#DFLAGS= -DLCROM -DJDATA_WIDTH=72 
+#DFLAGS= -DSTRATIX -DJDATA_WIDTH=123
+
+
+#CFLAGS = -Wall -O4
+CFLAGS = -Wall 
+HEAD = pgpg.h pgpg_submodule.h generate_pipelinemap.h pgpg_lcelltable_core.h \
+       pgpg_lcelltable_log_unsigned_add.h pgpg_lcelltable_conv_ftol.h pgpg_lcelltable_conv_ltof.h \
+
+
+OBJ = pgpg_fix_addsub.o pgpg_log_muldiv.o pgpg_log_shift.o pgpg_pdelay.o pgpg_conv_ftol.o pgpg_conv_ltof.o pgpg_log_add.o pgpg_fix_accum.o pgpg_set_io.o pgpg_log_unsigned_add.o pgpg_wtable.o pgpg_dwtable.o pgpg_pipe_com.o pgpg_log_unsigned_add_itp.o pgpg_conv_ftol_itp.o pgpg_conv_ltof_itp.o \
+      pgpg_lcelltable_core.o pgpg_lcelltable_log_unsigned_add.o pgpg_lcelltable_conv_ftol.o pgpg_lcelltable_conv_ltof.o pgpg_adder_RCA.o\
+      pgpg_submodule.o \
+      pgpg_lcell.o \
+      pgpg_bits_and.o pgpg_bits_or.o pgpg_bits_xor.o pgpg_bits_join.o pgpg_bits_part.o pgpg_bits_inv.o pgpg_bits_shift.o pgpg_bits_delay.o \
+
+all: pgpgvt pgpgvm
+
+pgpgvt: $(OBJ) $(HEAD) pgpgvt.o 
+	$(CC)  $(CFLAGS) pgpgvt.o $(OBJ) -o pgpgvt -lm
+
+pgpgvm: $(OBJ) $(HEAD) pgpgvm.o
+	$(CC)  $(CFLAGS) pgpgvm.o $(OBJ) -o pgpgvm -lm
+
+pgpgvt.o : pgpg.c pgpg.h
+	$(CC)  -c -DPGPGVT $(DFLAGS) $(CFLAGS) pgpg.c -o pgpgvt.o
+
+pgpgvm.o : pgpg.c pgpg.h
+	$(CC)  -c $(CFLAGS) $(DFLAGS) pgpg.c -o pgpgvm.o
+
+clean:
+	rm -f *.o *~ .*~ pgpgvt pgpgvm

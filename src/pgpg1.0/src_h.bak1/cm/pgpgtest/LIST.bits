@@ -1,0 +1,16 @@
+-- using CHECK_bits_join_part.c
+pg_bits_join(x,y,z,12,21);
+pg_bits_part(z,y,33,20,0);
+pg_bits_part(z,x,33,32,21);
+
+-- using CHECK_bits_and_or_xor_inv.c
+pg_bits_and(a,b,c,24);
+pg_bits_or(a,b,c,24);
+pg_bits_inv(a,c,24);
+
+-- not used
+pg_bits_xor(a,b,c,24);
+pg_bits_and(a,b,c,40);
+pg_bits_or(a,b,c,40);
+pg_bits_xor(a,b,c,40);
+pg_bits_inv(a,c,40);

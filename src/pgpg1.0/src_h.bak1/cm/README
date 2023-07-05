@@ -1,0 +1,61 @@
+2002/04/16 by hamada
+
+/*--- preparation --- */
+configure(rewrite) parameters at the "list" file
+
+
+/*--- do make --- */
+[shell]$ make
+
+
+/*--- run the PGPG --- */
+[shell]$ ./pgpgcm
+
+
+/*--- about HDL generations ---*/
+(Currently)Next five files would be generated after execution of PGPG.
+    pg_pipe.vhd       (pipeline part including all of the subcomponents)
+    table.vhd         (general table part)
+    ftol.mif          (memory initialization file for fix to log converter)
+    ltof.mif          (memory initialization file for log to fix converter)
+    addt.mif          (memory initialization file for log adder)
+
+
+/* software simulator modules */
+
+[加算器(Nビット)]------------------------------------------------
+  ソース : pg_fix_add_[N].c
+  [N]の意味 : 入出力ビット長(整数値)
+  関数プロトタイプ : void pg_fix_add_[N](int x,int y,int* z);
+  引数の説明
+    xi : 入力 (N-bit)
+    yi : 入力 (N-bit)
+    zi : 出力 (N-bit)
+  使用例
+    pg_fix_add_20(0xfffff,0x00001,&z);
+
+
+[減算器(Nビット)]------------------------------------------------
+  ソース : pg_fix_sub_[N].c
+  Nの意味 : 入出力ビット長(整数値)
+  関数プロトタイプ : void pg_fix_add_[N](int x,int y,int* z);
+  引数の説明
+    xi : 入力 (N-bit)
+    yi : 入力 (N-bit)
+    zi : 出力 (N-bit)
+  使用例
+    pg_fix_sub_20(0xfffff,0x00001,&z);
+
+[Fixed-Point → Log 変換器]-------------------------------------
+  ソース : pg_fix_sub_N.c
+  関数プロトタイプ : void pg_conv_ftol_fix[FIX]_log[LOG]_man[MAN](int fixdata, int* logdata);
+  引数の説明
+    xi : 入力 (N-bit)
+    yi : 入力 (N-bit)
+    zi : 出力 (N-bit)
+
+
+[Nビット減算器]------------------------------------------------
+
+
+

@@ -1,0 +1,191 @@
+#define NPOS 24
+#define NVEL 14
+#define NLOG 14
+#define NMAN 5
+#define NFOR 57
+#define NACC 64
+
+#define xsize 16.0
+#define xoffset (xsize/2.0)
+#define xscale (pow(2.0,NPOS)/xsize)
+#define vscale (pow(2.0,NVEL)/4.0)
+#define pscale (1024.0)
+#define pscale2 (pscale*2.0)
+#define qscale (pscale*pscale)
+#define rhoscale (M_1_PI/pow(2.0,76.0)*xscale*xscale*xscale*pow(2.0,8.0))
+#define divvscale (M_1_PI/(pow(2.0,120.0)/3.0)*xscale*xscale*xscale*xscale/vscale*pow(2.0,48.0))
+#define fscale (M_1_PI/(pow(2.0,120.0)/3.0)*xscale*xscale*xscale*xscale/qscale*pow(2.0,56.0))
+#define dudtscale (M_1_PI/(pow(2.0,120.0)/3.0)*xscale*xscale*xscale*xscale/vscale/qscale*pow(2.0,64.0))
+
+/NPIPE 1
+/NVMP 3
+/JPSET xj,0,0,23,x[][0],ufix,NPOS,xscale,xoffset
+/JPSET yj,0,24,47,x[][1],ufix,NPOS,xscale,xoffset
+/JPSET zj,1,0,23,x[][2],ufix,NPOS,xscale,xoffset
+/JPSET vxj,1,24,37,v[][0],fix,NVEL,vscale
+/JPSET vyj,1,38,51,v[][1],fix,NVEL,vscale
+/JPSET vzj,2,0,13,v[][2],fix,NVEL,vscale
+/JPSET hj,2,14,27,h[],log,NLOG,NMAN,xscale
+/JPSET pj,2,28,41,p[],log,NLOG,NMAN,pscale
+/JPSET qj,2,42,55,q[],log,NLOG,NMAN,qscale
+/IPSET xi,x[][0],ufix,NPOS,xscale,xoffset
+/IPSET yi,x[][1],ufix,NPOS,xscale,xoffset
+/IPSET zi,x[][2],ufix,NPOS,xscale,xoffset
+/IPSET vxi,v[][0],fix,NVEL,vscale
+/IPSET vyi,v[][1],fix,NVEL,vscale
+/IPSET vzi,v[][2],fix,NVEL,vscale
+/IPSET pi,p[],log,NLOG,NMAN,pscale2
+/IPSET qi,q[],log,NLOG,NMAN,qscale
+/IPSET hi,h[],log,NLOG,NMAN,xscale
+/FOSET srho,rho[],fix,NACC,rhoscale
+/FOSET sdivv,divv[],fix,NACC,divvscale
+/FOSET sax,a[][0],fix,NACC,fscale
+/FOSET say,a[][1],fix,NACC,fscale
+/FOSET saz,a[][2],fix,NACC,fscale
+/FOSET sdudt,dudt[],fix,NACC,dudtscale
+/VALSET rhoshift,0x1100,0,13
+/VALSET dshift,0x1600,0,13
+/VALSET fshift,0x1700,0,13
+/VALSET ushift,0x1800,0,13
+
+/ALTERAESB on
+
+void sph_pipeline_on_emulator(x,v,a,n,h,p,q,rho,divv,dudt)
+        double x[][3];
+        double v[][3];
+        double a[][3];
+        int n;
+        double h[];
+        double p[];
+        double q[];
+        double rho[];
+        double divv[];
+        double dudt[];
+{
+  pg_rundelay(22);
+
+-- distance
+
+  pg_fix_addsub(SUB,xi,xj,xij,NPOS,1);
+  pg_fix_addsub(SUB,yi,yj,yij,NPOS,1);
+  pg_fix_addsub(SUB,zi,zj,zij,NPOS,1);
+
+  pg_conv_ftol(xij,dx,24,NLOG,NMAN,4);
+  pg_conv_ftol(yij,dy,24,NLOG,NMAN,4);
+  pg_conv_ftol(zij,dz,24,NLOG,NMAN,4);
+
+  pg_pdelay(dx,dxr,NLOG,14);
+  pg_pdelay(dy,dyr,NLOG,14);
+  pg_pdelay(dz,dzr,NLOG,14);
+
+  pg_log_shift(1,dx,x2,NLOG);
+  pg_log_shift(1,dy,y2,NLOG);
+  pg_log_shift(1,dz,z2,NLOG);
+
+  pg_log_unsigned_add(x2,y2,x2y2,NLOG,NMAN,3);
+  pg_pdelay(z2,z2r,NLOG,3);
+  pg_log_unsigned_add(x2y2,z2r,r2,NLOG,NMAN,3);
+
+-- inner product
+
+  pg_fix_addsub(SUB,vxi,vxj,vxij,NVEL,1);
+  pg_fix_addsub(SUB,vyi,vyj,vyij,NVEL,1);
+  pg_fix_addsub(SUB,vzi,vzj,vzij,NVEL,1);
+
+  pg_conv_ftol(vxij,dvx,NVEL,NLOG,NMAN,4);
+  pg_conv_ftol(vyij,dvy,NVEL,NLOG,NMAN,4);
+  pg_conv_ftol(vzij,dvz,NVEL,NLOG,NMAN,4);
+
+  pg_log_muldiv(MUL,dvx,dx,vxx,NLOG,1);
+  pg_log_muldiv(MUL,dvy,dy,vyy,NLOG,1);
+  pg_log_muldiv(MUL,dvz,dz,vzz,NLOG,1);
+
+  pg_log_add(vxx,vyy,vxy,NLOG,NMAN,3);
+  pg_pdelay(vzz,vzzr,NLOG,3);
+  pg_log_add(vxy,vzzr,vdotr,NLOG,NMAN,3);
+
+-- kernel
+
+  pg_pdelay(hi,hir,NLOG,11);
+  pg_log_shift(1,hir,hii2,NLOG);
+  pg_log_muldiv(MUL,hir,hii2,hii3,NLOG,1);	
+  pg_pdelay(hii2,hii2r,NLOG,1);
+  pg_log_muldiv(MUL,hii3,hii2r,hii5,NLOG,1);
+  pg_pdelay(hii3,hii3r,NLOG,1);
+
+  pg_log_muldiv(DIV,r2,hii2,rhi2,NLOG,1);
+  pg_wtable(rhi2,wi,NLOG,NMAN,1);
+  pg_log_muldiv(DIV,wi,hii3r,whi,NLOG,1);
+  pg_dwtable(rhi2,dwi,NLOG,NMAN,1);
+  pg_log_muldiv(DIV,dwi,hii5,dwhi,NLOG,1);
+
+  pg_pdelay(hj,hjr,NLOG,11);
+  pg_log_shift(1,hjr,hj2,NLOG);
+  pg_log_muldiv(MUL,hjr,hj2,hj3,NLOG,1);	
+  pg_pdelay(hj2,hj2r,NLOG,1);
+  pg_log_muldiv(MUL,hj3,hj2r,hj5,NLOG,1);
+  pg_pdelay(hj3,hj3r,NLOG,1);
+
+  pg_log_muldiv(DIV,r2,hj2,rhj2,NLOG,1);
+  pg_wtable(rhj2,wj,NLOG,NMAN,1);
+  pg_log_muldiv(DIV,wj,hj3r,whj,NLOG,1);
+  pg_dwtable(rhj2,dwj,NLOG,NMAN,1);
+  pg_log_muldiv(DIV,dwj,hj5,dwhj,NLOG,1);
+
+  pg_log_unsigned_add(whi,whj,w,NLOG,NMAN,3);
+  pg_log_unsigned_add(dwhi,dwhj,dw,NLOG,NMAN,3);
+
+-- density
+
+  pg_log_muldiv(SDIV,w,rhoshift,wrhos,NLOG,1);
+  pg_conv_ltof(wrhos,frho,NLOG,NMAN,NFOR,2);
+  pg_fix_accum(frho,srho,NFOR,NACC,2,20);
+
+-- divv
+  pg_pdelay(vdotr,vdotrr,NLOG,5);
+  pg_log_muldiv(MUL,vdotrr,dw,vrdw0,NLOG,1);
+  pg_log_muldiv(SDIV,vrdw0,dshift,vrdw,NLOG,1);
+  pg_conv_ltof(vrdw,fdivv,NLOG,NMAN,NFOR,2);
+  pg_fix_accum(fdivv,sdivv,NFOR,NACC,2,21);
+
+-- artificial viscosity
+
+  pg_pdelay(pj,pjr,NLOG,13);
+  pg_pdelay(pi,pir,NLOG,13);  
+  pg_log_muldiv(MUL,pir,pjr,pij,NLOG,1);
+
+  pg_pdelay(qj,qjr,NLOG,11);
+  pg_pdelay(qi,qir,NLOG,11);  
+  pg_log_unsigned_add(qir,qjr,qij,NLOG,NMAN,3);
+  pg_log_unsigned_add(pij,qij,avij,NLOG,NMAN,3);
+
+-- acceleration
+
+  pg_log_muldiv(MUL,dw,avij,avdw0,NLOG,1);
+
+  pg_log_muldiv(SDIV,avdw0,fshift,avdw,NLOG,1);
+
+  pg_log_muldiv(MUL,dxr,avdw,avdwx,NLOG,1);
+  pg_log_muldiv(MUL,dyr,avdw,avdwy,NLOG,1);
+  pg_log_muldiv(MUL,dzr,avdw,avdwz,NLOG,1);	
+
+  pg_conv_ltof(avdwx,ax,NLOG,NMAN,NFOR,2);
+  pg_conv_ltof(avdwy,ay,NLOG,NMAN,NFOR,2);
+  pg_conv_ltof(avdwz,az,NLOG,NMAN,NFOR,2);
+
+  pg_fix_accum(ax,sax,NFOR,NACC,2,22);
+  pg_fix_accum(ay,say,NFOR,NACC,2,22);
+  pg_fix_accum(az,saz,NFOR,NACC,2,22);		
+
+-- du/dt
+
+  pg_log_muldiv(SDIV,avdw0,ushift,avdw1,NLOG,1);
+
+  pg_pdelay(vdotrr,vdotrrr,NLOG,2);
+  pg_log_muldiv(MUL,vdotrrr,avdw1,dudt0,NLOG,1);  
+
+  pg_conv_ltof(dudt0,fdudt,NLOG,NMAN,NFOR,2);
+  pg_fix_accum(fdudt,sdudt,NFOR,NACC,2,22);			
+
+}
+

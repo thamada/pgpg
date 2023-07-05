@@ -1,0 +1,1059 @@
+library ieee;
+use ieee.std_logic_1164.all;
+LIBRARY altera_mf;
+USE altera_mf.altera_mf_components.all;
+LIBRARY altera;
+USE altera.maxplus2.all;
+
+entity pgfpga is 
+  port(
+-- for IO 
+      e_clk,e_sysclk,e_rst: in std_logic;
+      e_jpwe : in std_logic;
+      e_pid: in std_logic_vector(9 downto 0);
+      e_ipd : in std_logic_vector(35 downto 0);
+      e_ipwe : in std_logic;
+      e_fod: out std_logic_vector(35 downto 0);
+      e_nd,e_vd,e_sts: out std_logic;
+      e_wd : in std_logic;
+      e_active : out std_logic;
+
+-- for memory
+      m_oe : out std_logic_vector(1 downto 0);
+      m_we : out std_logic_vector(1 downto 0);
+      m_al : out std_logic_vector(18 downto 0);
+      m_ah : out std_logic_vector(18 downto 0);
+      m_dl : inout std_logic_vector(35 downto 0);
+      m_dh : inout std_logic_vector(35 downto 0);
+      m_clk : out std_logic_vector(1 downto 0)
+  );
+end pgfpga;
+
+architecture hierarchy of pgfpga is
+
+  component ipw
+    port( 
+      i_ipwe: in std_logic;
+      i_ipd : in std_logic_vector(35 downto 0);
+      i_weca,i_wejp,i_wefo,i_wei: out std_logic;
+      i_adri : out std_logic_vector(11 downto 0);
+      i_adr : out std_logic_vector(3 downto 0);
+      i_data: out std_logic_vector(31 downto 0);
+      i_perr: out std_logic;
+      clk,sysclk,rst : in std_logic );
+  end component;
+
+  component jpw
+    port( 
+      j_jpwe: in std_logic;
+      j_jpd : in std_logic_vector(35 downto 0);
+      j_physid : in std_logic_vector(9 downto 0);
+      j_wejp: in std_logic;
+      j_data: in std_logic_vector(19 downto 0);
+      j_adr : in std_logic_vector(3 downto 0);
+      j_mdl : out std_logic_vector(35 downto 0);
+      j_mdh : out std_logic_vector(35 downto 0);
+      j_mwe,j_moe : out std_logic_vector(1 downto 0);
+      j_mal : out std_logic_vector(18 downto 0);
+      j_mah : out std_logic_vector(18 downto 0);
+      j_oel,j_oeh : out std_logic;
+      j_clma : in std_logic_vector(18 downto 0);
+      j_vcido : out std_logic_vector(9 downto 0);
+      j_perr : out std_logic;
+      clk,sysclk,rst : in std_logic);
+  end component;
+
+  component calc
+    port(
+      c_md : in std_logic_vector(71 downto 0);
+      c_ma : out std_logic_vector(18 downto 0);
+      c_weca: in std_logic;
+      c_data: in std_logic_vector(19 downto 0);
+      c_adr : in std_logic_vector(3 downto 0);
+      c_jdata : out std_logic_vector(71 downto 0); 	        
+      c_run : out std_logic;
+      rst,clk : in std_logic);
+  end component;
+
+  component fo
+    port(
+      f_wefo : in std_logic;
+      f_data: in std_logic_vector(31 downto 0);
+      f_adr : in std_logic_vector(3 downto 0);
+      f_pd : in std_logic_vector(31 downto 0);      
+      f_pa : out std_logic_vector(11 downto 0);
+      f_csts : in std_logic;
+      f_fodata : out std_logic_vector(35 downto 0);
+      f_sts,f_vd,f_nd : out std_logic;
+      f_wd : in std_logic;
+      f_active : out std_logic;
+      f_vcid : in std_logic_vector(9 downto 0);
+      rst,clk,sysclk : in std_logic );
+  end component;
+
+  component pg_pipe
+    port(
+      p_jdata: in std_logic_vector(71 downto 0);
+      p_run : in std_logic;
+      p_we : in std_logic;
+      p_adri : in std_logic_vector(11 downto 0);      
+      p_datai : in std_logic_vector(31 downto 0);
+      p_adro : in std_logic_vector(11 downto 0);      
+      p_datao : out std_logic_vector(31 downto 0);
+      p_runret : out std_logic;
+      rst,clk : in std_logic );
+  end component;
+
+ signal clk, iclk0, iclk1, iclk2, clk0, clk1:  std_logic;
+ signal weca,wejp,wefo,wei: std_logic;
+ signal adr: std_logic_vector(3 downto 0);
+ signal adri: std_logic_vector(11 downto 0);
+ signal data: std_logic_vector(31 downto 0);
+ signal clma: std_logic_vector(18 downto 0);
+ signal clsts: std_logic;
+ signal jdata: std_logic_vector(71 downto 0);
+ signal run: std_logic;
+ signal padr: std_logic_vector(11 downto 0);
+ signal pdata: std_logic_vector(31 downto 0);
+ signal mdlh: std_logic_vector(71 downto 0);
+ signal iperr,jperr: std_logic; 
+ signal vcid: std_logic_vector(9 downto 0);
+
+ signal mdoel,mdoeh: std_logic;
+ signal m_dl0 : std_logic_vector(35 downto 0);
+ signal m_dh0 : std_logic_vector(35 downto 0);
+
+ signal sysclk0,sysclk1:  std_logic; 
+
+begin
+
+--  upll: altclklock generic map(inclock_period => 58823,
+--                              clock0_boost => 1,clock1_boost => 2)
+--                  port map(inclock=>e_clk, clock0=>clk, clock1=>iclk0);
+ 
+--  process(iclk0) begin
+--    if(iclk0'event and iclk0='1') then 
+--      iclk1 <= not iclk1;
+--    end if;
+--  end process;
+
+--  m_clk(1) <= iclk1;
+--  m_clk(0) <= iclk1;
+
+--  ulcell0: lcell PORT MAP(a_in=>e_sysclk, a_out=>sysclk0);
+--  ulcell1: lcell PORT MAP(a_in=>sysclk0, a_out=>sysclk1);
+
+  clk <= e_clk;
+  m_clk(1) <= e_sysclk;
+  m_clk(0) <= e_sysclk;
+
+  uipw: ipw PORT MAP(i_ipwe=>e_ipwe,i_ipd=>e_ipd,
+		   i_weca=>weca, i_wejp=>wejp, i_wefo=>wefo, i_wei=>wei, 
+		   i_adr=>adr, i_adri=>adri, i_data=>data, i_perr=>iperr,
+                   clk=>clk,sysclk=>e_sysclk,rst=>e_rst);
+
+  ujpw: jpw PORT MAP(j_jpwe=>e_jpwe, j_jpd=>e_ipd, j_physid=>e_pid, 
+                    j_wejp=>wejp, j_data=>data(19 downto 0), j_adr=>adr(3 downto 0), 
+	            j_mdl=>m_dl0, j_mdh=>m_dh0, j_mwe=>m_we, j_moe=>m_oe,
+                    j_oel=>mdoel, j_oeh=>mdoeh, 
+	            j_mal=>m_al, j_mah=>m_ah,j_clma=>clma, j_perr=>jperr,
+                    j_vcido=>vcid, clk=>clk,sysclk=>e_sysclk,rst=>e_rst);
+
+   
+  with mdoel select
+    m_dl <= m_dl0 when '1',
+            "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ" when others;
+
+  with mdoeh select
+    m_dh <= m_dh0 when '1',
+            "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ" when others;
+
+  mdlh <= m_dh & m_dl;
+  ucalc: calc PORT MAP(c_md=>mdlh, c_ma=>clma, 
+                     c_weca=>weca, c_data=>data(19 downto 0), c_adr=>adr(3 downto 0), 
+	             c_jdata=>jdata, c_run=>run, 
+                     clk=>clk,rst=>e_rst);
+
+  ufo: fo PORT MAP(f_wefo=>wefo,f_data=>data, f_adr=>adr(3 downto 0),
+                   f_pd=>pdata, f_pa=>padr, f_csts=>clsts,
+		   f_fodata=>e_fod, f_sts=>e_sts,
+	           f_vd=>e_vd, f_nd=>e_nd, f_wd=>e_wd, 
+	           f_active=>e_active, f_vcid=>vcid,
+                   rst=>e_rst,clk=>clk,sysclk=>e_sysclk);
+
+
+  upipeline: pg_pipe PORT MAP(p_jdata=>jdata, p_run=>run,
+	                p_we=>wei,p_adri=>adri,p_datai=>data,
+	                p_adro=>padr,p_datao=>pdata, p_runret=>clsts,
+                        rst=>e_rst,clk=>clk);
+	                  
+end hierarchy;
+  
+
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity parity_check is
+port(
+   data: in std_logic_vector(35 downto 0);
+   clk,rst,vd : in std_logic;
+   perr: out std_logic
+);
+end parity_check;
+
+architecture RTL of parity_check is
+  signal perr0 : std_logic;
+begin
+
+  process(clk)
+    variable tmp: std_logic_vector(3 downto 0);  
+  begin
+    if(clk'event and clk='1') then 
+      if(rst = '1') then 
+        perr0 <= '0';
+      else
+	if(vd = '1') then 
+          tmp := "0000";
+          for i in 0 to 7 loop
+            tmp(0) := tmp(0) xor data(i);
+            tmp(1) := tmp(1) xor data(i+8);
+            tmp(2) := tmp(2) xor data(i+16);
+            tmp(3) := tmp(3) xor data(i+24);
+          end loop;
+          if((tmp(0) /= data(32)) or (tmp(1) /= data(33)) 
+            or (tmp(2) /= data(34)) or (tmp(3) /= data(35))) then 
+            perr0 <= perr0 or '1';
+          end if;
+        end if;
+      end if;
+    end if;
+  end process;
+  perr <= perr0;
+
+end RTL;
+
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.std_logic_unsigned.all;
+
+entity ipw is
+    port( 
+      i_ipwe: in std_logic;
+      i_ipd : in std_logic_vector(35 downto 0);
+      i_weca,i_wejp,i_wefo,i_wei: out std_logic;
+      i_adri : out std_logic_vector(11 downto 0);
+      i_adr : out std_logic_vector(3 downto 0);
+      i_data: out std_logic_vector(31 downto 0);
+      i_perr: out std_logic;
+      clk,sysclk,rst : in std_logic );
+end ipw;
+
+architecture rtl of ipw is
+
+  component parity_check
+  port(
+    data: in std_logic_vector(35 downto 0);
+    clk,rst,vd: in std_logic;
+    perr: out std_logic  );
+  end component;
+
+  signal ipd0,ipd1 : std_logic_vector(35 downto 0);
+  signal sysclk0,sysclk1 : std_logic;
+  signal ipwe0,ipwe1 : std_logic;
+  signal vd : std_logic;
+  signal cefp0,weiprg0,wejp0,wefo0,wecalc0 : std_logic;
+  signal diprg: std_logic_vector(31 downto 0);
+  signal aiprg : std_logic_vector(5 downto 0);
+  signal com_dc : std_logic_vector(1 downto 0);
+  signal word_dc : std_logic_vector(10 downto 0);
+  signal adrdec : std_logic_vector(14 downto 0);
+  signal radr_uc : std_logic_vector(3 downto 0);
+  signal fadr_uc : std_logic_vector(11 downto 0);
+
+begin
+
+-- data latch at input port
+
+  process(clk) begin
+    if(clk'event and clk='1') then
+      sysclk1 <= sysclk0;
+      sysclk0 <= sysclk;
+      ipwe1 <= ipwe0;
+      ipwe0 <= i_ipwe;
+      ipd1 <= ipd0;
+      ipd0 <= i_ipd;	
+    end if;
+  end process;
+
+-- check write enable
+
+  process(sysclk0,sysclk1,ipwe1) begin
+--    if(sysclk0='1' and sysclk1='0' and ipwe1='0') then  
+    if(ipwe1='0') then  
+      vd <= '1';
+    else 
+      vd <= '0';
+    end if;
+  end process;
+
+-- command counter
+
+  process(clk) begin
+    if(clk'event and clk='1') then 
+      if(rst='1') then 
+        com_dc <= "00";
+      elsif(vd='1') then
+        if(com_dc = "00" and word_dc = "00000000000") then 
+          com_dc <= "10";
+	elsif(com_dc /=  "00") then 
+          com_dc <= com_dc - "01";
+        end if;
+      end if;
+    end if;
+  end process;
+
+-- word counter
+
+  process(clk) begin
+    if(clk'event and clk='1') then
+      if(rst = '1') then 
+        word_dc <= "00000000000";
+      elsif(vd = '1') then 
+        if(com_dc = "10") then 
+           word_dc <= ipd1(10 downto 0);
+        elsif(word_dc /= "00000000000") then
+           word_dc <= word_dc - "00000000001";
+        end if;
+      end if;
+    end if;
+  end process;
+
+-- address latch and decoder
+
+  process(clk) begin
+    if(clk'event and clk='1') then
+      if(vd = '1') then 
+        if(com_dc = "00" and word_dc = "00000000000") then 
+          adrdec <= ipd1(14 downto 0);
+        end if;
+      end if;
+    end if;
+  end process;
+
+  with adrdec(14 downto 12) select
+    cefp0 <= '1' when "000",
+             '0' when others;
+
+  with adrdec(14 downto 12) select
+    weiprg0 <= '1' when "001",
+               '0' when others;
+
+  with adrdec(14 downto 12) select
+    wejp0 <= '1' when "010",
+             '0' when others;
+
+  with adrdec(14 downto 12) select
+    wefo0 <= '1' when "011",
+             '0' when others;
+
+  with adrdec(14 downto 12) select
+    wecalc0 <= '1' when "100",
+               '0' when others;
+
+-- register address counter 
+
+  process(clk) begin   
+    if(clk'event and clk='1') then
+      if(vd ='1') then 
+        if(com_dc = "00" and word_dc = "00000000000") then
+          radr_uc <= ipd1(3 downto 0);
+        elsif(word_dc /= "00000000000" and cefp0 = '0') then 
+          radr_uc <=  radr_uc + "0001";
+	end if;
+      end if;
+    end if;
+  end process;
+
+-- pipeline address counter 
+
+  process(clk) begin   
+    if(clk'event and clk='1') then
+      if(vd ='1') then 
+        if(com_dc = "00" and word_dc = "00000000000") then
+          fadr_uc <= ipd1(11 downto 0);
+        elsif(word_dc /= "00000000000" and cefp0 = '1') then 
+          fadr_uc <=  fadr_uc + "000000000001";
+	end if;
+      end if;
+    end if;
+  end process;
+
+-- parity checker
+
+   pcheck: parity_check PORT MAP(data=>ipd1,clk=>clk,rst=>rst,vd=>vd,
+				perr=>i_perr);
+
+-- write enable signal
+
+  process(clk) begin
+    if(clk'event and clk='1') then 
+      if(vd='1' and word_dc /= "00000000000") then
+	i_adr <= radr_uc;
+        i_data <= ipd1(31 downto 0);
+        i_adri <= fadr_uc;
+        i_wejp <= wejp0;
+        i_weca <= wecalc0;
+        i_wefo <= wefo0;
+        i_wei <= cefp0;
+      else
+        i_wejp <= '0';
+        i_wefo <= '0';
+        i_weca <= '0';
+        i_wei <= '0';
+      end if;
+    end if;
+  end process;
+
+-- write to command register in ipw
+
+--  diprg <= ipd1(31 downto 0); 
+--  aiprg <= radr_uc;
+  process(clk) begin
+    if(clk'event and clk='1') then 
+      if(weiprg0='1') then 
+      end if;	
+    end if;
+  end process;
+     
+end RTL;
+  
+
+
+
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.std_logic_unsigned.all;
+
+entity jpw is
+    port( 
+      j_jpwe: in std_logic;
+      j_jpd : in std_logic_vector(35 downto 0);
+      j_physid : in std_logic_vector(9 downto 0);
+      j_wejp: in std_logic;
+      j_data: in std_logic_vector(19 downto 0);
+      j_adr : in std_logic_vector(3 downto 0);
+      j_mdl : out std_logic_vector(35 downto 0);
+      j_mdh : out std_logic_vector(35 downto 0);
+      j_mwe,j_moe : out std_logic_vector(1 downto 0);
+      j_mal : out std_logic_vector(18 downto 0);
+      j_mah : out std_logic_vector(18 downto 0);
+      j_oel,j_oeh : out std_logic;
+      j_clma : in std_logic_vector(18 downto 0);
+      j_vcido : out std_logic_vector(9 downto 0);
+      j_perr : out std_logic;
+      clk,sysclk,rst : in std_logic);
+end jpw;
+
+architecture RTL of jpw is
+
+  component parity_check
+  port(
+    data: in std_logic_vector(35 downto 0);
+    clk,rst,vd: in std_logic;
+    perr: out std_logic  );
+  end component;
+
+  signal sysclk0,sysclk1,jpwe0,jpwe1: std_logic;
+  signal jpd0,jpd1: std_logic_vector(35 downto 0);
+  signal vd : std_logic;
+  signal com_dc: std_logic_vector(1 downto 0);
+  signal word_dc: std_logic_vector(4 downto 0);
+  signal word_uc: std_logic_vector(3 downto 0);
+  signal selid : std_logic;
+  signal reg1: std_logic_vector(31 downto 0);
+  signal memadr0,memadr1,memadr2: std_logic_vector(18 downto 0);
+  signal weregl,weregh: std_logic;
+  signal nd : std_logic_vector(4 downto 0);
+  signal vcid : std_logic_vector(9 downto 0);
+
+begin
+
+-- data latch at input port
+
+  process(clk) begin
+    if(clk'event and clk='1') then
+      sysclk1 <= sysclk0;
+      sysclk0 <= sysclk;
+      jpwe1 <= jpwe0;
+      jpwe0 <= j_jpwe;
+      jpd1 <= jpd0;
+      jpd0 <= j_jpd;	
+    end if;
+  end process;
+
+-- check write enable (asyn)
+
+  process(sysclk0,sysclk1,jpwe1) begin
+--    if(sysclk0='1' and sysclk1='0' and jpwe1='0') then  
+    if(jpwe1='0') then  
+      vd <= '1';
+    else 
+      vd <= '0';
+    end if;
+  end process;
+
+-- parity checker
+
+  pcheck: parity_check PORT MAP(data=>jpd1,clk=>clk,rst=>rst,perr=>j_perr,vd=>vd);
+
+-- command counter
+
+  process(clk) begin
+    if(clk'event and clk='1') then 
+      if(rst = '1') then 
+         com_dc <= "00"; 
+      elsif(vd='1') then
+        if(com_dc = "00" and word_dc = "00000") then
+          com_dc <= "10";
+	elsif(com_dc /= "00") then 
+          com_dc <= com_dc -"01";
+        end if;
+      end if;
+    end if;
+  end process;
+
+-- word counter 
+
+  process(clk) begin
+    if(clk'event and clk='1') then
+      if(rst = '1') then 
+        word_dc <= "00000";
+      elsif(vd = '1') then 
+        if(com_dc="10") then 
+          word_dc <= nd;
+          word_uc <= "0000";
+        elsif(word_dc /= "00000") then
+          word_dc <= word_dc - "00001";
+          word_uc <= word_uc + "0001";
+        end if;
+      end if;
+    end if;
+  end process;
+
+-- check ID
+
+  process(clk) begin
+    if(clk'event and clk='1') then 
+      if(vd='1') then 
+        if(com_dc = "00" and word_dc="00000") then
+          if((jpd1(9 downto 0) and jpd1(19 downto 10)) = (vcid and jpd1(19 downto 10))) then 
+            selid <= '1';
+          else
+            selid <= '0';
+	  end if;
+        end if;
+      end if;
+    end if;
+  end process;
+
+-- write to register 0 
+
+  process(clk) begin
+    if(clk'event and clk='1') then 
+      if(vd='1') then 
+        reg1 <= jpd1(31 downto 0);
+      end if;
+    end if;
+  end process;
+
+-- memory address latch and counter
+ 
+  process(clk) begin   
+    if(clk'event and clk='1') then
+      if(vd ='1') then 
+        if(com_dc = "10") then
+          memadr0 <= jpd1(18 downto 0);
+	else
+          if(word_uc(0) = '1') then 
+            memadr0 <= memadr0 + "000000000000000001";
+          end if;
+        end if;
+      end if;
+    end if;
+  end process;
+
+  process(clk) begin   
+    if(clk'event and clk='1') then
+      memadr1 <= memadr0;
+--      memadr2 <= memadr1;
+    end if;
+  end process;
+
+-- memory control timing signal
+
+  process(clk) begin   
+    if(clk'event and clk='1') then
+      if(word_dc /= "00000" and selid = '1' and word_uc(0) = '0') then 
+        weregl <= '1';
+      else 
+	weregl <= '0';
+      end if;	
+    end if;
+  end process;
+
+  process(clk) begin   
+    if(clk'event and clk='1') then
+      if(word_dc /= "00000" and selid = '1' and word_uc(0) = '1') then 
+        weregh <= '1';
+      else 
+	weregh <= '0';
+      end if;	
+    end if;
+  end process;
+
+-- mema signal
+
+  process(clk) begin   
+    if(clk'event and clk='1') then
+      if(weregl = '1') then 
+	j_mal <= memadr1;
+      else 
+	j_mal <= j_clma;
+      end if;	
+    end if;
+  end process;
+
+  process(clk) begin   
+    if(clk'event and clk='1') then
+      if(weregh = '1') then 
+--	j_mah <= memadr2;
+	j_mah <= memadr1;
+      else
+	j_mah <= j_clma;
+      end if;	
+    end if;
+  end process;
+
+-- memd signal
+
+
+  process(clk) begin   
+    if(clk'event and clk='1') then
+      j_mdl <= "0000" & reg1;
+      j_mdh <= "0000" & reg1;
+      j_oel <= weregl;	
+      j_oeh <= weregh;	
+    end if;
+  end process;
+
+--  process(clk) begin   
+--    if(clk'event and clk='1') then
+--      if(weregl = '1') then 	
+--        j_mdl <= "0000" & reg1;
+--      else
+--        j_mdl <= "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ";
+--      end if;	
+--    end if;
+--  end process;
+--
+--  process(clk) begin   
+--    if(clk'event and clk='1') then
+--      if(weregh = '1') then 	
+--        j_mdh <= "0000" & reg1;
+--      else
+--        j_mdh <= "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ";
+--      end if;	
+--    end if;
+--  end process;
+
+-- memwe signal
+
+  process(clk) begin   
+    if(clk'event and clk='1') then
+      j_mwe(0) <= not weregl;
+      j_mwe(1) <= not weregh;
+    end if;
+  end process;
+
+-- memoe signal
+
+  process(clk) begin   
+    if(clk'event and clk='1') then
+      j_moe(0) <= weregl;
+      j_moe(1) <= weregh;
+    end if;
+  end process;
+
+-- write to command register in jpw
+
+  process(clk) begin
+    if(clk'event and clk='1') then 
+      if(j_wejp='1') then 
+        if(j_adr(3 downto 0) = "0000") then 
+          nd <= j_data(4 downto 0);
+        elsif(j_adr(3 downto 0)= "0001") then            
+	  if(j_data(19 downto 10)=j_physid) then 
+            vcid <= j_data(9 downto 0);
+ 	  end if;
+        end if; 
+      end if;	
+    end if;
+  end process;
+  j_vcido <= vcid;
+     
+end RTL;
+
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.std_logic_unsigned.all;
+
+entity calc is
+    port(
+      c_md : in std_logic_vector(71 downto 0);
+      c_ma : out std_logic_vector(18 downto 0);
+      c_weca: in std_logic;
+      c_data: in std_logic_vector(19 downto 0);
+      c_adr : in std_logic_vector(3 downto 0);
+      c_jdata : out std_logic_vector(71 downto 0);             
+      c_run : out std_logic;
+      rst,clk : in std_logic);
+end calc;
+
+architecture RTL of calc is
+
+  signal mema_dc: std_logic_vector(19 downto 0);
+  signal adrvd00: std_logic;
+  signal adrvd: std_logic_vector(5 downto 0);
+  signal n: std_logic_vector(19 downto 0);
+  signal start: std_logic;
+
+begin
+
+-- generate memory address 
+
+  process(clk) begin
+    if(clk'event and clk='1') then 
+      if(rst = '1') then 
+        mema_dc <= "00000000000000000000";
+      else
+        if(start='1') then 
+          mema_dc <= n ;
+        elsif(mema_dc /= "00000000000000000000") then 
+          mema_dc <= mema_dc - "00000000000000000001";
+        end if;	
+      end if;
+    end if;
+  end process;
+
+  c_ma <= mema_dc(18 downto 0);
+
+-- address and data valid signal
+
+  process(clk) begin
+    if(clk'event and clk='1') then 
+      if(rst = '1') then
+        adrvd00 <= '0';
+      elsif(start = '1') then 
+	adrvd00 <= '1';
+      elsif(mema_dc = "0000000000000000000001") then 
+	adrvd00 <= '0';
+      end if;
+    end if;
+  end process;
+
+  process(clk) begin
+    if(clk'event and clk='1') then 
+      if(rst = '1') then  
+        adrvd <= "000000";
+      else
+        adrvd(1) <= adrvd00;        
+        adrvd(2) <= adrvd(1);        
+        adrvd(3) <= adrvd(2);        
+        adrvd(4) <= adrvd(3);        
+        adrvd(5) <= adrvd(4);        
+      end if; 
+    end if;
+  end process;
+
+  c_run <= adrvd(4);
+
+-- data from memory
+
+  process(clk) begin
+    if(clk'event and clk='1') then 
+      c_jdata <= c_md(71 downto 68) & c_md(35 downto 32) & c_md(67 downto 36) & c_md(31 downto 0);
+    end if;
+  end process;
+
+-- write to command register in calc
+
+  process(clk) begin
+    if(clk'event and clk='1') then 
+      if(c_weca='1') then 
+        if(c_adr = "0000") then 
+	  n <= c_data;
+        end if;
+      end if;	
+    end if;
+  end process;
+     
+  process(clk) begin
+    if(clk'event and clk='1') then 
+      if(rst = '1') then 
+        start <=  '0';
+      elsif(c_weca='1' and c_adr = "0000") then 
+        start <=  '1';
+      else
+	start <= '0';
+      end if;	
+    end if;
+  end process;
+
+end RTL;
+
+
+
+  
+
+
+
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.std_logic_unsigned.all;
+
+entity fo is
+    port(
+      f_wefo : in std_logic;
+      f_data: in std_logic_vector(31 downto 0);
+      f_adr : in std_logic_vector(3 downto 0);
+      f_pd : in std_logic_vector(31 downto 0);      
+      f_pa : out std_logic_vector(11 downto 0);
+      f_csts : in std_logic;
+      f_fodata : out std_logic_vector(35 downto 0);
+      f_sts,f_vd,f_nd : out std_logic;
+      f_wd : in std_logic;
+      f_active : out std_logic;
+      f_vcid : in std_logic_vector(9 downto 0);	
+      rst,clk,sysclk : in std_logic );
+end fo;
+
+architecture RTL of fo is
+
+  signal sysclk0,sysclk1 : std_logic;
+  signal scphase : std_logic;
+  signal calcsts1 : std_logic;
+  signal plstart_flag,rdstart_flag: std_logic;
+  signal select_code: std_logic_vector(1 downto 0);
+  signal al_dc,al_uc: std_logic_vector(3 downto 0);
+  signal ah_dc,ah_uc: std_logic_vector(7 downto 0);
+  signal address_pl : std_logic_vector(11 downto 0);
+  signal vdflag_pl: std_logic;
+  signal random_dc : std_logic_vector(1 downto 0);
+  signal random_uc : std_logic_vector(11 downto 0);
+  signal address_rd : std_logic_vector(11 downto 0);
+  signal fodata0: std_logic_vector(31 downto 0);
+  signal vdflag_rd: std_logic;
+  signal vd0,vd1: std_logic;
+  signal com0,com1: std_logic_vector(31 downto 0);
+  signal ni : std_logic_vector(5 downto 0);
+  signal ndata : std_logic_vector(3 downto 0);
+  signal comstart: std_logic;
+
+begin
+
+  f_active <= '1';
+
+-- make phase and wd from sysclk 
+
+  process(clk) begin
+    if(clk'event and clk='1') then
+      sysclk1 <= sysclk0;
+      sysclk0 <= sysclk;
+    end if;
+  end process;
+
+  scphase <= '1';
+	 
+-- triger logic
+
+  process(clk) begin
+    if(clk'event and clk='1') then
+      if(scphase = '1') then 
+	calcsts1 <= f_csts;
+      end if;	
+    end if;
+  end process;
+
+  process(clk) begin
+    if(clk'event and clk='1') then
+      if(scphase = '1') then 
+        if((f_csts = '0') and (calcsts1 = '1')) then 
+          plstart_flag <= '1';
+        else 
+          plstart_flag <= '0';	
+	end if;
+      end if;
+    end if;
+  end process;
+
+  process(clk) begin
+    if(clk'event and clk='1') then
+      if(scphase = '1') then 
+        if((comstart = '1') and (com0(31 downto 30) = "00") 
+ 	    and ((com0(9 downto 0) and com0(19 downto 10)) 
+		= (f_vcid and com0(19 downto 10))) and (ah_dc = "000000")) then 	
+          rdstart_flag <= '1';
+        else
+          rdstart_flag <= '0';
+	end if;
+      end if;
+    end if;
+  end process;
+
+  process(clk) begin
+    if(clk'event and clk='1') then
+      if(plstart_flag = '1') then 
+        select_code <= "00";
+      elsif(rdstart_flag = '1') then 
+        select_code <= "10";
+      end if;	
+    end if;
+  end process;
+
+-- pipeline read counter
+
+  process(clk) begin
+    if(clk'event and clk='1') then
+      if(scphase = '1') then 
+        if(plstart_flag = '1' or (al_dc = "0001" and ah_dc /= "00000001")) then 
+	  al_dc <= ndata;
+	  al_uc <= "0000";
+        elsif(al_dc /= "0000") then 
+	  al_dc <= al_dc - "0001";
+	  al_uc <= al_uc + "0001";
+	end if;
+      end if;
+    end if;
+  end process;
+
+  process(clk) begin
+    if(clk'event and clk='1') then
+      if(rst='1') then  
+	  ah_dc <= "00000000";
+      elsif(scphase = '1') then 
+        if(plstart_flag = '1') then 
+	  ah_dc <= "00" & ni;
+	  ah_uc <= "00000000";
+        elsif(ah_dc /= "00000000" and al_dc = "0001") then 
+	  ah_dc <= ah_dc - "00000001";
+	  ah_uc <= ah_uc + "00000001";
+	end if;
+      end if;
+    end if;
+  end process;
+
+  address_pl <= ah_uc & al_uc;
+
+  with ah_dc select
+    vdflag_pl <= '0' when "00000000",
+                 '1' when others;
+
+-- ramdom read counter
+
+  process(clk) begin
+    if(clk'event and clk='1') then
+      if(rst = '1') then  
+        random_dc <= "00";
+      elsif(scphase = '1') then 
+        if(rdstart_flag = '1') then 
+          random_uc <= com1(11 downto 0); 
+          random_dc <= "10";
+        elsif(random_dc /= "00") then 
+          random_uc <= random_uc + "000000000001";
+          random_dc <= random_dc - "01";
+	end if;
+      end if;
+    end if;
+  end process;
+
+  address_rd <= random_uc;
+ 
+  with random_dc select 
+    vdflag_rd <= '0' when "00",
+	         '1' when others;
+
+-- address selector
+
+  with select_code select
+    f_pa <= address_rd when "10",
+	    address_pl when others;
+
+-- data selector
+
+   fodata0 <= f_pd;
+
+-- add parity
+
+  process(clk) 
+    variable tmp: std_logic_vector(3 downto 0);  
+  begin
+    if(clk'event and clk='1') then
+      if(scphase = '1') then 
+        tmp := "0000";
+        for i in 0 to 7 loop
+          tmp(0) := tmp(0) xor fodata0(i);
+          tmp(1) := tmp(1) xor fodata0(i+8);
+          tmp(2) := tmp(2) xor fodata0(i+16);
+          tmp(3) := tmp(3) xor fodata0(i+24);
+        end loop;
+        f_fodata <= tmp & fodata0;
+      end if;
+    end if;
+  end process;
+ 
+-- output logic
+
+  with select_code select
+    vd0 <= vdflag_rd when "10",
+	   vdflag_pl when others;
+
+  process(clk) begin
+    if(clk'event and clk='1') then 
+      if(scphase = '1') then 
+	vd1 <= vd0;
+        f_vd <= not vd1;
+        f_sts <= not f_csts;
+        f_nd <= not vd1;
+      end if;      	      
+    end if;
+  end process;
+
+-- write to command register in fo
+
+  process(clk) begin
+    if(clk'event and clk='1') then 
+      if(f_wefo='1') then 
+        if(f_adr = "0000") then 
+          com0 <= f_data;
+        elsif(f_adr = "0001") then 
+          com1 <= f_data;
+        elsif(f_adr = "0010") then            
+          ni <= f_data(5 downto 0);
+        elsif(f_adr = "0011") then            
+          ndata <= f_data(3 downto 0);
+        end if; 
+      end if;	
+    end if;
+  end process;
+
+  process(clk) begin
+    if(clk'event and clk='1') then 
+      if(f_wefo='1' and f_adr = "0001") then 
+        comstart <= '1';
+      elsif(scphase = '1') then 
+	comstart <= '0';	
+      end if;
+    end if;
+  end process;
+    
+end RTL;

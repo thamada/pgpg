@@ -1,0 +1,3 @@
+cpp $1 $1.cpp
+/usr2/fukushig/pgpg1.0/bin/pgpgct $1.cpp
+/usr2/fukushig/pgpg1.0/bin/pgpgcm $1.cpp
