@@ -2,6 +2,8 @@
 
 > **注意**: 本ドキュメントは設計仕様書です。変更履歴や実装の詳細な変更点については、`ChangeLog`を参照してください。本ドキュメントでは、現在のシステムの設計と仕様を記述します。
 >
+> **関連**: プロジェクト概要とクイックスタートは [README.md](../README.md) を参照してください。
+>
 > **参考文献**: Hamada, T., Fukushige, T., & Makino, J. (2007). PGPG: An Automatic Generator of Pipeline Design for Programmable GRAPE Systems. *arXiv:astro-ph/0703182*.
 
 ---
