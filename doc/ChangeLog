@@ -6,6 +6,19 @@
 
 ## 2026-03-14 (update-doc)
 
+### paper/README.md — Kawai et al. (1999) astro-ph/9905101 を反映
+
+- [Kawai et al. (1999)](https://arxiv.org/abs/astro-ph/9905101)（$7.0/Mflops Astrophysical N-Body Simulation with Treecode on GRAPE-5）の情報を追加
+  - 1999 年 Gordon Bell 価格性能部門エントリー：210 万粒子宇宙論 N 体、持続 5.92 Gflops、7.0 ドル/Mflops
+  - GRAPE-5 系譜：G5 チップ 90 MHz、理論ピーク 109.44 Gflops（32 パイプライン）、ペアワイズ力相対誤差約 0.3%
+  - Barnes 修正ツリー法、最適グループサイズ \(n_g \approx 2000\)、総コスト 40,900 ドル
+- 冒頭関連論文・先行研究表・参考文献・研究系譜・関連リソースに astro-ph/9905101 を追加
+
+### doc/design.md
+
+- 14 節 論文解説：Kawai et al. (1999) astro-ph/9905101（GRAPE-5 ツリーコード、1999 年 Gordon Bell エントリー、7.0 ドル/Mflops）を追記
+- 12.4 節 性能表：GRAPE-5 チップ 80 MHz → 90 MHz に修正
+
 ### doc/design.md Mermaid 図の用語・ラベル整理
 
 - pgpgcm: ラベルから「(pg_module.c)」を削除（出力先は H で明示）

@@ -589,7 +589,7 @@ void force(double x[][3], double m[], double eps2, double a[][3], int n);
 | G5 | 32bit fix | 17bit log（符号1,非ゼロ1,指数7,仮数8） | 64bit fix | GRAPE-5 相当 |
 | G5+ | 32bit fix | 20bit log（符号1,非ゼロ1,指数7,仮数11） | 64bit fix | 高精度 |
 
-**Stratix での例**（G5）: fmax 約 142〜182 MHz、LE 約 2500〜3000。Stratix EP1S20 に 5 本の G5 パイプラインを 180 MHz で実装可能。元の GRAPE-5 チップ（7 年前、2 本、80 MHz）と比べ約 5 倍の性能。
+**Stratix での例**（G5）: fmax 約 142〜182 MHz、LE 約 2500〜3000。Stratix EP1S20 に 5 本の G5 パイプラインを 180 MHz で実装可能。元の GRAPE-5 チップ（7 年前、2 本、90 MHz）と比べ約 5 倍の性能。
 
 ---
 
@@ -629,7 +629,7 @@ void force(double x[][3], double m[], double eps2, double a[][3], int n);
 | 項目 | 内容 |
 |------|------|
 | **公式サイト** | http://progrape.jp（CGI による PGDL から VHDL/エミュレータ/インターフェース生成） |
-| **論文解説** | [paper/README.md](../paper/README.md) — 時代背景、GRAPE（GRAPE-3/GRAPE-5 含む）/PROGRAPE-1～3/PGPG/PGR の系譜、Nakasato et al. (2006) SPH、Chamomile Scheme（GPU）、Hamada et al. (2009) 42 TFlops・多重ウォーク法・2009 年ゴードン・ベル賞、牧野「スーパーコンピューティングの将来」、先行研究、**5 節 低精度計算AI専用チップと開発競争**（低精度計算の技術的背景、量子化・NVFP4、AI専用チップ例・Tensor Core（テンサーコア）、開発競争の様相、GRAPE時代の日本と現代の対比・Preferred Networks）、結語（2026 年 AI ブームと低精度計算チップ、若い世代へのメッセージ）。末尾に最終更新日付を表示 |
+| **論文解説** | [paper/README.md](../paper/README.md) — 時代背景、GRAPE（GRAPE-3/GRAPE-5 含む、[Kawai et al. 1999](https://arxiv.org/abs/astro-ph/9905101) ツリーコード 1999 年 Gordon Bell エントリー・7.0 ドル/Mflops）/PROGRAPE-1～3/PGPG/PGR の系譜、Nakasato et al. (2006) SPH、Chamomile Scheme（GPU）、Hamada et al. (2009) 42 TFlops・多重ウォーク法・2009 年ゴードン・ベル賞、牧野「スーパーコンピューティングの将来」、先行研究、**5 節 低精度計算AI専用チップと開発競争**（低精度計算の技術的背景、量子化・NVFP4、AI専用チップ例・Tensor Core（テンサーコア）、開発競争の様相、GRAPE時代の日本と現代の対比・Preferred Networks）、結語（2026 年 AI ブームと低精度計算チップ、若い世代へのメッセージ）。末尾に最終更新日付を表示 |
 | **論文計画** | SPH、BEM（Boundary Element Method）のサポート、浮動小数点拡張、Xilinx FPGA 対応 |
 
 ---

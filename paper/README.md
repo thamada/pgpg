@@ -5,7 +5,7 @@ Tsuyoshi Hamada, Toshiyuki Fukushige, Junichiro Makino
 *Publications of the Astronomical Society of Japan*, Vol. 57, No. 5 (2005), pp. 799–813  
 arXiv: [astro-ph/0703182](https://arxiv.org/abs/astro-ph/0703182)
 
-> **関連論文**: PGPG の共著者 Hamada、Fukushige、Makino は、[PROGRAPE-1](https://arxiv.org/abs/astro-ph/9906419)（Hamada et al. 1999/2000）で **Programmable GRAPE** の概念を実装した。PROGRAPE-1 は[1998 年日本天文学会春季年会](https://www.asj.or.jp/nenkai/archive/1998a/pdf/X02a.pdf)で初発表され、同開発で露呈した「パイプライン設計に 1 人年以上」という生産性の壁が、PGPG の直接の動機となった。PGPG の後継 **PGR** を用いた [Nakasato et al. (2006)](https://arxiv.org/abs/astro-ph/0604295) は **PROGRAPE-3** 上で SPH パイプラインを初実装し、1998 年の目標を達成した。さらに、**PGPG と同時期**（2007 年 3 月）に、同じ Hamada らは [Chamomile Scheme](https://arxiv.org/abs/astro-ph/0703100)（Hamada & Iitaka 2007）で **GPU 向け N 体シミュレーション**を発表している。その発展として、[Hamada et al. (2009)](https://www.cs.umd.edu/class/fall2019/cmsc714/readings/Hamada-nbody.pdf) は **多重ウォーク法**により階層的 N 体法（ツリーコード・FMM）を GPU で初めて高効率に実現し、**2009 年ゴードン・ベル賞（価格性能部門）**で 42 TFlops・124 MFlops/$ を達成した。研究の系譜：GRAPE → PROGRAPE-1（1998/1999）→ **PGPG** → PGR/PROGRAPE-3（SPH）∥ **Chamomile Scheme**（GPU）→ **42 TFlops**（SC09）。
+> **関連論文**: PGPG の共著者 Hamada、Fukushige、Makino は、[PROGRAPE-1](https://arxiv.org/abs/astro-ph/9906419)（Hamada et al. 1999/2000）で **Programmable GRAPE** の概念を実装した。PROGRAPE-1 は[1998 年日本天文学会春季年会](https://www.asj.or.jp/nenkai/archive/1998a/pdf/X02a.pdf)で初発表され、同開発で露呈した「パイプライン設計に 1 人年以上」という生産性の壁が、PGPG の直接の動機となった。同じ Fukushige、Makino は [Kawai et al. (1999)](https://arxiv.org/abs/astro-ph/9905101) で **GRAPE-5** によるツリーコード宇宙論 N 体シミュレーション（210 万粒子）で **1999 年 Gordon Bell 価格性能部門**にエントリーし、持続 5.92 Gflops・**7.0 ドル/Mflops** を達成した。PGPG の後継 **PGR** を用いた [Nakasato et al. (2006)](https://arxiv.org/abs/astro-ph/0604295) は **PROGRAPE-3** 上で SPH パイプラインを初実装し、1998 年の目標を達成した。さらに、**PGPG と同時期**（2007 年 3 月）に、同じ Hamada らは [Chamomile Scheme](https://arxiv.org/abs/astro-ph/0703100)（Hamada & Iitaka 2007）で **GPU 向け N 体シミュレーション**を発表している。その発展として、[Hamada et al. (2009)](https://www.cs.umd.edu/class/fall2019/cmsc714/readings/Hamada-nbody.pdf) は **多重ウォーク法**により階層的 N 体法（ツリーコード・FMM）を GPU で初めて高効率に実現し、**2009 年ゴードン・ベル賞（価格性能部門）**で 42 TFlops・124 MFlops/$ を達成した。研究の系譜：GRAPE → **GRAPE-5（1999 GB エントリー、7.0 ドル/Mflops）** → PROGRAPE-1（1998/1999）→ **PGPG** → PGR/PROGRAPE-3（SPH）∥ **Chamomile Scheme**（GPU）→ **42 TFlops**（SC09）。
 
 ---
 
@@ -43,7 +43,7 @@ GRAPE は **低精度型**（奇数番号）と **高精度型**（偶数番号�
 - **GRAPE-3**（Okumura et al. 1993）: 8 個の GRAPE チップ（各 1 パイプライン、20 MHz）、4.8 Gflops ピーク。LNS 12 bit。ペアワイズ力の相対誤差約 2%。VME バス。
 - **GRAPE-2A**（1992）: 分子動力学・天体両用。補間テーブルで van der Waals、Coulomb、Ewald 法の実空間成分を計算可能。
 - **GRAPE-4**（計画）: 約 1,600 パイプライン、ピーク約 1 Tflops、1995 年完成予定、約 1 億円。
-- **GRAPE-5**（[Kawai et al. 1999](https://arxiv.org/abs/astro-ph/9909116)）: GRAPE-3 の後継。8 個の G5 チップ（各 2 パイプライン、80 MHz、1 クロックあたり 2 ペア相互作用）、**38.4 Gflops ピーク**。仮想マルチパイプライン（実パイプライン 1 本あたり 6 仮想パイプライン、計 12 仮想パイプライン）でメモリ帯域を削減。PCI バス（VME の約 10 倍の通信速度）。純粋 1/r に加え**任意の cutoff 関数**（オンチップ RAM テーブル）で Ewald 法・P³M 法に対応。セルインデックス法で PP 力の計算コストを削減。ペアワイズ力の精度は GRAPE-3 の**約 10 倍**、動的範囲は **10³ 倍**。LNS 17 bit（符号 1 bit、非ゼロ 1 bit、指数部 7 bit、仮数部 8 bit）。メモリ最大 131,072 粒子。128k 体直接和で 14 秒/タイムステップ、100 万体 Barnes-Hut（θ=0.75）で 16 秒/タイムステップ。
+- **GRAPE-5**（[Kawai et al. 1999](https://arxiv.org/abs/astro-ph/9909116)）: GRAPE-3 の後継。8 個の G5 チップ（各 2 パイプライン、90 MHz、1 クロックあたり 2 ペア相互作用）、**理論ピーク 109.44 Gflops**（32 パイプライン、1 相互作用あたり 38 演算）。仮想マルチパイプライン（実パイプライン 1 本あたり 6 仮想パイプライン、計 12 仮想パイプライン）でメモリ帯域を削減。PCI バス（VME の約 10 倍の通信速度）。純粋 1/r に加え**任意の cutoff 関数**（オンチップ RAM テーブル）で Ewald 法・P³M 法に対応。セルインデックス法で PP 力の計算コストを削減。ペアワイズ力の相対誤差約 0.3%（GRAPE-3 の**約 10 倍**の精度）、動的範囲は **10³ 倍**。LNS 17 bit（符号 1 bit、非ゼロ 1 bit、指数部 7 bit、仮数部 8 bit）。メモリ最大 131,072 粒子。128k 体直接和で 14 秒/タイムステップ、100 万体 Barnes-Hut（θ=0.75）で 16 秒/タイムステップ。[Kawai et al. (1999)](https://arxiv.org/abs/astro-ph/9905101) では、**1999 年 Gordon Bell 価格性能部門**のエントリーとして、宇宙論的 N 体シミュレーション（210 万粒子、半径 50 Mpc、z=24 から現在まで 999 タイムステップ）を COMPAQ AlphaServer DS10 をホストとして 8.37 時間で実行し、**持続性能 5.92 Gflops**、**価格性能 7.0 ドル/Mflops**（総コスト 40,900 ドル）を達成した。Barnes の修正ツリー法を採用し、最適なグループサイズ \(n_g \approx 2000\) でホストと GRAPE の負荷バランスを取っている。
 
 GRAPE システムは、汎用スーパーコンピュータと比べて **価格性能比で 100〜10,000 倍** 優れていた（Ebisuzaki et al. 1993）。
 
@@ -51,7 +51,7 @@ GRAPE システムは、汎用スーパーコンピュータと比べて **価�
 
 [Fukushige & Makino (1996)](https://arxiv.org/abs/astro-ph/9612090) では、**GRAPE-4** による銀河形成 N 体シミュレーション（78 万粒子、185 時間）で平均 332 Gflops を達成し、1,269 個のパイプライン処理器でピーク 663 Gflops、価格性能比 4,600 ドル/Gflops を実現した。この成果は **1996 年ゴードン・ベル賞**を受賞した。
 
-**GRAPE-5** の開発は 1996 年 5 月に開始され、G5 チップは 1998 年 6 月に完成、プロトタイプボード（4 チップ）は 1998 年 10 月、量産版（8 チップ）は 1999 年 4 月に完成した。NEC 0.5 μm ゲートアレイで製造、約 20 万ゲート、364 ピン PGA、3.3 V、約 10 W/チップ。論文では約 1 Tflops の大規模並列 GRAPE-5 システムの構想も述べられている（Kawai et al. 1999）。
+**GRAPE-5** の開発は 1996 年 5 月に開始され、G5 チップは 1998 年 6 月に完成、プロトタイプボード（4 チップ）は 1998 年 10 月、量産版（8 チップ）は 1999 年 4 月に完成した。NEC 0.5 μm ゲートアレイで製造、約 20 万ゲート、364 ピン PGA、3.3 V、約 10 W/チップ。論文では約 1 Tflops の大規模並列 GRAPE-5 システムの構想も述べられている（Kawai et al. 1999）。[Kawai et al. (1999)](https://arxiv.org/abs/astro-ph/9905101) の **Gordon Bell 価格性能部門エントリー**では、GRAPE-5（32 パイプライン、理論ピーク 109.44 Gflops）を COMPAQ AlphaServer DS10 に接続し、宇宙論的 N 体シミュレーション（210 万粒子、999 タイムステップ、8.37 時間）で持続 5.92 Gflops、**7.0 ドル/Mflops** の価格性能を達成した。総コストは 40,900 ドル（GRAPE-5 ボード 1.65 M 円/枚×2、ホスト等 1.4 M 円）。ツリー構築・走査・時間積分はホスト、重力計算は GRAPE-5 が担当する「ホスト＋専用アクセラレータ」構成で、Barnes の修正ツリー法により相互作用リストをグループで共有しホスト負荷を \(n_g\) 分の 1 に削減している。
 
 **GRAPE-6** は約 5 億円で 64 Tflops のピーク性能を達成し、当時の Earth Simulator（40 Tflops）や ASCI-Q（30 Tflops）と同等以上の性能を、桁違いに安いコストで実現した。**2003 年ゴードン・ベル賞（特別賞）**を受賞している。
 
@@ -119,7 +119,8 @@ Cold Collapse テスト（N=50 万）では、SPH を PROGRAPE、重力をツリ
 | Brieu et al. (1995) | GRAPE-3 上で P³M 法を実装（Plummer のみのため 3 回呼び出しで 1 つの PP 力を近似） |
 | [Fukushige & Makino (1996)](https://arxiv.org/abs/astro-ph/9612090) | GRAPE-4 による銀河形成 N 体シミュレーション（78 万粒子、332 Gflops、1996 年ゴードン・ベル賞） |
 | Makino & Taiji (1998) | GRAPE システムの体系化 |
-| [Kawai et al. (1999)](https://arxiv.org/abs/astro-ph/9909116) | GRAPE-5：GRAPE-3 の後継。G5 チップ（2 パイプライン、80 MHz）、38.4 Gflops ピーク、PCI バス、任意 cutoff で Ewald/P³M 対応、LNS 17 bit（符号 1 bit、非ゼロ 1 bit、指数部 7 bit、仮数部 8 bit） |
+| [Kawai et al. (1999)](https://arxiv.org/abs/astro-ph/9909116) | GRAPE-5：GRAPE-3 の後継。G5 チップ（2 パイプライン、90 MHz）、理論ピーク 109.44 Gflops、PCI バス、任意 cutoff で Ewald/P³M 対応、LNS 17 bit |
+| [Kawai et al. (1999)](https://arxiv.org/abs/astro-ph/9905101) | GRAPE-5 ツリーコード：1999 年 Gordon Bell 価格性能部門エントリー。210 万粒子宇宙論 N 体、持続 5.92 Gflops、7.0 ドル/Mflops、Barnes 修正ツリー法 |
 
 ### 2.3 再構成可能計算・PROGRAPE
 
@@ -195,7 +196,7 @@ PGPG 論文（Table 2, 3, 4）における PGPG 生成ハードウェアモデ�
 
 ### 3.5 重力パイプラインの実例
 
-重力加速度 \( f_i = \sum_j m_j \boldsymbol{r}_{ij} / (r_{ij}^2 + \varepsilon^2)^{3/2} \) を PGDL で記述し、GRAPE-3 / GRAPE-5 と同等の設計を自動生成した。Stratix 上では、GRAPE-5 と同様のパイプラインを 5 本、180 MHz で実装可能であり、元の G5 チップ（2 パイプライン、80 MHz、1 クロックあたり 2 ペア相互作用）と比べ約 **5 倍**の性能を達成した。GRAPE-5 ボードは 8 個の G5 チップで 38.4 Gflops ピーク、実効性能は小規模（N=10⁴）でピークの 70% 超を達成している（Kawai et al. 1999）。
+重力加速度 \( f_i = \sum_j m_j \boldsymbol{r}_{ij} / (r_{ij}^2 + \varepsilon^2)^{3/2} \) を PGDL で記述し、GRAPE-3 / GRAPE-5 と同等の設計を自動生成した。Stratix 上では、GRAPE-5 と同様のパイプラインを 5 本、180 MHz で実装可能であり、元の G5 チップ（2 パイプライン、90 MHz、1 クロックあたり 2 ペア相互作用）と比べ約 **5 倍**の性能を達成した。GRAPE-5 システムは 8 個の G5 チップ（計 32 パイプライン）で理論ピーク 109.44 Gflops、[Kawai et al. (1999)](https://arxiv.org/abs/astro-ph/9905101) の宇宙論 N 体シミュレーション（210 万粒子）では持続 5.92 Gflops を達成している（Kawai et al. 1999）。
 
 ### 3.6 今後の拡張計画（論文当時）とその実現
 
@@ -277,7 +278,7 @@ PGPG の共著者である牧野淳一郎は、[「スーパーコンピュー�
 ### 4.6 研究の系譜（まとめ）
 
 ```
-GRAPE (1990-)        → 専用ハードウェア、重力のみ
+GRAPE (1990-)        → 専用ハードウェア、重力のみ。GRAPE-5 (1999) でツリーコード 210 万粒子、Gordon Bell 価格性能部門エントリー、7.0 ドル/Mflops
     ↓
 PROGRAPE-1 (1998/1999) → FPGA で再構成可能に。1998 年 ASJ 初発表、重力・SPH・van der Waals へ拡張可能
     ↓                 設計生産性の壁（1 人年以上）を露呈
@@ -409,7 +410,7 @@ NVIDIA の CUDA への依存を弱めるため、**Intel、Google、Arm、Qualco
 
 1990 年代、**GRAPE** は天体 N 体シミュレーションにおいて、低精度（LNS・固定小数点）による専用ハードウェアで、汎用スーパーコンピュータの **100〜10,000 倍** の価格性能比を実現した。GRAPE-4 は 1996 年ゴードン・ベル賞、GRAPE-6 は 2003 年同特別賞を受賞している。PGPG や PROGRAPE は、その設計思想を継承しつつ、FPGA による再構成可能性と高レベル設計ツールで設計生産性を高めた。当時の日本は、**低精度計算専用ハードウェア**の分野で世界を牽引する存在だった。
 
-2020 年代の AI チップ開発競争において、日本は **Preferred Networks（PFN）** の MN-Core シリーズが一定の存在感を示している。第 1 世代 MN-Core は 2020〜2021 年に Green500 で世界 1 位を 3 度獲得し、第 2 世代 MN-Core 2 は 2023 年稼働開始、2024 年 9 月から販売を開始した。2024 年 8 月には SBI ホールディングスと次世代 AI 半導体開発に向けた資本業務提携（最大 100 億円規模の出資予定）を締結、同年 11 月には生成 AI 推論専用プロセッサ **MN-Core L1000** の開発を発表している。L1000 は三次元積層 DRAM 技術を採用し、既存 GPU と比較して最大 10 倍の高速処理を目指し、2026 年の提供を目標としている。一方で、NVIDIA、AMD、Google、Amazon などに比べて市場規模・エコシステム・顧客基盤の面で存在感は限定的であり、技術の継承、産業構造の変容、国際競争環境の変貌、人材・資金の流れなど、多角的な考察が今後求められる。本稿で扱う PGPG や GRAPE の系譜は、日本が低精度計算専用ハードウェアの分野で築いた**知の遺産**であり、その設計思想は現代の AI チップ開発にも通じる。次代を担う研究者・技術者が、この遺産を足がかりに新たな挑戦を始めることへの期待が、結語に込められている。
+2020 年代の AI チップ開発競争において、日本は **Preferred Networks（PFN）** の MN-Core シリーズが一定の存在感を示している。第 1 世代 MN-Core は 2020〜2021 年に Green500 で世界 1 位を 3 度獲得し、第 2 世代 MN-Core 2 は 2023 年稼働開始、2024 年 9 月から販売を開始した。2024 年 8 月には SBI ホールディングスと次世代 AI 半導体開発に向けた資本業務提携（最大 100 億円規模の出資予定）を締結、同年 11 月には生成 AI 推論専用プロセッサ **MN-Core L1000** の開発を発表している。L1000 は三次元積層 DRAM 技術を採用し、既存 GPU と比較して最大 10 倍の高速処理を目指し、2026 年の提供を目標としている。一方で、NVIDIA、AMD、Google、Amazon などに比べて市場規模・エコシステム・顧客基盤の面で存在感は限定的である。
 
 ---
 
@@ -425,7 +426,8 @@ NVIDIA の CUDA への依存を弱めるため、**Intel、Google、Arm、Qualco
 - Barnes, J., & Hut, P. (1986). Barnes-Hut ツリー法
 - Sugimoto, D., et al. (1990). GRAPE プロジェクト開始
 - [Ebisuzaki, T., Makino, J., Fukushige, T., Taiji, M., Sugimoto, D., Ito, T., & Okumura, S. K. (1993). GRAPE Project: An Overview. *PASJ*, 45, 269–278](https://articles.adsabs.harvard.edu/cgi-bin/nph-iarticle_query?1993PASJ...45..269E&defaultprint=YES&filetype=.pdf)
-- [**Kawai, A., Fukushige, T., Makino, J., & Taiji, M. (1999). GRAPE-5: A Special-Purpose Computer for N-body Simulation. arXiv:astro-ph/9909116**](https://arxiv.org/abs/astro-ph/9909116) — GRAPE-3 の後継。G5 チップ、38.4 Gflops ピーク、PCI バス、任意 cutoff で Ewald/P³M 対応
+- [**Kawai, A., Fukushige, T., Makino, J., & Taiji, M. (1999). GRAPE-5: A Special-Purpose Computer for N-body Simulation. arXiv:astro-ph/9909116**](https://arxiv.org/abs/astro-ph/9909116) — GRAPE-3 の後継。G5 チップ、理論ピーク 109.44 Gflops、PCI バス、任意 cutoff で Ewald/P³M 対応
+- [**Kawai, A., Fukushige, T., & Makino, J. (1999). $7.0/Mflops Astrophysical N-Body Simulation with Treecode on GRAPE-5. arXiv:astro-ph/9905101**](https://arxiv.org/abs/astro-ph/9905101) — 1999 年 Gordon Bell 価格性能部門エントリー。210 万粒子宇宙論 N 体、持続 5.92 Gflops、7.0 ドル/Mflops、Barnes 修正ツリー法
 - [Fukushige, T., & Makino, J. (1996). N-body Simulation of Galaxy Formation on GRAPE-4 Special-Purpose Computer. arXiv:astro-ph/9612090](https://arxiv.org/abs/astro-ph/9612090)
 - Makino, J., & Taiji, M. (1998). GRAPE システム
 - Hamada, T., Fukushige, T., Kawai, A., & Makino, J. (1998). PROGRAPE-1: プログラム可能な超高速多体シミュレーション専用計算機. *日本天文学会 1998 年春季年会* X02a. [PDF](https://www.asj.or.jp/nenkai/archive/1998a/pdf/X02a.pdf) — **PROGRAPE-1 の初発表**
@@ -437,6 +439,7 @@ NVIDIA の CUDA への依存を弱めるため、**Intel、Google、Arm、Qualco
 
 ### 関連リソース
 
+- [$7.0/Mflops Astrophysical N-Body Simulation with Treecode on GRAPE-5（Kawai et al. 1999, Gordon Bell エントリー）](https://arxiv.org/abs/astro-ph/9905101)
 - [PROGRAPE-1 初発表（日本天文学会 1998 年春季年会 X02a）](https://www.asj.or.jp/nenkai/archive/1998a/pdf/X02a.pdf)
 - [SPH Simulations with Reconfigurable Hardware Accelerator（Nakasato et al. 2006）](https://arxiv.org/abs/astro-ph/0604295)
 - [スーパーコンピューティングの将来（牧野淳一郎）](http://jun.artcompsci.org/articles/future_sc.pdf) — FPGA・PGR に関する論考（[note010](https://jun-makino.sakura.ne.jp/articles/future_sc/note010.html) 等）
