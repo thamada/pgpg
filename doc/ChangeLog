@@ -6,6 +6,13 @@
 
 ## 2026-03-14 (update-doc)
 
+### PGDL コンパイルフロー統一（README.md, doc/design.md）
+
+- `*.sph` → `cpp` → `*.sph.cpp` を削除し、入力を PGDL に統合
+- コンパイルフロー図を修正（README: ASCII 図、design.md: Mermaid 図）
+- コンパイルパイプライン説明を更新（cpp ステップ削除、pgpgct/pgpgcm が PGDL を直接入力）
+- ディレクトリ構成の pgpgc 説明を「pgpgct → pgpgcm」に修正
+
 ### 用語統一（doc/design.md, paper/README.md, README.md）
 
 - LNS 初出箇所に「LNS: Logarithmic Number System (対数表現)」を明記（3 ファイル）

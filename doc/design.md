@@ -61,14 +61,11 @@ PGPGは以下の3つの主要コンポーネントから構成される。
 ```mermaid
 flowchart TB
     subgraph flow["PGPG コンパイルフロー"]
-        A["*.sph ソース"]
-        B["cpp プリプロ"]
-        C["*.sph.cpp 展開後"]
-        A --> B --> C
+        A["PGDL"]
 
-        C --> D
-        C --> E
-        C --> F
+        A --> D
+        A --> E
+        A --> F
 
         D["pgpgct<br/>Cエミュレータトランスパイラ"]
         E["pgpgcm<br/>Cモデル生成 (pg_module.c)"]
@@ -88,23 +85,20 @@ flowchart TB
 
 ```bash
 # bin/pgpgc の内容
-cpp $1 $1.cpp
-pgpgct $1.cpp
-pgpgcm $1.cpp
+pgpgct $1
+pgpgcm $1
 ```
 
-1. **cpp**: Cプリプロセッサを実行し、`.sph` のマクロを展開して `.sph.cpp` を生成
-2. **pgpgct**: リストファイルを解析し、Cソフトウェアエミュレータのトップループ（`pg_pipe.c`）を生成
-3. **pgpgcm**: リストファイルを解析し、各PGPGモジュールに対応するC関数を生成（`pg_module.c`）
-
-4. **pgpgvt / pgpgvm**: リストファイルを直接読み、VHDL ハードウェア記述を生成
+1. **pgpgct**: PGDL を解析し、Cソフトウェアエミュレータのトップループ（`pg_pipe.c`）を生成
+2. **pgpgcm**: PGDL を解析し、各PGPGモジュールに対応するC関数を生成（`pg_module.c`）
+3. **pgpgvt / pgpgvm**: PGDL を直接読み、VHDL ハードウェア記述を生成
 
 ### 2.3 ディレクトリ構成
 
 ```
 src/pgpg1.0/
 ├── bin/
-│   ├── pgpgc          # スクリプト: cpp → pgpgct → pgpgcm
+│   ├── pgpgc          # スクリプト: pgpgct → pgpgcm
 │   └── pgpgct         # Cエミュレータトランスパイラ（バイナリ）
 ├── src_h/
 │   ├── v/             # VHDL生成モジュール（Cソース）
