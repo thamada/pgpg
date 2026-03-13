@@ -8,8 +8,9 @@
 
 ### 用語統一（doc/design.md, paper/README.md, README.md）
 
+- LNS 初出箇所に「LNS: Logarithmic Number System (対数表現)」を明記（3 ファイル）
 - 「対数表現」を「LNS（Logarithmic Number System）」に置換
-  - 初出・説明箇所では「LNS（Logarithmic Number System）」、表・コンパクト文脈では「LNS」を使用
+  - 初出・説明箇所では「LNS: Logarithmic Number System (対数表現)」、表・コンパクト文脈では「LNS」を使用
   - 「対数形式」「14 bit 対数」「12 bit 対数」なども LNS に統一
 
 ### paper/README.md

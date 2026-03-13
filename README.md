@@ -35,7 +35,7 @@
 
 | 項目 | 内容 |
 |------|------|
-| **数値表現** | 固定小数点（fix/ufix）、LNS（log）、浮動小数点（FLP）の併用 |
+| **数値表現** | 固定小数点（fix/ufix）、LNS: Logarithmic Number System (対数表現)（log）、浮動小数点（FLP）の併用 |
 | **出力形式** | VHDL、C（エミュレータ・インターフェース） |
 | **対象 FPGA** | Altera（APEX20K, Cyclone, Stratix 等） |
 | **ハードウェア** | PROGRAPE-2 対応 |
