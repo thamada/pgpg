@@ -635,7 +635,7 @@ void force(double x[][3], double m[], double eps2, double a[][3], int n);
 | 項目 | 内容 |
 |------|------|
 | **公式サイト** | http://progrape.jp（CGI による PGDL から VHDL/エミュレータ/インターフェース生成） |
-| **論文解説** | [paper/README.md](../paper/README.md) — 時代背景、GRAPE（GRAPE-3/GRAPE-5 含む）/PROGRAPE-1～3/PGPG/PGR の系譜、Nakasato et al. (2006) SPH、Chamomile Scheme（GPU）、Hamada et al. (2009) 42 TFlops・多重ウォーク法・2009 年ゴードン・ベル賞、牧野「スーパーコンピューティングの将来」、先行研究 |
+| **論文解説** | [paper/README.md](../paper/README.md) — 時代背景、GRAPE（GRAPE-3/GRAPE-5 含む）/PROGRAPE-1～3/PGPG/PGR の系譜、Nakasato et al. (2006) SPH、Chamomile Scheme（GPU）、Hamada et al. (2009) 42 TFlops・多重ウォーク法・2009 年ゴードン・ベル賞、牧野「スーパーコンピューティングの将来」、先行研究、結語（2026 年 AI ブームと低精度計算チップ、若い世代へのメッセージ） |
 | **論文計画** | SPH、BEM（Boundary Element Method）のサポート、浮動小数点拡張、Xilinx FPGA 対応 |
 
 ---
