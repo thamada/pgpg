@@ -5,7 +5,7 @@ Tsuyoshi Hamada, Toshiyuki Fukushige, Junichiro Makino
 *Publications of the Astronomical Society of Japan*, Vol. 57, No. 5 (2005), pp. 799–813  
 arXiv: [astro-ph/0703182](https://arxiv.org/abs/astro-ph/0703182)
 
-> **関連論文**: PGPG の共著者 Hamada、Fukushige、Makino は、[PROGRAPE-1](https://arxiv.org/abs/astro-ph/9906419)（Hamada et al. 1999/2000）で **Programmable GRAPE** の概念を初めて実装した。PROGRAPE-1 の開発で露呈した「パイプライン設計に 1 人年以上」という生産性の壁が、PGPG 開発の直接の動機となった。研究の系譜：GRAPE → **PROGRAPE-1** → **PGPG**。
+> **関連論文**: PGPG の共著者 Hamada、Fukushige、Makino は、[PROGRAPE-1](https://arxiv.org/abs/astro-ph/9906419)（Hamada et al. 1999/2000）で **Programmable GRAPE** の概念を初めて実装した。PROGRAPE-1 の開発で露呈した「パイプライン設計に 1 人年以上」という生産性の壁が、PGPG 開発の直接の動機となった。さらに、**PGPG と同時期**（2007 年 3 月）に、同じ Hamada らは [Chamomile Scheme](https://arxiv.org/abs/astro-ph/0703100)（Hamada & Iitaka 2007）で **GPU 向け N 体シミュレーション**を発表している。研究の系譜：GRAPE → PROGRAPE-1 → **PGPG**（FPGA）∥ **Chamomile Scheme**（GPU）。
 
 ---
 
@@ -110,6 +110,10 @@ PROGRAPE-1 の開発を通じて、**パイプラインの詳細設計、制御�
 
 当時、デジタル信号処理分野では MATLAB などから HDL を生成するツールが存在した。また、**システムレベル設計**（SLDL）が広まり、SpecC、SystemC、Handel-C などが C/C++ 系でハードウェアを記述する手段として使われ始めていた。しかし、これらは依然として詳細なハードウェア記述を必要とし、PGPG の目指す「パイプラインの高レベル記述から全設計を自動生成する」というアプローチとは異なっていた。
 
+### 2.5 関連の強い並行研究：Chamomile Scheme（PGPG と同時期）
+
+PGPG 論文の arXiv 投稿（2007 年 3 月 8 日）の **2 日前**、同じ筆頭著者（Hamada）から [**Chamomile Scheme**](https://arxiv.org/abs/astro-ph/0703100)（Hamada & Iitaka 2007）が発表された。これは **GPU** 上での重力 N 体シミュレーション最適化アルゴリズムであり、CUNBODY-1 ライブラリとして実装された。PGPG が FPGA 設計の生産性を扱う一方で、Chamomile Scheme は GPU の共有メモリ・スレッド並列性を活用し、GRAPE と同様の「粒子間相互作用の並列化」を汎用 GPU で実現した。**同一研究グループによる FPGA と GPU の並行研究**として、関連性が極めて強い。
+
 ---
 
 ## 3. 論文内容
@@ -180,9 +184,26 @@ PGPG は「高レベル記述からハードウェアを自動生成する」と
 
 本リポジトリ（`pgpg`）では、PGPG のソースコードが維持されており、**SPH パイプライン**などへの拡張が進められている。設計仕様書（`doc/design.md`）には、浮動小数点（FLP）のサポート、複数 FPGA の対応など、論文の拡張計画を踏まえた発展が記述されている。
 
-### 4.4 天体シミュレーションと GPU の台頭
+### 4.4 Chamomile Scheme と GPU による N 体シミュレーションの変遷
 
-2000 年代後半以降、**GPU** による汎用計算（GPGPU）が急速に発展し、N 体シミュレーションの多くは GPU 上で実行されるようになった。一方で、FPGA は低電力・高スループットが求められるエッジ AI、データセンターのアクセラレータ、ストリーミング処理などで活躍している。PGPG が示した「**ドメイン特化による設計の簡素化**」というアプローチは、FPGA や ASIC の設計生産性を高める現代的な HLS や DSL の文脈で、再評価される価値がある。
+PGPG 論文が arXiv に投稿された **2007 年 3 月**、同じ研究グループから **2 日違い**で別の論文が発表された。[**Hamada & Iitaka (2007)**](https://arxiv.org/abs/astro-ph/0703100) の **Chamomile Scheme** である。これは、**プログラム可能な GPU**（NVIDIA GeForce 8800 GTX）上で重力 N 体シミュレーションを最適化するアルゴリズムであり、ライブラリ **CUNBODY-1** として実装された。
+
+#### Chamomile Scheme の設計思想と PGPG との接点
+
+Chamomile Scheme は、当時の GPU の制約（16 KB × 16 の共有メモリ、ブロードキャスト機構なし、単精度 500 Gflop/s の浮動小数点演算）に最適化されている。GRAPE が専用パイプラインで「1 粒子から多粒子への力の並列計算」を実現したのと同様に、Chamomile Scheme は **GPU の共有メモリとスレッド並列性**を活用し、粒子間相互作用の計算を効率化した。PGPG の著者 Hamada が両方の論文の筆頭著者であり、**FPGA 設計の自動化（PGPG）** と **GPU アルゴリズムの最適化（Chamomile Scheme）** を並行して推進していたことがわかる。
+
+| 項目 | Chamomile Scheme（Hamada & Iitaka 2007） |
+|------|------------------------------------------|
+| **ハードウェア** | NVIDIA GeForce 8800 GTX |
+| **ライブラリ** | CUNBODY-1 |
+| **性能** | 2,048 粒子で 173 Gflop/s、131,072 粒子で 256 Gflop/s |
+| **設計** | 共有メモリの制約を考慮したドメイン特化アルゴリズム |
+
+#### GPU の台頭と FPGA の役割分担
+
+Chamomile Scheme 以降、**GPU** による N 体シミュレーションが急速に普及した。Sapporo（GRAPE 互換 API を GPU で実装）、CUDA ベースのツリーコード、FMM などが開発され、Hamada らは 2010 年に DEGIMA GPU クラスタで 190 Tflops を達成し、SC'09 ゴードン・ベル賞（価格性能部門）を受賞している。GPU は、**コスト・入手性・プログラミング容易性**の面で GRAPE や FPGA を上回り、天体 N 体シミュレーションの主流となった。
+
+一方、**FPGA** は低電力・高スループットが求められるエッジ AI、データセンターのアクセラレータ、ストリーミング処理などで活躍している。PGPG が示した「**ドメイン特化による設計の簡素化**」というアプローチは、FPGA や ASIC の設計生産性を高める現代的な HLS や DSL の文脈で、再評価される価値がある。また、Chamomile Scheme に代表される GPU アルゴリズム設計も、GRAPE/PROGRAPE で培った「粒子相互作用のパイプライン化」の知見を継承しており、**専用ハードウェア（GRAPE）→ 再構成可能（PROGRAPE/PGPG）→ 汎用並列（GPU）** という技術の連続性が読み取れる。
 
 ### 4.5 学術的意義
 
@@ -191,11 +212,20 @@ Ebisuzaki et al. (1993) は、GRAPE を「ユーザーから見ればハード�
 ### 4.6 研究の系譜（まとめ）
 
 ```
-GRAPE (1990-)     → 専用ハードウェア、重力のみ
+GRAPE (1990-)        → 専用ハードウェア、重力のみ
     ↓
-PROGRAPE-1 (1999) → FPGA で再構成可能に。重力・SPH・van der Waals へ拡張可能
-    ↓              設計生産性の壁（1 人年以上）を露呈
-PGPG (2005)       → 高レベル記述から一括生成。設計工数を大幅短縮
+PROGRAPE-1 (1999)    → FPGA で再構成可能に。重力・SPH・van der Waals へ拡張可能
+    ↓                 設計生産性の壁（1 人年以上）を露呈
+PGPG (2005)          → 高レベル記述から一括生成。設計工数を大幅短縮
+    │
+    ├── FPGA 系：HLS、DSL、PROGRAPE-2 など
+    │
+    └── GPU 系（並行研究、同一著者）：
+        Chamomile Scheme (2007) → CUNBODY-1、256 Gflop/s
+            ↓
+        Sapporo、DEGIMA (2009)、ツリーコード/FMM on GPU
+            ↓
+        N 体シミュレーションの主流は GPU へ
 ```
 
 ---
@@ -216,9 +246,11 @@ PGPG (2005)       → 高レベル記述から一括生成。設計工数を大�
 - Makino, J., & Taiji, M. (1998). GRAPE システム
 - [**Hamada, T., Fukushige, T., Kawai, A., & Makino, J. (1999/2000). PROGRAPE-1: A Programmable, Multi-Purpose Computer for Many-Body Simulations. *PASJ*, 52, 943. arXiv:astro-ph/9906419](https://arxiv.org/abs/astro-ph/9906419) — **PGPG の直接の前身。FPGA による Programmable GRAPE の初実装**
 - Kawai, A., et al. (2000). GRAPE-5 パイプライン
+- [**Hamada, T., & Iitaka, T. (2007). The Chamomile Scheme: An Optimized Algorithm for N-body simulations on Programmable Graphics Processing Units. arXiv:astro-ph/0703100](https://arxiv.org/abs/astro-ph/0703100) — **PGPG と同時期・同一著者。GPU 向け N 体シミュレーション、CUNBODY-1**
 
 ### 関連リソース
 
 - [PROGRAPE 公式サイト](http://progrape.jp)
+- [CUNBODY-1（Chamomile Scheme 実装）](https://github.com/thamada/cunbody1)
 - [本リポジトリ README](../README.md)
 - [設計仕様書](../doc/design.md)

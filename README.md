@@ -186,6 +186,7 @@ Stratix EP1S20 に 5 本の G5 パイプラインを 180 MHz で実装可能。�
 - [arXiv:astro-ph/0703182](https://arxiv.org/abs/astro-ph/0703182)
 - [PASJ HTML](https://academic.oup.com/pasj/article/57/5/799/2948924)
 - [PROGRAPE 公式サイト](http://progrape.jp) — CGI による PGDL から VHDL/エミュレータ/インターフェース生成
+- [Chamomile Scheme](https://arxiv.org/abs/astro-ph/0703100)（Hamada & Iitaka 2007）— PGPG と同時期・同一著者による GPU 向け N 体シミュレーション、CUNBODY-1
 
 ---
 

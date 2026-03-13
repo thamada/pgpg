@@ -4,6 +4,29 @@
 >   本ドキュメントは変更履歴です。日付はdateコマンドで確認して2026-01-23 12:34:55のように年-月-日 時:分:秒のようにします。
 >   最も最新のものから順に並べて記入します。
 
+## 2026-03-14 00:15:00
+
+### paper/README.md
+
+- Chamomile Scheme（Hamada & Iitaka 2007, arXiv:astro-ph/0703100）を追加
+- 4.4 節を全面改訂：PGPG と同時期（2007年3月）の GPU 向け N 体シミュレーション研究を詳述
+  - Chamomile Scheme の設計思想、CUNBODY-1、PGPG との接点
+  - GPU の台頭（Sapporo、DEGIMA、SC'09 ゴードン・ベル賞）と FPGA の役割分担
+  - 専用ハードウェア→再構成可能→汎用並列（GPU）の技術連続性
+- 2.5 節を新設：関連の強い並行研究として Chamomile Scheme を追加
+- 4.6 節：研究の系譜に GPU 系（Chamomile Scheme → Sapporo → DEGIMA）を追加
+- 参考文献に Hamada & Iitaka (2007) を追加
+- 冒頭の関連論文に Chamomile Scheme を追記
+- 関連リソースに CUNBODY-1 GitHub を追加
+
+### README.md
+
+- 参考文献に Chamomile Scheme（Hamada & Iitaka 2007）へのリンクを追加
+
+### doc/design.md
+
+- 14 節：論文解説の説明に Chamomile Scheme（GPU）を追記
+
 ## 2026-03-13 23:45:00
 
 ### README.md
