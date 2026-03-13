@@ -4,6 +4,24 @@
 >   本ドキュメントは変更履歴です。日付はdateコマンドで確認して2026-01-23 12:34:55のように年-月-日 時:分:秒のようにします。
 >   最も最新のものから順に並べて記入します。
 
+## 2026-03-14 01:30:00
+
+### paper/README.md
+
+- [Hamada et al. (2009)](https://www.cs.umd.edu/class/fall2019/cmsc714/readings/Hamada-nbody.pdf)（42 TFlops 階層的 N 体シミュレーション、SC09）を追加
+  - 4.4 節に「42 TFlops 階層的 N 体シミュレーション」セクションを新設
+  - 多重ウォーク法（multiple walks method）の技術解説：i-parallel / j-parallel との比較、各スレッドブロックを 1 GRAPE と見なす設計
+  - 重力 16 億粒子 42.15 TFlops、乱流 1600 万粒子 20.2 TFlops、124 MFlops/$、2009 年ゴードン・ベル賞（価格性能部門）
+  - FMM on GPU（実数基底、オンデマンド翻訳行列、約 80 倍高速化）、ボルテックス粒子法の記述
+  - 研究系譜に「多重ウォーク法 → 42 TFlops (SC09 2009)」を追加
+  - 参考文献・関連リソースに Hamada et al. (2009) を追加
+- Chamomile Scheme の j-parallel の課題（reduction オーバーヘッド）を明記
+- 冒頭の関連論文に 42 TFlops 成果を追記
+
+### doc/design.md
+
+- 14 節：論文解説の説明に Hamada et al. (2009) 42 TFlops・多重ウォーク法・2009 年ゴードン・ベル賞を追記
+
 ## 2026-03-14 01:17:50
 
 ### doc/design.md

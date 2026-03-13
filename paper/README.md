@@ -5,7 +5,7 @@ Tsuyoshi Hamada, Toshiyuki Fukushige, Junichiro Makino
 *Publications of the Astronomical Society of Japan*, Vol. 57, No. 5 (2005), pp. 799–813  
 arXiv: [astro-ph/0703182](https://arxiv.org/abs/astro-ph/0703182)
 
-> **関連論文**: PGPG の共著者 Hamada、Fukushige、Makino は、[PROGRAPE-1](https://arxiv.org/abs/astro-ph/9906419)（Hamada et al. 1999/2000）で **Programmable GRAPE** の概念を実装した。PROGRAPE-1 は[1998 年日本天文学会春季年会](https://www.asj.or.jp/nenkai/archive/1998a/pdf/X02a.pdf)で初発表され、同開発で露呈した「パイプライン設計に 1 人年以上」という生産性の壁が、PGPG の直接の動機となった。PGPG の後継 **PGR** を用いた [Nakasato et al. (2006)](https://arxiv.org/abs/astro-ph/0604295) は **PROGRAPE-3** 上で SPH パイプラインを初実装し、1998 年の目標を達成した。さらに、**PGPG と同時期**（2007 年 3 月）に、同じ Hamada らは [Chamomile Scheme](https://arxiv.org/abs/astro-ph/0703100)（Hamada & Iitaka 2007）で **GPU 向け N 体シミュレーション**を発表している。研究の系譜：GRAPE → PROGRAPE-1（1998/1999）→ **PGPG** → PGR/PROGRAPE-3（SPH）∥ **Chamomile Scheme**（GPU）。
+> **関連論文**: PGPG の共著者 Hamada、Fukushige、Makino は、[PROGRAPE-1](https://arxiv.org/abs/astro-ph/9906419)（Hamada et al. 1999/2000）で **Programmable GRAPE** の概念を実装した。PROGRAPE-1 は[1998 年日本天文学会春季年会](https://www.asj.or.jp/nenkai/archive/1998a/pdf/X02a.pdf)で初発表され、同開発で露呈した「パイプライン設計に 1 人年以上」という生産性の壁が、PGPG の直接の動機となった。PGPG の後継 **PGR** を用いた [Nakasato et al. (2006)](https://arxiv.org/abs/astro-ph/0604295) は **PROGRAPE-3** 上で SPH パイプラインを初実装し、1998 年の目標を達成した。さらに、**PGPG と同時期**（2007 年 3 月）に、同じ Hamada らは [Chamomile Scheme](https://arxiv.org/abs/astro-ph/0703100)（Hamada & Iitaka 2007）で **GPU 向け N 体シミュレーション**を発表している。その発展として、[Hamada et al. (2009)](https://www.cs.umd.edu/class/fall2019/cmsc714/readings/Hamada-nbody.pdf) は **多重ウォーク法**により階層的 N 体法（ツリーコード・FMM）を GPU で初めて高効率に実現し、**2009 年ゴードン・ベル賞（価格性能部門）**で 42 TFlops・124 MFlops/$ を達成した。研究の系譜：GRAPE → PROGRAPE-1（1998/1999）→ **PGPG** → PGR/PROGRAPE-3（SPH）∥ **Chamomile Scheme**（GPU）→ **42 TFlops**（SC09）。
 
 ---
 
@@ -224,11 +224,33 @@ Chamomile Scheme は、当時の GPU の制約（16 KB × 16 の共有メモリ�
 | **ハードウェア** | NVIDIA GeForce 8800 GTX |
 | **ライブラリ** | CUNBODY-1 |
 | **性能** | 2,048 粒子で 173 Gflop/s、131,072 粒子で 256 Gflop/s |
-| **設計** | 共有メモリの制約を考慮したドメイン特化アルゴリズム |
+| **設計** | 共有メモリの制約を考慮したドメイン特化アルゴリズム。j-parallel で部分力を別ブロックで計算するため、GPU 上での reduction が必要でオーバーヘッドが発生 |
+
+#### 42 TFlops 階層的 N 体シミュレーション（SC09 2009）— 多重ウォーク法のブレークスルー
+
+[Hamada et al. (2009)](https://www.cs.umd.edu/class/fall2019/cmsc714/readings/Hamada-nbody.pdf) は、**2009 年ゴードン・ベル賞（価格性能部門）**のエントリーとして、Chamomile Scheme を発展させた **多重ウォーク法（multiple walks method）** により、階層的 N 体法を GPU で初めて高効率に実現した。従来の GPU 実装では、セルあたりの目標粒子数 \(N_g\) が小さいときにパイプライン利用率が低く、階層的アルゴリズムの利点が活かせなかった。
+
+| 先行手法 | 並列化戦略 | 課題 |
+|----------|------------|------|
+| **i-parallel**（Nyland, Belleman） | 各スレッドが異なる i 粒子の力を計算 | \(N_g\) が数百以下だとプロセッサが遊休 |
+| **j-parallel**（Chamomile 等） | j 粒子を分割し、複数ブロックで部分力を計算 | 部分力の GPU 上 reduction が遅く、ホスト通信が \(N_{blocks}\) 倍に増加 |
+| **多重ウォーク**（本論文） | **各スレッドブロックを 1 台の GRAPE と見なし**、複数の walk を並列評価 | reduction 不要、ブロックごとに独立した walk を処理 |
+
+多重ウォーク法の流れ：（1）ホスト上で複数 walk の i/j 粒子リストを準備、（2）まとめて GPU へ転送、（3）各ブロックが 1 walk を担当して計算、（4）力を一括でホストへ返却、（5）ホストで軌道積分。Barnes の修正ツリー法と ORB（直交再帰二分法）による負荷分散を併用。GPU では \(N_{crit} \approx 1000\)（CPU は約 32）が最適。**実測では従来 GPU 実装の 2.4 倍、Phantom-GRAPE（最適化 CPU）の 3.2 倍**を達成した。
+
+| 項目 | 重力シミュレーション（ツリーコード） | 乱流シミュレーション（FMM） |
+|------|--------------------------------------|-----------------------------|
+| **粒子数** | 1,608,044,129 | 16,777,216（256³） |
+| **持続性能** | 42.15 TFlops | 20.2 TFlops |
+| **補正後性能** | 28.1 TFlops（CPU 最効率アルゴリズム基準の Flops 換算） | — |
+| **ハードウェア** | 128 PC × 2 GPU = 256 GPU、総コスト $228,912 | 同上 |
+| **価格性能** | 124 MFlops/$ | — |
+
+**FMM on GPU** では、複素球面調和関数を実数基底に変換、翻訳行列をオンデマンド生成、ボックス構造を coalesced 転送に合わせて再編成し、同じ「多重ウォーク」戦略を P2M／M2M／M2L／L2L／L2P 全段に適用。CPU 版と比較して約 **80 倍**の高速化を達成した。乱流計算では **ボルテックス粒子法**（速度は Eq. (1)、渦度の伸長は Eq. (3)、遠距離は FMM）を周期境界の FMM で実装し、スペクトル法との運動エネルギー減衰・エネルギースペクトルの定量的一致を確認している（Yokota et al. 2007）。2006 年 GB ファイナリスト（Kawai et al.）と比較して、粒子数は約 745 倍、補正性能は約 1,826 倍、価格性能は約 19 倍であった。
 
 #### GPU の台頭と FPGA の役割分担
 
-Chamomile Scheme 以降、**GPU** による N 体シミュレーションが急速に普及した。Sapporo（GRAPE 互換 API を GPU で実装）、CUDA ベースのツリーコード、FMM などが開発され、Hamada らは 2010 年に DEGIMA GPU クラスタで 190 Tflops を達成し、SC'09 ゴードン・ベル賞（価格性能部門）を受賞している。GPU は、**コスト・入手性・プログラミング容易性**の面で GRAPE や FPGA を上回り、天体 N 体シミュレーションの主流となった。
+Chamomile Scheme と 42 TFlops 成果の後、**GPU** による N 体シミュレーションが急速に普及した。Sapporo（GRAPE 互換 API を GPU で実装）、CUDA ベースのツリーコード・FMM などが開発され、**2009 年 SC09** で Hamada らは 256 GPU クラスタにより重力 N 体で **42.15 TFlops**（補正後 28.1 TFlops）、価格性能 **124 MFlops/$** を達成してゴードン・ベル賞（価格性能部門）を受賞した。GPU は、**コスト・入手性・プログラミング容易性**の面で GRAPE や FPGA を上回り、天体 N 体シミュレーションの主流となった。
 
 一方、**FPGA** は低電力・高スループットが求められるエッジ AI、データセンターのアクセラレータ、ストリーミング処理などで活躍している。PGPG が示した「**ドメイン特化による設計の簡素化**」というアプローチは、FPGA や ASIC の設計生産性を高める現代的な HLS や DSL の文脈で、再評価される価値がある。また、Chamomile Scheme に代表される GPU アルゴリズム設計も、GRAPE/PROGRAPE で培った「粒子相互作用のパイプライン化」の知見を継承しており、**専用ハードウェア（GRAPE）→ 再構成可能（PROGRAPE/PGPG）→ 汎用並列（GPU）** という技術の連続性が読み取れる。
 
@@ -261,7 +283,9 @@ PGR (2005-)          → 浮動小数点サポートを追加。SPH パイプラ
     └── GPU 系（並行研究、同一著者）：
         Chamomile Scheme (2007) → CUNBODY-1、256 Gflop/s
             ↓
-        Sapporo、DEGIMA (2009)、ツリーコード/FMM on GPU
+        多重ウォーク法 → 42 TFlops (SC09 2009)、ゴードン・ベル賞（価格性能部門）
+            ↓
+        Sapporo、DEGIMA、ツリーコード/FMM on GPU の普及
             ↓
         N 体シミュレーションの主流は GPU へ
 ```
@@ -286,6 +310,7 @@ PGR (2005-)          → 浮動小数点サポートを追加。SPH パイプラ
 - Hamada, T., Fukushige, T., Kawai, A., & Makino, J. (1998). PROGRAPE-1: プログラム可能な超高速多体シミュレーション専用計算機. *日本天文学会 1998 年春季年会* X02a. [PDF](https://www.asj.or.jp/nenkai/archive/1998a/pdf/X02a.pdf) — **PROGRAPE-1 の初発表**
 - [**Hamada, T., Fukushige, T., Kawai, A., & Makino, J. (1999/2000). PROGRAPE-1: A Programmable, Multi-Purpose Computer for Many-Body Simulations. *PASJ*, 52, 943. arXiv:astro-ph/9906419](https://arxiv.org/abs/astro-ph/9906419) — **PGPG の直接の前身。FPGA による Programmable GRAPE の詳細論文**
 - [**Hamada, T., & Iitaka, T. (2007). The Chamomile Scheme: An Optimized Algorithm for N-body simulations on Programmable Graphics Processing Units. arXiv:astro-ph/0703100](https://arxiv.org/abs/astro-ph/0703100) — **PGPG と同時期・同一著者。GPU 向け N 体シミュレーション、CUNBODY-1**
+- [**Hamada, T., Narumi, T., Yokota, R., Yasuoka, K., Nitadori, K., & Taiji, M. (2009). 42 TFlops Hierarchical N-body Simulations on GPUs with Applications in both Astrophysics and Turbulence. SC09.**](https://www.cs.umd.edu/class/fall2019/cmsc714/readings/Hamada-nbody.pdf) — **多重ウォーク法による階層的 N 体法（ツリーコード・FMM）の GPU 高効率実装。重力 16 億粒子で 42.15 TFlops、乱流 1600 万粒子で 20.2 TFlops。2009 年ゴードン・ベル賞（価格性能部門）、124 MFlops/$**
 - [**Nakasato, N., Hamada, T., & Fukushige, T. (2006). SPH Simulations with Reconfigurable Hardware Accelerator. arXiv:astro-ph/0604295**](https://arxiv.org/abs/astro-ph/0604295) — **PROGRAPE-3 上で SPH パイプラインを初実装。PGR で浮動小数点をサポート、85 Gflops ピーク、5〜10 倍加速**
 - 牧野淳一郎. スーパーコンピューティングの将来. [PDF](http://jun.artcompsci.org/articles/future_sc.pdf)、[HTML 版（目次）](https://jun-makino.sakura.ne.jp/articles/future_sc/face.html) — **note010「FPGA と再構成可能計算」**で PGPG/PGR を「設計問題を解決する可能性がある現在唯一のツール」と評価
 
@@ -296,5 +321,6 @@ PGR (2005-)          → 浮動小数点サポートを追加。SPH パイプラ
 - [スーパーコンピューティングの将来（牧野淳一郎）](http://jun.artcompsci.org/articles/future_sc.pdf) — FPGA・PGR に関する論考（[note010](https://jun-makino.sakura.ne.jp/articles/future_sc/note010.html) 等）
 - [PROGRAPE 公式サイト](http://progrape.jp)
 - [CUNBODY-1（Chamomile Scheme 実装）](https://github.com/thamada/cunbody1)
+- [42 TFlops Hierarchical N-body Simulations on GPUs（Hamada et al. 2009, SC09）](https://www.cs.umd.edu/class/fall2019/cmsc714/readings/Hamada-nbody.pdf) — 2009 年ゴードン・ベル賞（価格性能部門）
 - [本リポジトリ README](../README.md)
 - [設計仕様書](../doc/design.md)
