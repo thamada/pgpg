@@ -6,15 +6,21 @@
 
 ## 2026-03-14 (update-doc)
 
+### 用語統一（doc/design.md, paper/README.md, README.md）
+
+- 「対数表現」を「LNS（Logarithmic Number System）」に置換
+  - 初出・説明箇所では「LNS（Logarithmic Number System）」、表・コンパクト文脈では「LNS」を使用
+  - 「対数形式」「14 bit 対数」「12 bit 対数」なども LNS に統一
+
 ### paper/README.md
 
-- GRAPE-5 対数表現：17(8) bit を「17 bit（符号 1 bit、非ゼロ 1 bit、指数部 7 bit、仮数部 8 bit）」に修正（3 箇所）
+- GRAPE-5 LNS：17(8) bit を「17 bit（符号 1 bit、非ゼロ 1 bit、指数部 7 bit、仮数部 8 bit）」に修正（3 箇所）
 - 3.4 節：PGPG 生成モデル（G3, G5, G5+）の数値表現表を design.md から追加。G3 は GRAPE-3 相当（実機 12 bit、PGPG G3・PROGRAPE-1 は 14 bit）であることを注記
 
 ### doc/design.md
 
-- 対数表現の構造：「整数部」を「指数部」に修正（242, 248, 531 行目）
-- 性能表（12.4 節）：G3/G5/G5+ の対数表現を明示形式に修正
+- LNS の構造：「整数部」を「指数部」に修正（242, 248, 531 行目）
+- 性能表（12.4 節）：G3/G5/G5+ の LNS を明示形式に修正
   - G3: 14(5)bit log → 14bit log（符号1,非ゼロ1,指数7,仮数5）
   - G5: 17(8)bit log → 17bit log（符号1,非ゼロ1,指数7,仮数8）
   - G5+: 20(11)bit log → 20bit log（符号1,非ゼロ1,指数7,仮数11）
