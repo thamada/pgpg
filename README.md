@@ -171,6 +171,7 @@ Stratix EP1S20 に 5 本の G5 パイプラインを 180 MHz で実装可能。�
 |--------------|------|
 | [doc/design.md](doc/design.md) | 設計仕様書（PGDL、モジュール、ビルド手順など） |
 | [doc/ChangeLog](doc/ChangeLog) | 変更履歴 |
+| [paper/README.md](paper/README.md) | 技術論文の解説（時代背景、先行研究、GRAPE/PROGRAPE-1/PGPG の系譜） |
 | [paper/PGPG.pdf](paper/PGPG.pdf) | 技術論文（PDF） |
 
 ---

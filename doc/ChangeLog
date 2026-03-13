@@ -4,6 +4,30 @@
 >   本ドキュメントは変更履歴です。日付はdateコマンドで確認して2026-01-23 12:34:55のように年-月-日 時:分:秒のようにします。
 >   最も最新のものから順に並べて記入します。
 
+## 2026-03-13 23:45:00
+
+### README.md
+
+- ドキュメント一覧に [paper/README.md](paper/README.md) を追加
+
+### paper/README.md
+
+- 技術論文の解説を全面改訂
+- 主な変更:
+  - 時代背景：GRAPE プロジェクト（Ebisuzaki et al. 1993）、GRAPE-4（Fukushige & Makino 1996）、PROGRAPE-1（Hamada et al. 1999/2000）の系譜を追加
+  - PROGRAPE-1 を PGPG の直接の前身として詳述（仕様、数値表現、設計生産性の壁 → PGPG の動機）
+  - 先行研究：Ebisuzaki 1993、Fukushige 1996、Hamada 1999 を追加
+  - 論文内容：GRAPE アーキテクチャとの対応、PROGRAPE-1 からの発展を追記
+  - その後：HLS、DSL、研究の系譜（GRAPE → PROGRAPE-1 → PGPG）を追加
+  - 参考文献を拡充
+
+### doc/design.md
+
+- 参考文献を Hamada et al. (2005) に修正（PASJ 57(5), 799–813）
+- paper/README.md への参照を追加（関連ドキュメント、論文解説）
+- 1.1 節：PROGRAPE-1 の開発経験（1 人年以上）と PGPG の動機を追記
+- 14 節：論文解説（paper/README.md）へのリンクを追加
+
 ## 2026-03-13 23:09:53
 
 ### README.md

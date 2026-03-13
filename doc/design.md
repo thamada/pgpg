@@ -4,7 +4,9 @@
 >
 > **関連**: プロジェクト概要とクイックスタートは [README.md](../README.md) を参照してください。
 >
-> **参考文献**: Hamada, T., Fukushige, T., & Makino, J. (2007). PGPG: An Automatic Generator of Pipeline Design for Programmable GRAPE Systems. *arXiv:astro-ph/0703182*.
+> **参考文献**: Hamada, T., Fukushige, T., & Makino, J. (2005). PGPG: An Automatic Generator of Pipeline Design for Programmable GRAPE Systems. *PASJ*, 57(5), 799–813. [arXiv:astro-ph/0703182](https://arxiv.org/abs/astro-ph/0703182)
+>
+> **関連ドキュメント**: 技術論文の時代背景・先行研究・影響については [paper/README.md](../paper/README.md) を参照。
 
 ---
 
@@ -14,7 +16,7 @@
 
 **PGPG**（**P**ipeline **G**enerator for **P**rogrammable **G**RAPE）は、**PROGRAPE**（Programmable GRAPE）やその他の **FBCE**（FPGA-Based Computing Engine）向けに、パイプライン処理器の低レベル設計と通信ソフトウェアを自動生成するソフトウェアである。
 
-PROGRAPE は FPGA チップと粒子メモリから構成される再構成可能な計算装置であり、重力計算、SPH 相互作用、画像処理など様々なパイプライン処理器を同一ハードウェアに実装できる。PGPG は、**PGDL**（PGPG Description Language）で記述された高レベル設計から、VHDL ハードウェア記述、ビットレベルエミュレータ、ホスト用インターフェースソフトウェアを**一括生成**する。従来 1 人年以上かかっていた設計作業を、PGDL による簡潔な記述に置き換える。
+PROGRAPE は FPGA チップと粒子メモリから構成される再構成可能な計算装置であり、重力計算、SPH 相互作用、画像処理など様々なパイプライン処理器を同一ハードウェアに実装できる。**PROGRAPE-1**（Hamada et al. 1999/2000）で初実装された Programmable GRAPE の開発では、パイプライン設計に 1 人年以上を要した。PGPG は、**PGDL**（PGPG Description Language）で記述された高レベル設計から、VHDL ハードウェア記述、ビットレベルエミュレータ、ホスト用インターフェースソフトウェアを**一括生成**し、この設計生産性の壁を解消する。
 
 主な用途は **N体シミュレーション**（重力計算、SPH 流体シミュレーションなど）における粒子間相互作用のパイプライン化である。**対数表現**（Logarithmic Number System）を用いることで、乗除算を加減算に変換し、ハードウェアの複雑さと遅延を削減する。
 
@@ -136,7 +138,7 @@ src/pgpg1.0/
 
 ### 3.1 PGDL（PGPG Description Language）
 
-PGDL はパイプライン処理器の記述に特化した高レベル言語である。技術論文（Hamada et al. 2007）では、PGDL プログラムは以下の 4 セクションから構成されると定義されている。
+PGDL はパイプライン処理器の記述に特化した高レベル言語である。技術論文（Hamada et al. 2005）では、PGDL プログラムは以下の 4 セクションから構成されると定義されている。
 
 1. **マクロ宣言**: C プリプロセッサ（cpp）で処理。スケール等の式を `#define` で定義
 2. **ジェネリック宣言**: `/NPIPE`, `/NVMP` でパイプ数と仮想マルチパイプ数を指定
@@ -636,6 +638,7 @@ void force(double x[][3], double m[], double eps2, double a[][3], int n);
 | 項目 | 内容 |
 |------|------|
 | **公式サイト** | http://progrape.jp（CGI による PGDL から VHDL/エミュレータ/インターフェース生成） |
+| **論文解説** | [paper/README.md](../paper/README.md) — 時代背景、GRAPE/PROGRAPE-1/PGPG の系譜、先行研究 |
 | **論文計画** | SPH、BEM（Boundary Element Method）のサポート、浮動小数点拡張、Xilinx FPGA 対応 |
 
 ---
@@ -659,4 +662,4 @@ void force(double x[][3], double m[], double eps2, double a[][3], int n);
 
 ---
 
-*本ドキュメントは PGPG 1.0 の実装および Hamada et al. (2007) の技術論文に基づいて作成されています。*
+*本ドキュメントは PGPG 1.0 の実装および Hamada et al. (2005) の技術論文に基づいて作成されています。*
