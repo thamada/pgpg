@@ -4,6 +4,26 @@
 >   本ドキュメントは変更履歴です。日付はdateコマンドで確認して2026-01-23 12:34:55のように年-月-日 時:分:秒のようにします。
 >   最も最新のものから順に並べて記入します。
 
+## 2026-03-14 01:15:00
+
+### paper/README.md
+
+- [日本天文学会 1998 年春季年会](https://www.asj.or.jp/nenkai/archive/1998a/pdf/X02a.pdf) の PROGRAPE-1 初発表を反映
+  - PROGRAPE-1 の初発表を 1998 年 ASJ 春季年会に修正、1999/2000 に詳細論文
+  - 設計動機（FPGA で初期費用削減・汎用性）、ターゲット（SPH・エワルド法）、性能見積り（重力 2.4 Gflops、SPH 4.0 Gflops）
+- [Nakasato et al. (2006)](https://arxiv.org/abs/astro-ph/0604295)（PROGRAPE-3 上での SPH パイプライン初実装）を追加
+  - 1.4 節を新設：PROGRAPE-3、PGR、85 Gflops ピーク、5〜10 倍加速
+  - 3.6 節：SPH・浮動小数点の実現（Nakasato et al. 2006）を追記
+  - 先行研究表・系譜図に PROGRAPE-2/3、PGR を追加
+- [牧野「スーパーコンピューティングの将来」](https://jun-makino.sakura.ne.jp/articles/future_sc/note010.html)（note010「FPGA と再構成可能計算」）を追加
+  - 2.4 節：再構成可能計算の設計困難さと PGPG/PGR の位置づけ
+  - 4.5 節：牧野による FPGA・PGR の評価（「現在唯一のツール」）
+  - タイトルを正式な「スーパーコンピューティングの将来」に統一
+
+### doc/design.md
+
+- 14 節：論文解説の説明に PROGRAPE-3、SPH、PGR、スーパーコンピューティングの将来を追記
+
 ## 2026-03-14 00:45:00
 
 ### paper/README.md

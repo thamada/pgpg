@@ -5,7 +5,7 @@ Tsuyoshi Hamada, Toshiyuki Fukushige, Junichiro Makino
 *Publications of the Astronomical Society of Japan*, Vol. 57, No. 5 (2005), pp. 799–813  
 arXiv: [astro-ph/0703182](https://arxiv.org/abs/astro-ph/0703182)
 
-> **関連論文**: PGPG の共著者 Hamada、Fukushige、Makino は、[PROGRAPE-1](https://arxiv.org/abs/astro-ph/9906419)（Hamada et al. 1999/2000）で **Programmable GRAPE** の概念を初めて実装した。PROGRAPE-1 の開発で露呈した「パイプライン設計に 1 人年以上」という生産性の壁が、PGPG 開発の直接の動機となった。さらに、**PGPG と同時期**（2007 年 3 月）に、同じ Hamada らは [Chamomile Scheme](https://arxiv.org/abs/astro-ph/0703100)（Hamada & Iitaka 2007）で **GPU 向け N 体シミュレーション**を発表している。研究の系譜：GRAPE → PROGRAPE-1 → **PGPG**（FPGA）∥ **Chamomile Scheme**（GPU）。
+> **関連論文**: PGPG の共著者 Hamada、Fukushige、Makino は、[PROGRAPE-1](https://arxiv.org/abs/astro-ph/9906419)（Hamada et al. 1999/2000）で **Programmable GRAPE** の概念を実装した。PROGRAPE-1 は[1998 年日本天文学会春季年会](https://www.asj.or.jp/nenkai/archive/1998a/pdf/X02a.pdf)で初発表され、同開発で露呈した「パイプライン設計に 1 人年以上」という生産性の壁が、PGPG の直接の動機となった。PGPG の後継 **PGR** を用いた [Nakasato et al. (2006)](https://arxiv.org/abs/astro-ph/0604295) は **PROGRAPE-3** 上で SPH パイプラインを初実装し、1998 年の目標を達成した。さらに、**PGPG と同時期**（2007 年 3 月）に、同じ Hamada らは [Chamomile Scheme](https://arxiv.org/abs/astro-ph/0703100)（Hamada & Iitaka 2007）で **GPU 向け N 体シミュレーション**を発表している。研究の系譜：GRAPE → PROGRAPE-1（1998/1999）→ **PGPG** → PGR/PROGRAPE-3（SPH）∥ **Chamomile Scheme**（GPU）。
 
 ---
 
@@ -55,21 +55,23 @@ GRAPE システムは、汎用スーパーコンピュータと比べて **価�
 
 **GRAPE-6** は約 5 億円で 64 Tflops のピーク性能を達成し、当時の Earth Simulator（40 Tflops）や ASCI-Q（30 Tflops）と同等以上の性能を、桁違いに安いコストで実現した。**2003 年ゴードン・ベル賞（特別賞）**を受賞している。
 
-### 1.3 PROGRAPE-1：Programmable GRAPE の初実装（1999）
+### 1.3 PROGRAPE-1：Programmable GRAPE の初実装（1998/1999）
 
 GRAPE の課題は、**1/r ポテンシャル以外の相互作用を扱えない**ことだった。GRAPE-2A は補間テーブルで分子動力学にも対応したが（Ito et al. 1993）、重力と SPH の両方を同一ハードウェアで扱う設計は困難だった。GRAPE-3 は Plummer ソフトニングのみ対応していたが、[GRAPE-5](https://arxiv.org/abs/astro-ph/9909116) では **任意の cutoff 関数**をオンチップ RAM テーブルで実装し、Ewald 法・P³M 法に対応した（Kawai et al. 1999）。従来の GRAPE では、SPH の近傍粒子探索は GRAPE 上で行えたが、**実際の SPH 相互作用の計算はホスト計算機**で行われており、これがボトルネックとなっていた（Yokono et al. 1999）。
 
-[**Hamada et al. (1999/2000)**](https://arxiv.org/abs/astro-ph/9906419) は、**PROGRAPE-1**（PROgrammable GRAPE-1）を開発し、このアプローチを **Programmable GRAPE** と名付けた。PROGRAPE-1 は、従来のハードワイヤードな GRAPE と異なり、**FPGA**（Field-Programmable Gate Array）を処理要素として用いる。FPGA の論理は再構成可能であるため、**重力に加えて van der Waals 力、SPH の流体力学相互作用など、様々な相互作用**を同一ハードウェアで計算できる。
+**PROGRAPE-1**（PROgrammable GRAPE-1）は、[日本天文学会 1998 年春季年会](https://www.asj.or.jp/nenkai/archive/1998a/pdf/X02a.pdf)で初めて発表され（Hamada et al. 1998）、[**Hamada et al. (1999/2000)**](https://arxiv.org/abs/astro-ph/9906419) で詳細論文として公表された。PROGRAPE-1 は、従来のハードワイヤードな GRAPE と異なり、**FPGA**（Field-Programmable Gate Array）を処理要素として用いる。FPGA の論理は再構成可能であるため、**重力に加えて van der Waals 力、SPH の流体力学相互作用など、様々な相互作用**を同一ハードウェアで計算できる。
 
-#### PROGRAPE-1 の仕様と成果（Hamada et al. 1999 より）
+1998 年の学会発表では、FPGA を採用した設計動機として次の点が述べられている：専用 LSI の代わりに FPGA を用いることで**開発初期費用を下げる**、専用機の利点を保ちつつ**汎用性を得る**。一方で、FPGA は単位ゲート当たり単価が高く大規模システムには不向きである。**ターゲットアプリケーション**として **SPH 法**と**エワルド法**が挙げられており、SPH は計算量が粒子数オーダーのため 10〜100 倍の加速で十分、エワルド法は周期境界条件向けで特定用途に限られる、といった理由で FPGA の柔軟性が活きるとしている。
+
+#### PROGRAPE-1 の仕様と成果
 
 | 項目 | 内容 |
 |------|------|
-| **ハードウェア** | Altera EPF10K100 FPGA × 2（各 10 万ゲート） |
-| **実装パイプライン** | GRAPE-3 と同様の重力相互作用パイプライン |
+| **ハードウェア** | Altera Flex10K100（EPF10K100）FPGA × 2、座標メモリ |
+| **実装パイプライン** | GRAPE-3 と同様の重力相互作用パイプライン、SPH 用プログラミング進行中（1998 年時点） |
 | **数値表現** | 減算 20 bit 固定小数点、除算・平方根 14 bit 対数（7 bit 指数・5 bit 仮数）、累積 56 bit 固定小数点 |
-| **動作** | 1 チップに 1 パイプライン、16 MHz 動作 |
-| **性能** | 0.96 Gflops 相当（重力計算） |
+| **動作** | 1 チップに 1 パイプライン、16 MHz 動作（Hamada et al. 1999） |
+| **性能** | 重力・クーロン力：2.4 Gflops 見積り（1998 年）、0.96 Gflops 実測（1999 年論文）。SPH 法：4.0 Gflops 見積り（1998 年） |
 
 PROGRAPE-1 は、**粒子ベースシミュレーションにおいて重力以外の相互作用（SPH など）の計算コストが高い場合**に特に有用であると結論づけている。
 
@@ -78,6 +80,22 @@ PROGRAPE-1 は、**粒子ベースシミュレーションにおいて重力以�
 #### PROGRAPE-1 が露呈した課題 → PGPG の動機
 
 PROGRAPE-1 の開発を通じて、**パイプラインの詳細設計、制御論理、ホスト通信、データ変換ライブラリ**の開発に膨大な工数がかかることが明らかになった。PGPG 論文によれば、比較的単純な重力パイプラインの実装でも **1 人年以上**を要した。この設計生産性の壁が、**PGPG**（高レベル記述から VHDL・エミュレータ・インターフェースを一括生成するツール）開発の**直接の動機**となった。
+
+### 1.4 PROGRAPE-3 と SPH パイプライン（2006）
+
+PROGRAPE-1 が 1998 年にターゲットとした **SPH 法**の FPGA 実装は、[**Nakasato et al. (2006)**](https://arxiv.org/abs/astro-ph/0604295) において **PROGRAPE-3** 上で初めて実現された。PROGRAPE-3 は第三世代の PROGRAPE アーキテクチャで、千葉大学・理研共同の **Bioler-3 ボード**（Xilinx XC2VP70-5 FPGA × 4、各 10 万ゲート相当）を用いる。従来の GRAPE では SPH の近傍探索のみを GRAPE で行い、**実際の SPH 相互作用（圧力・粘性・∇・v など）はホスト計算機**で計算されていた。SPH の 1 相互作用あたりの演算量（約 160 flop）は重力（約 38 flop）より大きく、これがボトルネックとなっていた。
+
+Nakasato et al. (2006) では、PGPG の後継である **PGR**（Processors Generators for Reconfigurable systems）を用いて SPH パイプラインを実装した。PGR の重要な拡張は **可変ビット長の浮動小数点演算**のサポートである。PGPG は LNS と整数のみをサポートしていたが、SPH は加減算が多く LNS の利点が少なく、浮動小数点が必須だった。SPH パイプラインの記述は約 200 行程度であり、生成される VHDL は約 7,000 行に及ぶ。
+
+| 項目 | 内容 |
+|------|------|
+| **ハードウェア** | Bioler-3 ボード、Xilinx XC2VP70-5 × 4、PCI 64bit/66MHz |
+| **SPH パイプライン** | 密度・∇・v・∇×v・圧力・人工粘性などを 2 段階で計算 |
+| **数値精度** | 仮数部 16 bit、指数 8 bit で Sod 衝撃波管・Cold Collapse を良好に再現 |
+| **性能** | SPH ピーク 85 Gflops、現実的な設定でホスト比 **5〜10 倍**の加速 |
+| **ボトルネック** | ホスト-PROGRAPE 間のデータ転送が全体時間の約 70% |
+
+Cold Collapse テスト（N=50 万）では、SPH を PROGRAPE、重力をツリー法でホスト計算する構成で約 2.3 倍、SPH・重力ともに PROGRAPE で計算する構成では **約 11 倍**の加速を達成した。1998 年の PROGRAPE-1 発表で掲げた「SPH を FPGA で加速する」という目標が、約 8 年後に PROGRAPE-3 と PGR によって実現された。
 
 ---
 
@@ -108,13 +126,16 @@ PROGRAPE-1 の開発を通じて、**パイプラインの詳細設計、制御�
 | 研究 | 内容 |
 |------|------|
 | Buell et al. (1996) | Splash-1, Splash-2 |
-| Kim et al. (1995) | FPGA による粒子シミュレーション |
-| [**Hamada et al. (1999/2000)**](https://arxiv.org/abs/astro-ph/9906419) | **PROGRAPE-1**：FPGA ベース Programmable GRAPE の初実装。2× Altera EPF10K100、GRAPE-3 相当パイプライン、0.96 Gflops。重力・van der Waals・SPH への拡張可能性を実証。**PGPG の直接の前身** |
+| Hamada et al. (1998) | [PROGRAPE-1 初発表](https://www.asj.or.jp/nenkai/archive/1998a/pdf/X02a.pdf)：日本天文学会春季年会。Flex10K100×2、重力 2.4 Gflops・SPH 4.0 Gflops 見積り、SPH・エワルド法をターゲットに |
+| [**Hamada et al. (1999/2000)**](https://arxiv.org/abs/astro-ph/9906419) | **PROGRAPE-1**：FPGA ベース Programmable GRAPE の詳細論文。2× Altera EPF10K100、GRAPE-3 相当パイプライン、0.96 Gflops 実測。重力・van der Waals・SPH への拡張可能性を実証。**PGPG の直接の前身** |
 | Spurzem et al. (2002) | FPGA を用いた N 体シミュレーション |
+| [**Nakasato et al. (2006)**](https://arxiv.org/abs/astro-ph/0604295) | **PROGRAPE-3 上で SPH パイプラインを初実装**。PGR（PGPG 後継）で浮動小数点をサポートし、SPH を 85 Gflops ピーク、現実設定で 5〜10 倍加速を達成。1998 年 PROGRAPE-1 で掲げた SPH ターゲットを実現 |
 
 ### 2.4 高レベル設計手法
 
 当時、デジタル信号処理分野では MATLAB などから HDL を生成するツールが存在した。また、**システムレベル設計**（SLDL）が広まり、SpecC、SystemC、Handel-C などが C/C++ 系でハードウェアを記述する手段として使われ始めていた。しかし、これらは依然として詳細なハードウェア記述を必要とし、PGPG の目指す「パイプラインの高レベル記述から全設計を自動生成する」というアプローチとは異なっていた。
+
+[牧野の「スーパーコンピューティングの将来」](https://jun-makino.sakura.ne.jp/articles/future_sc/note010.html)（2005 年）によれば、FPGA による再構成可能計算は過去 15 年間「未来の技術」のままで、多くのプロジェクトが良い結果を出せていなかった。最大の理由は**設計の困難さ**—シミュレーション専門家と電子工学専門家の共同でも効率の良いハードウェア設計は難しく、1 つの演算精度のパイプラインに 2 年かかると試行錯誤が不可能になる—である。PGPG/PGR はこの「適切なツールがない」問題に対する回答として位置づけられる。
 
 ### 2.5 関連の強い並行研究：Chamomile Scheme（PGPG と同時期）
 
@@ -168,11 +189,9 @@ PGPG 1.0 は **固定小数点**（fix/ufix）と **対数表現**（log）を�
 
 重力加速度 \( f_i = \sum_j m_j \boldsymbol{r}_{ij} / (r_{ij}^2 + \varepsilon^2)^{3/2} \) を PGDL で記述し、GRAPE-3 / GRAPE-5 と同等の設計を自動生成した。Stratix 上では、GRAPE-5 と同様のパイプラインを 5 本、180 MHz で実装可能であり、元の G5 チップ（2 パイプライン、80 MHz、1 クロックあたり 2 ペア相互作用）と比べ約 **5 倍**の性能を達成した。GRAPE-5 ボードは 8 個の G5 チップで 38.4 Gflops ピーク、実効性能は小規模（N=10⁴）でピークの 70% 超を達成している（Kawai et al. 1999）。
 
-### 3.6 今後の拡張計画（論文当時）
+### 3.6 今後の拡張計画（論文当時）とその実現
 
-- SPH パイプライン、境界要素法（BEM）のサポート
-- 浮動小数点演算モジュールの追加
-- Xilinx FPGA への対応
+PGPG 論文（2005）が掲げた拡張計画のうち、**SPH パイプライン**と**浮動小数点演算**は [Nakasato et al. (2006)](https://arxiv.org/abs/astro-ph/0604295) で実現された。同論文では PGPG の後継である **PGR** が可変ビット長の浮動小数点をサポートし、PROGRAPE-3 上で SPH パイプライン（密度・∇・v・圧力・人工粘性など）を実装、85 Gflops ピーク・現実設定で 5〜10 倍の加速を達成している。その他の計画：境界要素法（BEM）のサポート、Xilinx FPGA への対応。
 
 ---
 
@@ -187,6 +206,8 @@ PGPG は「高レベル記述からハードウェアを自動生成する」と
 2020 年代には、**Spatial**（Stanford）、**Graphitron**、**Scotch** など、**DSL から FPGA アクセラレータを自動生成**する研究が活発になっている。PGPG の「パイプラインの高レベル記述から VHDL、エミュレータ、インターフェースを一括生成する」という設計思想は、これらの DSL と共通する。PGPG は、**ドメイン特化による設計生産性の向上**という方向性を、早期に示した事例として評価できる。
 
 ### 4.3 プロジェクトの継続と発展
+
+PGPG の後継として **PGR**（Processors Generators for Reconfigurable systems）が開発され（Hamada & Nakasato 2005）、浮動小数点演算のサポートを追加した。PGR を用いて [Nakasato et al. (2006)](https://arxiv.org/abs/astro-ph/0604295) は **PROGRAPE-3** 上で SPH パイプラインを初実装し、1998 年 PROGRAPE-1 発表時の目標を達成した。PROGRAPE の系譜は PROGRAPE-1 → PROGRAPE-2 → **PROGRAPE-3**（Bioler-3 ボード、4× Xilinx FPGA）と進化している。
 
 本リポジトリ（`pgpg`）では、PGPG のソースコードが維持されており、**SPH パイプライン**などへの拡張が進められている。設計仕様書（`doc/design.md`）には、浮動小数点（FLP）のサポート、複数 FPGA の対応など、論文の拡張計画を踏まえた発展が記述されている。
 
@@ -215,16 +236,27 @@ Chamomile Scheme 以降、**GPU** による N 体シミュレーションが急�
 
 Ebisuzaki et al. (1993) は、GRAPE を「ユーザーから見ればハードウェアサブルーチン」と表現した。[PROGRAPE-1](https://arxiv.org/abs/astro-ph/9906419) は、その「サブルーチン」を **FPGA 上で再構成可能**にしたが、設計には 1 人年以上を要した。PGPG は、**天体物理学の専門家がハードウェア設計の詳細を学ばずに**、その「サブルーチン」を FPGA 上で自作・カスタマイズできるようにすることを目指した。この「ドメイン専門家の知識」と「ハードウェア設計の詳細」の分離は、**ドメイン特化アーキテクチャ（DSA）** や **DSL の設計**において、今日も重要な設計原則として受け継がれている。
 
+#### 牧野による FPGA・PGR の評価（スーパーコンピューティングの将来 より）
+
+PGPG の共著者である牧野淳一郎は、[「スーパーコンピューティングの将来」](http://jun.artcompsci.org/articles/future_sc.pdf)の [note010](https://jun-makino.sakura.ne.jp/articles/future_sc/note010.html)（2005/12/28）において、**FPGA による再構成可能計算**を論じている。牧野は、FPGA はカスタム LSI に比べて 1/20〜1/1000 の性能にとどまるが、**開発初期コストが不要**となり約 100 万円程度の予算で専用計算機を構築できる利点を指摘する。一方で、再構成可能計算は過去 15 年間「未来の技術」のままで広く普及しておらず、多くのプロジェクトが良い結果を出していないと述べる。
+
+その最大の理由は**設計の困難さ**である。重力パイプラインを FPGA に載せる場合、倍精度浮動小数点をそのまま使うと回路規模は GRAPE-6 の 5 倍、GRAPE-5 の 20 倍以上になり競争力がない。GRAPE はパイプライン部位ごとに演算精度を変え、逆数平方根を表引きと補間多項式で小規模に実現している。**演算精度を最適化した設計**が必須だが、シミュレーション専門家と電子工学専門家の共同では効率の良いハードウェア設計が困難で、1 つの精度で 2 年かかると試行錯誤も不可能になる。
+
+牧野は、**PGR**（濱田・中里による PGPG 後継システム）を「この問題を解決する可能性がある**現在唯一のツール**」と評価している。PGR では演算パイプラインの式を C 風に記述するだけで、ハードウェア記述・通信ライブラリ・エミュレータまで一括生成され、年オーダーの開発期間なしに試せる点が大きな変化であるとしている。FPGA はベクトル計算機の代わりにはならない（メモリバンド幅がボトルネック）が、PC で十分性能が出る計算なら FPGA の検討価値はある、との見解を示している。
+
 ### 4.6 研究の系譜（まとめ）
 
 ```
 GRAPE (1990-)        → 専用ハードウェア、重力のみ
     ↓
-PROGRAPE-1 (1999)    → FPGA で再構成可能に。重力・SPH・van der Waals へ拡張可能
+PROGRAPE-1 (1998/1999) → FPGA で再構成可能に。1998 年 ASJ 初発表、重力・SPH・van der Waals へ拡張可能
     ↓                 設計生産性の壁（1 人年以上）を露呈
 PGPG (2005)          → 高レベル記述から一括生成。設計工数を大幅短縮
+    ↓
+PGR (2005-)          → 浮動小数点サポートを追加。SPH パイプライン実装に必須
     │
-    ├── FPGA 系：HLS、DSL、PROGRAPE-2 など
+    ├── FPGA 系：PROGRAPE-2 → PROGRAPE-3 (2006)
+    │              ↑ Nakasato et al. (2006)：SPH 85 Gflops、5〜10倍加速
     │
     └── GPU 系（並行研究、同一著者）：
         Chamomile Scheme (2007) → CUNBODY-1、256 Gflop/s
@@ -251,11 +283,17 @@ PGPG (2005)          → 高レベル記述から一括生成。設計工数を�
 - [**Kawai, A., Fukushige, T., Makino, J., & Taiji, M. (1999). GRAPE-5: A Special-Purpose Computer for N-body Simulation. arXiv:astro-ph/9909116**](https://arxiv.org/abs/astro-ph/9909116) — GRAPE-3 の後継。G5 チップ、38.4 Gflops ピーク、PCI バス、任意 cutoff で Ewald/P³M 対応
 - [Fukushige, T., & Makino, J. (1996). N-body Simulation of Galaxy Formation on GRAPE-4 Special-Purpose Computer. arXiv:astro-ph/9612090](https://arxiv.org/abs/astro-ph/9612090)
 - Makino, J., & Taiji, M. (1998). GRAPE システム
-- [**Hamada, T., Fukushige, T., Kawai, A., & Makino, J. (1999/2000). PROGRAPE-1: A Programmable, Multi-Purpose Computer for Many-Body Simulations. *PASJ*, 52, 943. arXiv:astro-ph/9906419](https://arxiv.org/abs/astro-ph/9906419) — **PGPG の直接の前身。FPGA による Programmable GRAPE の初実装**
+- Hamada, T., Fukushige, T., Kawai, A., & Makino, J. (1998). PROGRAPE-1: プログラム可能な超高速多体シミュレーション専用計算機. *日本天文学会 1998 年春季年会* X02a. [PDF](https://www.asj.or.jp/nenkai/archive/1998a/pdf/X02a.pdf) — **PROGRAPE-1 の初発表**
+- [**Hamada, T., Fukushige, T., Kawai, A., & Makino, J. (1999/2000). PROGRAPE-1: A Programmable, Multi-Purpose Computer for Many-Body Simulations. *PASJ*, 52, 943. arXiv:astro-ph/9906419](https://arxiv.org/abs/astro-ph/9906419) — **PGPG の直接の前身。FPGA による Programmable GRAPE の詳細論文**
 - [**Hamada, T., & Iitaka, T. (2007). The Chamomile Scheme: An Optimized Algorithm for N-body simulations on Programmable Graphics Processing Units. arXiv:astro-ph/0703100](https://arxiv.org/abs/astro-ph/0703100) — **PGPG と同時期・同一著者。GPU 向け N 体シミュレーション、CUNBODY-1**
+- [**Nakasato, N., Hamada, T., & Fukushige, T. (2006). SPH Simulations with Reconfigurable Hardware Accelerator. arXiv:astro-ph/0604295**](https://arxiv.org/abs/astro-ph/0604295) — **PROGRAPE-3 上で SPH パイプラインを初実装。PGR で浮動小数点をサポート、85 Gflops ピーク、5〜10 倍加速**
+- 牧野淳一郎. スーパーコンピューティングの将来. [PDF](http://jun.artcompsci.org/articles/future_sc.pdf)、[HTML 版（目次）](https://jun-makino.sakura.ne.jp/articles/future_sc/face.html) — **note010「FPGA と再構成可能計算」**で PGPG/PGR を「設計問題を解決する可能性がある現在唯一のツール」と評価
 
 ### 関連リソース
 
+- [PROGRAPE-1 初発表（日本天文学会 1998 年春季年会 X02a）](https://www.asj.or.jp/nenkai/archive/1998a/pdf/X02a.pdf)
+- [SPH Simulations with Reconfigurable Hardware Accelerator（Nakasato et al. 2006）](https://arxiv.org/abs/astro-ph/0604295)
+- [スーパーコンピューティングの将来（牧野淳一郎）](http://jun.artcompsci.org/articles/future_sc.pdf) — FPGA・PGR に関する論考（[note010](https://jun-makino.sakura.ne.jp/articles/future_sc/note010.html) 等）
 - [PROGRAPE 公式サイト](http://progrape.jp)
 - [CUNBODY-1（Chamomile Scheme 実装）](https://github.com/thamada/cunbody1)
 - [本リポジトリ README](../README.md)
