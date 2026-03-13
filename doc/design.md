@@ -68,16 +68,16 @@ flowchart TB
         A --> F
 
         D["pgpgct<br/>Cエミュレータトランスパイラ"]
-        E["pgpgcm<br/>C演算器エミュレータトランスパイラ (pg_module.c)"]
-        F["pgpgv (pgpgvt/vm)<br/>VHDL生成"]
+        E["pgpgcm<br/>C演算器エミュレータトランスパイラ"]
+        F["pgpgv (pgpgvt/vm)<br/>VHDLトランスパイラ"]
 
         D --> G
         E --> H
         F --> I
 
         G["pg_pipe.c<br/>エミュレータトップレベル"]
-        H["pg_module.c<br/>C関数群"]
-        I["pg_module.vhd, pg_pipe.vhd<br/>*.mif, *.vhd"]
+        H["pg_module.c<br/>C演算器エミュレータ群"]
+        I["pg_module.vhd, pg_pipe.vhd<br/>*.mif, *.vhd等 FPGA合成用ファイル群"]
     end
 ```
 

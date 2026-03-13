@@ -6,6 +6,13 @@
 
 ## 2026-03-14 (update-doc)
 
+### doc/design.md Mermaid 図の用語・ラベル整理
+
+- pgpgcm: ラベルから「(pg_module.c)」を削除（出力先は H で明示）
+- pgpgv: 「VHDL生成」→「VHDLトランスパイラ」
+- pg_module.c: 「C関数群」→「C演算器エミュレータ群」
+- VHDL 出力: 「*.mif, *.vhd」→「*.mif, *.vhd等 FPGA合成用ファイル群」
+
 ### 用語修正：Cモデル生成 → C演算器エミュレータトランスパイラ（README.md, doc/design.md）
 
 - 「Cモデル生成」「C モデル」を「C演算器エミュレータトランスパイラ」に統一
