@@ -68,7 +68,7 @@ flowchart TB
         A --> F
 
         D["pgpgct<br/>Cエミュレータトランスパイラ"]
-        E["pgpgcm<br/>Cモデル生成 (pg_module.c)"]
+        E["pgpgcm<br/>C演算器エミュレータトランスパイラ (pg_module.c)"]
         F["pgpgv (pgpgvt/vm)<br/>VHDL生成"]
 
         D --> G
@@ -109,7 +109,7 @@ src/pgpg1.0/
 │   │   ├── pgpg_set_io.c
 │   │   ├── pgpg_pipe_com.c
 │   │   └── ...
-│   ├── cm/            # Cモデル生成モジュール（C++ソース）
+│   ├── cm/            # C演算器エミュレータトランスパイラモジュール（C++ソース）
 │   │   ├── pgpg.cpp   # pgpgcm のエントリ
 │   │   ├── pgpgc.h    # パーサ・生成器の定義
 │   │   ├── pgpg_c_*.cpp
@@ -398,7 +398,7 @@ for(i=0;i<n;i++){
 }
 ```
 
-### 7.2 pgpgcm（Cモデル生成）
+### 7.2 pgpgcm（C演算器エミュレータトランスパイラ）
 
 - 入力: リストファイル
 - 出力: `pg_module.c`（各モジュールの C 関数を集約、論文 Figure 13 相当）
@@ -456,7 +456,7 @@ make pgpgvm   # PGPGVM で pg_module.vhd を出力
 ./pgpgvm list/list.sph.cpp
 ```
 
-### 9.2 Cモデル生成
+### 9.2 C演算器エミュレータトランスパイラ
 
 ```bash
 cd src/pgpg1.0/src_h/cm
@@ -539,7 +539,7 @@ pg_fix_accum(fij,sfij,64,64,1);
 
 ### 11.3 モジュール対応表
 
-| モジュール | pgpg (VHDL) | pgpgct (C pipe) | pgpgcm (C model) |
+| モジュール | pgpg (VHDL) | pgpgct (C pipe) | pgpgcm (C演算器エミュレータトランスパイラ) |
 |------------|-------------|-----------------|------------------|
 | pg_fix_addsub | ○ | ○ | ○ |
 | pg_log_muldiv | ○ | ○ | ○ |

@@ -53,7 +53,7 @@ cd src/pgpg1.0/src_h/v
 make pgpgvt   # pg_pipe.vhd を出力
 make pgpgvm   # pg_module.vhd を出力
 
-# C モデル生成（pgpgcm）
+# C演算器エミュレータトランスパイラ（pgpgcm）
 cd src/pgpg1.0/src_h/cm
 make pgpgcm
 
@@ -69,7 +69,7 @@ make pgpgcm
 # または
 ./pgpgvm list/list.sph.cpp
 
-# C モデル生成
+# C演算器エミュレータトランスパイラ
 ./pgpgcm list/list.sph.cpp
 # 出力: pg_module.c
 ```
@@ -79,7 +79,7 @@ make pgpgcm
 ```bash
 cpp list/list.sph list/list.sph.cpp   # プリプロセス
 pgpgct list/list.sph.cpp             # エミュレータ (pg_pipe.c)
-pgpgcm list/list.sph.cpp             # C モデル (pg_module.c)
+pgpgcm list/list.sph.cpp             # C演算器エミュレータトランスパイラ (pg_module.c)
 ```
 
 ---
@@ -126,7 +126,7 @@ void force(double x[][3], double m[], double eps2, double a[][3], int n);
 ├───────────────────────────────────────────────────────────────────────┤
 │                                                                       │
 │   PGDL ──┬──▶ pgpgct ──▶ pg_pipe.c (エミュレータ)                     │
-│          ├──▶ pgpgcm ──▶ pg_module.c (C モデル)                       │
+│          ├──▶ pgpgcm ──▶ pg_module.c (C演算器エミュレータトランスパイラ)                       │
 │          └──▶ pgpgvt/vm ──▶ *.vhd (VHDL)                              │
 │                                                                       │
 └───────────────────────────────────────────────────────────────────────┘
@@ -141,7 +141,7 @@ src/pgpg1.0/
 │   └── pgpgct         # C エミュレータトランスパイラ
 ├── src_h/
 │   ├── v/             # VHDL 生成 (pgpgvt, pgpgvm)
-│   ├── cm/            # C モデル生成 (pgpgcm)
+│   ├── cm/            # C演算器エミュレータトランスパイラ (pgpgcm)
 │   └── ct/            # C エミュレータトランスパイラ (pgpgct)
 ├── list/              # サンプル PGDL ファイル
 │   ├── list.sph       # SPH パイプライン例
