@@ -43,7 +43,7 @@ GRAPE は **低精度型**（奇数番号）と **高精度型**（偶数番号�
 - **GRAPE-3**（Okumura et al. 1993）: 8 個の GRAPE チップ（各 1 パイプライン、20 MHz）、4.8 Gflops ピーク。対数表現 12 bit。ペアワイズ力の相対誤差約 2%。VME バス。
 - **GRAPE-2A**（1992）: 分子動力学・天体両用。補間テーブルで van der Waals、Coulomb、Ewald 法の実空間成分を計算可能。
 - **GRAPE-4**（計画）: 約 1,600 パイプライン、ピーク約 1 Tflops、1995 年完成予定、約 1 億円。
-- **GRAPE-5**（[Kawai et al. 1999](https://arxiv.org/abs/astro-ph/9909116)）: GRAPE-3 の後継。8 個の G5 チップ（各 2 パイプライン、80 MHz、1 クロックあたり 2 ペア相互作用）、**38.4 Gflops ピーク**。仮想マルチパイプライン（実パイプライン 1 本あたり 6 仮想パイプライン、計 12 仮想パイプライン）でメモリ帯域を削減。PCI バス（VME の約 10 倍の通信速度）。純粋 1/r に加え**任意の cutoff 関数**（オンチップ RAM テーブル）で Ewald 法・P³M 法に対応。セルインデックス法で PP 力の計算コストを削減。ペアワイズ力の精度は GRAPE-3 の**約 10 倍**、動的範囲は **10³ 倍**。対数表現 17(8) bit。メモリ最大 131,072 粒子。128k 体直接和で 14 秒/タイムステップ、100 万体 Barnes-Hut（θ=0.75）で 16 秒/タイムステップ。
+- **GRAPE-5**（[Kawai et al. 1999](https://arxiv.org/abs/astro-ph/9909116)）: GRAPE-3 の後継。8 個の G5 チップ（各 2 パイプライン、80 MHz、1 クロックあたり 2 ペア相互作用）、**38.4 Gflops ピーク**。仮想マルチパイプライン（実パイプライン 1 本あたり 6 仮想パイプライン、計 12 仮想パイプライン）でメモリ帯域を削減。PCI バス（VME の約 10 倍の通信速度）。純粋 1/r に加え**任意の cutoff 関数**（オンチップ RAM テーブル）で Ewald 法・P³M 法に対応。セルインデックス法で PP 力の計算コストを削減。ペアワイズ力の精度は GRAPE-3 の**約 10 倍**、動的範囲は **10³ 倍**。対数表現 17 bit（符号 1 bit、非ゼロ 1 bit、指数部 7 bit、仮数部 8 bit）。メモリ最大 131,072 粒子。128k 体直接和で 14 秒/タイムステップ、100 万体 Barnes-Hut（θ=0.75）で 16 秒/タイムステップ。
 
 GRAPE システムは、汎用スーパーコンピュータと比べて **価格性能比で 100〜10,000 倍** 優れていた（Ebisuzaki et al. 1993）。
 
@@ -119,7 +119,7 @@ Cold Collapse テスト（N=50 万）では、SPH を PROGRAPE、重力をツリ
 | Brieu et al. (1995) | GRAPE-3 上で P³M 法を実装（Plummer のみのため 3 回呼び出しで 1 つの PP 力を近似） |
 | [Fukushige & Makino (1996)](https://arxiv.org/abs/astro-ph/9612090) | GRAPE-4 による銀河形成 N 体シミュレーション（78 万粒子、332 Gflops、1996 年ゴードン・ベル賞） |
 | Makino & Taiji (1998) | GRAPE システムの体系化 |
-| [Kawai et al. (1999)](https://arxiv.org/abs/astro-ph/9909116) | GRAPE-5：GRAPE-3 の後継。G5 チップ（2 パイプライン、80 MHz）、38.4 Gflops ピーク、PCI バス、任意 cutoff で Ewald/P³M 対応、対数表現 17(8) bit |
+| [Kawai et al. (1999)](https://arxiv.org/abs/astro-ph/9909116) | GRAPE-5：GRAPE-3 の後継。G5 チップ（2 パイプライン、80 MHz）、38.4 Gflops ピーク、PCI バス、任意 cutoff で Ewald/P³M 対応、対数表現 17 bit（符号 1 bit、非ゼロ 1 bit、指数部 7 bit、仮数部 8 bit） |
 
 ### 2.3 再構成可能計算・PROGRAPE
 
@@ -183,7 +183,15 @@ PGDL プログラムは次の 4 セクションで構成される。
 
 ### 3.4 数値表現と GRAPE との継承
 
-PGPG 1.0 は **固定小数点**（fix/ufix）と **対数表現**（log）をサポートする。対数表現では乗除算が加減算になるため、ハードウェアの複雑さと遅延を削減できる。この設計思想は **GRAPE-1** 以来の伝統であり（Ebisuzaki et al. 1993）、GRAPE-3 では 12 bit、[PROGRAPE-1](https://arxiv.org/abs/astro-ph/9906419) では 14 bit（7 bit 指数・5 bit 仮数）の対数表現、[GRAPE-5](https://arxiv.org/abs/astro-ph/9909116) では **17(8) bit**（γ=7 bit 整数部、δ=8 bit 小数部）が用いられた（Kawai et al. 1999）。G5 チップは位置ベクトルに 32 bit 固定小数点、力の累積に 64 bit 固定小数点を採用している。PGPG は GRAPE-5 と同様の設計を採用している。
+PGPG 1.0 は **固定小数点**（fix/ufix）と **対数表現**（log）をサポートする。対数表現では乗除算が加減算になるため、ハードウェアの複雑さと遅延を削減できる。この設計思想は **GRAPE-1** 以来の伝統であり（Ebisuzaki et al. 1993）、GRAPE-3 では 12 bit、[PROGRAPE-1](https://arxiv.org/abs/astro-ph/9906419) では 14 bit（7 bit 指数・5 bit 仮数）の対数表現、[GRAPE-5](https://arxiv.org/abs/astro-ph/9909116) では **17 bit**（符号 1 bit、非ゼロ 1 bit、指数部 7 bit、仮数部 8 bit）が用いられた（Kawai et al. 1999）。G5 チップは位置ベクトルに 32 bit 固定小数点、力の累積に 64 bit 固定小数点を採用している。PGPG は GRAPE-5 と同様の設計を採用している。
+
+PGPG 論文（Table 2, 3, 4）における PGPG 生成ハードウェアモデルの数値表現は次のとおりである。G3 は GRAPE-3 相当モデル（実機 GRAPE-3 は 12 bit 対数、PGPG G3 および PROGRAPE-1 は 14 bit で同等の用途を実現）、G5 は GRAPE-5 相当、G5+ は高精度モデルである。
+
+| モデル | 位置 | 内部（対数表現） | アキュム | 備考 |
+|--------|------|------------------|----------|------|
+| G3 | 20bit fix | 14bit log（符号1,非ゼロ1,指数7,仮数5） | 56bit fix | GRAPE-3 相当 |
+| G5 | 32bit fix | 17bit log（符号1,非ゼロ1,指数7,仮数8） | 64bit fix | GRAPE-5 相当 |
+| G5+ | 32bit fix | 20bit log（符号1,非ゼロ1,指数7,仮数11） | 64bit fix | 高精度 |
 
 ### 3.5 重力パイプラインの実例
 
