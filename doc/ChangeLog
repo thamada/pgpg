@@ -4,6 +4,26 @@
 >   本ドキュメントは変更履歴です。日付はdateコマンドで確認して2026-01-23 12:34:55のように年-月-日 時:分:秒のようにします。
 >   最も最新のものから順に並べて記入します。
 
+## 2026-03-14 00:45:00
+
+### paper/README.md
+
+- [GRAPE-5 論文](https://arxiv.org/abs/astro-ph/9909116)（Kawai et al. 1999）を参照して全面修正
+- GRAPE の系譜：GRAPE-3（Okumura et al. 1993）の正確な仕様、GRAPE-5 の詳細を追加
+  - G5 チップ（2 パイプライン、80 MHz）、38.4 Gflops ピーク、PCI バス
+  - 任意 cutoff 関数で Ewald/P³M 対応、仮想マルチパイプライン、セルインデックス法
+  - ペアワイズ力の精度 10 倍、動的範囲 10³ 倍
+- GRAPE-5 の開発・製造情報（1996〜1999、NEC 0.5 μm、約 20 万ゲート）
+- GRAPE-5/PROGRAPE システムの構想（Section 6.2）を追加
+- Brieu et al. (1995) の P³M 実装を先行研究に追加
+- Kawai et al. (2000) → Kawai et al. (1999) に修正
+- 参考文献に Kawai et al. (1999) を追加
+
+### doc/design.md
+
+- 4.2 節：GRAPE-5 論文の参照を Kawai et al. 2000 → Kawai et al. 1999 に修正
+- 14 節：論文解説の説明に GRAPE-5 を追記
+
 ## 2026-03-14 00:15:00
 
 ### paper/README.md
