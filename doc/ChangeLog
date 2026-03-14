@@ -6,6 +6,25 @@
 
 ## 2026-03-14 (update-doc)
 
+### faq/pgpg-influence-and-history.md — 新規追加
+
+- PGPG の影響と計算機アーキテクチャ史における位置づけを解説する FAQ 記事を追加
+  - PGPG がその後に与えた影響（FPGA HLS の先駆け、PROGRAPE のソフトウェア化、後継ツール PGR/PGPG2）
+  - PGPG と GPU の思想的共通点（データ並列計算）
+  - なぜ GRAPE 研究は GPU に負けたのか（市場規模、汎用性、プログラミング容易さ、半導体進化速度）
+  - PGPG と現代 AI チップ（TPU）の共通点（専用ハードウェア、シストリックアレイ）
+  - なぜ日本は専用計算機では世界最強だったのに AI チップでは遅れたのか（ソフトウェアエコシステム、産業規模、半導体製造、市場、研究文化）
+  - 日本の AI チップ現状（Preferred Networks MN-Core）
+- faq/README.md に記事一覧を追加
+
+### doc/design.md
+
+- 14 節 参考情報：faq/pgpg-influence-and-history.md へのリンクを追加
+
+### README.md
+
+- ドキュメント一覧に faq/pgpg-influence-and-history.md を追加
+
 ### README.md — PGPG コンパイルフロー図の矩形レイアウト修正
 
 - システムアーキテクチャ節の ASCII 図：罫線幅の統一、余分なスペース削除、右端の `│` を揃えて矩形を整形
