@@ -6,6 +6,10 @@
 
 ## 2026-03-14 (update-doc)
 
+### README.md — PGPG コンパイルフロー図の矩形レイアウト修正
+
+- システムアーキテクチャ節の ASCII 図：罫線幅の統一、余分なスペース削除、右端の `│` を揃えて矩形を整形
+
 ### paper/README.md — Kawai et al. (1999) astro-ph/9905101 を反映
 
 - [Kawai et al. (1999)](https://arxiv.org/abs/astro-ph/9905101)（$7.0/Mflops Astrophysical N-Body Simulation with Treecode on GRAPE-5）の情報を追加
