@@ -6,6 +6,16 @@
 
 ## 2026-03-14 (update-doc)
 
+### MN-Core 開発者（牧野淳一郎＝GRAPE 開発者）の事実を反映（faq, paper, doc）
+
+- faq/pgpg-influence-and-history.md
+  - 7 節：MN-Core の開発者が GRAPE 開発者の牧野淳一郎であることを追記。専用計算機→FPGA→AI チップの系譜が同一研究者により継承されていることを明記
+  - 8 節 まとめ：牧野が PFN で MN-Core 開発を主導していることを追記
+- paper/README.md
+  - 5.4 節：MN-Core 開発者＝牧野淳一郎（GRAPE 開発者・PGPG 共著者）であることを追記
+  - 5.2.1 表・5.3.2 表：MN-Core の備考に開発者情報を追加
+- doc/design.md：14 節 FAQ リンクの説明に MN-Core 開発者（牧野＝GRAPE 開発者）の系譜を追記
+
 ### faq/pgpg-influence-and-history.md — 新規追加
 
 - PGPG の影響と計算機アーキテクチャ史における位置づけを解説する FAQ 記事を追加
