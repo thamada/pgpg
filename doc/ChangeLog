@@ -9,7 +9,9 @@
 ### paper/README.md の変更を doc に反映
 
 - **doc/design.md**
-  - 1.1 節：「LNS: Logarithmic Number System (対数形式)」を「LNS (Logarithmic Number System)」に統一（paper/README.md と同様に表記を LNS に統一）
+  - 1.1 節：既に「LNS (Logarithmic Number System)」表記のため変更なし
+  - 12.4 節 性能表：G3 行の「14bit log」を「14bit LNS」に統一し、備考に Okumura et al. (1993) へのリンクを追加（paper/README.md の表記・一次論文参照に合わせる）
+  - 14 節 論文解説：GRAPE の説明に [Okumura et al. (1993)](https://academic.oup.com/pasj/article/45/3/329/8052501) GRAPE-3 一次論文を明記
 - **paper/README.md での実施済み変更**（参照用）
   - GRAPE-3 を一次論文 [Okumura et al. (1993)](https://academic.oup.com/pasj/article/45/3/329/8052501) に基づき修正：2 ボード 48 チップ、10 MHz、理論ピーク 15 Gflops 相当・持続 10 Gflops 相当、近傍粒子リスト、数値表現（20 bit 固定小数点・14 bit LNS・56 bit 累積）と誤差解析を追記
   - 「対数形式」を LNS に統一（表・GRAPE-3 仕様・数値表現節・G3 備考）
