@@ -128,11 +128,6 @@ flowchart LR
     B --> E[pg_pipe.c<br/>エミュレータAPI]
     C --> F[pg_module.c<br/>演算器エミュレータ]
     D --> G[*.vhd<br/>VHDL]
-    
-    style A fill:#e1f5ff
-    style E fill:#fff4e1
-    style F fill:#fff4e1
-    style G fill:#fff4e1
 ```
 
 ### ディレクトリ構成
