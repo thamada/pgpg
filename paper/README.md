@@ -19,7 +19,7 @@ SPH（Smoothed Particle Hydrodynamics）流体シミュレーションでも、�
 
 ### 1.2 専用ハードウェアの台頭：GRAPE プロジェクト
 
-このような背景から、**GRAPE**（GRAvity piPE）プロジェクト（[Sugimoto et al. 1990](https://academic.oup.com/pasj/article/42/5/717)；PASJ Vol. 42, No. 5, pp. 717–, 1990）が始まった。重力相互作用の計算は比較的単純（1 ペアあたり約 20〜30 演算相当、低精度型では LNS を用いるため「浮動小数点」と表記される場合もある）であり、全粒子間の相互作用という並列性が高いため、専用パイプラインハードウェアによる加速が有望だった。
+このような背景から、**GRAPE**（GRAvity piPE）プロジェクト（[Sugimoto et al. 1990](https://www.nature.com/articles/345033a0)；*Nature* **345**, 33–35, 1990）が始まった。重力相互作用の計算は比較的単純（1 ペアあたり約 20〜30 演算相当、低精度型では LNS を用いるため「浮動小数点」と表記される場合もある）であり、全粒子間の相互作用という並列性が高いため、専用パイプラインハードウェアによる加速が有望だった。
 
 > **用語の注意（PASJ 42(5), 717, 1990）**: 同論文では「**浮動小数点**」という語が **LNS（Logarithmic Number System、対数形式）** を指して用いられている。本文を読む際は「浮動小数点」＝ LNS と解釈すること。
 
@@ -126,7 +126,7 @@ Cold Collapse テスト（N=50 万）では、SPH を PROGRAPE、重力をツリ
 
 | 研究 | 内容 |
 |------|------|
-| [Sugimoto et al. (1990)](https://academic.oup.com/pasj/article/42/5/717) | GRAPE プロジェクト開始。PASJ 42(5), 717 (1990)。※同論文では「浮動小数点」＝ LNS の意 |
+| [Sugimoto et al. (1990)](https://www.nature.com/articles/345033a0) | GRAPE プロジェクト開始。*Nature* 345, 33–35 (1990)。パイプライン 120 Mflops、並列化で Tflops 級が可能と報告 |
 | [Ebisuzaki et al. (1993)](https://articles.adsabs.harvard.edu/cgi-bin/nph-iarticle_query?1993PASJ...45..269E&defaultprint=YES&filetype=.pdf) | GRAPE プロジェクト概要（GRAPE-1〜4、アーキテクチャ、低/高精度型） |
 | [**Okumura et al. (1993)**](https://academic.oup.com/pasj/article/45/3/329/8052501) | **GRAPE-3 の一次論文**。2 ボード 48 チップ、理論ピーク 15 Gflops、持続 10 Gflops、近傍粒子リスト、数値精度解析 |
 | Ito et al. (1993), Fukushige et al. (1996) | 分子動力学用 GRAPE（GRAPE-2A 系） |
@@ -438,7 +438,7 @@ NVIDIA の CUDA への依存を弱めるため、**Intel、Google、Arm、Qualco
 ### 主要参考文献
 
 - Barnes, J., & Hut, P. (1986). Barnes-Hut ツリー法
-- **Sugimoto, D., et al. (1990). GRAPE プロジェクト開始。*PASJ* 42(5), 717–.** [OUP](https://academic.oup.com/pasj/article/42/5/717) — ※本文では「浮動小数点」が **LNS**（対数形式）を指す
+- **Sugimoto, D., Chikada, Y., Makino, J., Ito, T., Ebisuzaki, T., & Umemura, M. (1990). A special-purpose computer for gravitational many-body problems. *Nature* 345, 33–35.** [Nature](https://www.nature.com/articles/345033a0) — GRAPE プロジェクト開始。パイプライン 120 Mflops、並列化で Tflops 級が可能と報告
 - [Ebisuzaki, T., Makino, J., Fukushige, T., Taiji, M., Sugimoto, D., Ito, T., & Okumura, S. K. (1993). GRAPE Project: An Overview. *PASJ*, 45, 269–278](https://articles.adsabs.harvard.edu/cgi-bin/nph-iarticle_query?1993PASJ...45..269E&defaultprint=YES&filetype=.pdf)
 - [**Okumura, S. K., Makino, J., Ebisuzaki, T., Fukushige, T., Ito, T., Sugimoto, D., Hashimoto, E., Tomida, K., & Miyakawa, N. (1993). Highly Parallelized Special-Purpose Computer, GRAPE-3. *PASJ*, 45(3), 329–338**](https://academic.oup.com/pasj/article/45/3/329/8052501) — **GRAPE-3 の一次論文。2 ボード 48 チップ、理論ピーク 15 Gflops、近傍粒子リスト、誤差解析**
 - [**Kawai, A., Fukushige, T., Makino, J., & Taiji, M. (1999). GRAPE-5: A Special-Purpose Computer for N-body Simulation. arXiv:astro-ph/9909116**](https://arxiv.org/abs/astro-ph/9909116) — GRAPE-3 の後継。G5 チップ、理論ピーク 109.44 Gflops、PCI バス、任意 cutoff で Ewald/P³M 対応
@@ -454,7 +454,8 @@ NVIDIA の CUDA への依存を弱めるため、**Intel、Google、Arm、Qualco
 
 ### 関連リソース
 
-- [GRAPE プロジェクト開始（Sugimoto et al. 1990, PASJ 42(5), 717）](https://academic.oup.com/pasj/article/42/5/717) — ※同論文では「浮動小数点」＝ LNS の意で用いられている
+- [GRAPE プロジェクト開始（Sugimoto et al. 1990, Nature 345, 33–35）](https://www.nature.com/articles/345033a0)
+- [PASJ 42(5), 717 (1990)](https://academic.oup.com/pasj/article/42/5/717) — ※同論文では「浮動小数点」＝ LNS の意で用いられている
 - [$7.0/Mflops Astrophysical N-Body Simulation with Treecode on GRAPE-5（Kawai et al. 1999, Gordon Bell エントリー）](https://arxiv.org/abs/astro-ph/9905101)
 - [PROGRAPE-1 初発表（日本天文学会 1998 年春季年会 X02a）](https://www.asj.or.jp/nenkai/archive/1998a/pdf/X02a.pdf)
 - [SPH Simulations with Reconfigurable Hardware Accelerator（Nakasato et al. 2006）](https://arxiv.org/abs/astro-ph/0604295)

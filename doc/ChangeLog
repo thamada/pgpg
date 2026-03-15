@@ -6,14 +6,27 @@
 
 ## 2026-03-15 (update-doc)
 
+### 変更点の doc 反映確認
+
+- **doc/design.md**：14 節 論文解説の GRAPE 初出が [Sugimoto et al. (1990) Nature 345, 33–35](https://www.nature.com/articles/345033a0) で正しく記載されていることを確認。追加の修正なし
+- **doc/ChangeLog**：上記「PASJ 42(5), 717 反映」の記述を、のちの Nature 統一を踏まえて整理
+
+### Sugimoto et al. (1990) の参照元を Nature 論文に統一
+
+- **paper/README.md**
+  - Sugimoto et al. (1990) の参照を [Nature 345, 33–35 (1990)](https://www.nature.com/articles/345033a0)（A special-purpose computer for gravitational many-body problems）に変更。著者・書誌情報を Nature 版に合わせて修正
+  - 先行研究表・参考文献・関連リソースを同様に Nature に統一。PASJ 42(5), 717 は「浮動小数点」＝LNS の用語注意用に別項として残す
+- **doc/design.md**
+  - 14 節 論文解説：GRAPE 初出を Sugimoto et al. (1990) Nature 345, 33–35 に変更
+
 ### paper/README.md の変更を doc に反映（PASJ 42(5), 717, 1990 および「浮動小数点」＝LNS）
 
-- **doc/design.md**
-  - 14 節 論文解説：GRAPE 初出として [Sugimoto et al. (1990) PASJ 42(5), 717](https://academic.oup.com/pasj/article/42/5/717) を追加。同論文では「浮動小数点」が **LNS** を指す旨を注記
+- **doc/design.md**（※のちに「Sugimoto et al. の参照元を Nature 論文に統一」で GRAPE 初出を Nature 345, 33–35 に変更済み）
+  - 14 節 論文解説：GRAPE 初出の参照を追加（当初 PASJ 42(5), 717 → 後に Nature 345, 33–35 に変更）
 - **paper/README.md での実施済み変更**（参照用）
-  - PASJ 42(5), 717 (1990) を GRAPE プロジェクト初出論文として参照を追加
-  - 用語注意：同論文では「浮動小数点」＝ LNS（対数形式）であることを 1.2 節・表注・先行研究表・参考文献・関連リソースに明記
-  - 高精度型の特徴を「IEEE 等の浮動小数点」に修正し、PASJ 42(5) 717 の用語と区別
+  - PASJ 42(5), 717 (1990) を「浮動小数点」＝LNS の用語注意用として言及。GRAPE プロジェクト初出は Nature (Sugimoto et al. 1990) に統一
+  - 用語注意：PASJ 42(5), 717 では「浮動小数点」＝ LNS（対数形式）であることを 1.2 節・表注等に明記
+  - 高精度型の特徴を「IEEE 等の浮動小数点」に修正
 
 ### paper/README.md の変更を doc に反映（GRAPE-3 一次論文等）
 
