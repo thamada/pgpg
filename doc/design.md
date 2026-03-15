@@ -629,7 +629,7 @@ void force(double x[][3], double m[], double eps2, double a[][3], int n);
 | 項目 | 内容 |
 |------|------|
 | **公式サイト** | http://progrape.jp（CGI による PGDL から VHDL/エミュレータ/インターフェース生成） |
-| **論文解説** | [paper/README.md](../paper/README.md) — 時代背景、GRAPE（[Okumura et al. (1993)](https://academic.oup.com/pasj/article/45/3/329/8052501) GRAPE-3 一次論文、[Kawai et al. 1999](https://arxiv.org/abs/astro-ph/9905101) GRAPE-5・ツリーコード 1999 年 Gordon Bell エントリー・7.0 ドル/Mflops）/PROGRAPE-1～3/PGPG/PGR の系譜、Nakasato et al. (2006) SPH、Chamomile Scheme（GPU）、Hamada et al. (2009) 42 TFlops・多重ウォーク法・2009 年ゴードン・ベル賞、牧野「スーパーコンピューティングの将来」、先行研究、**5 節 低精度計算AI専用チップと開発競争**（低精度計算の技術的背景、量子化・NVFP4、AI専用チップ例・Tensor Core（テンサーコア）、開発競争の様相、GRAPE時代の日本と現代の対比・Preferred Networks）、結語（2026 年 AI ブームと低精度計算チップ、若い世代へのメッセージ）。末尾に最終更新日付を表示 |
+| **論文解説** | [paper/README.md](../paper/README.md) — 時代背景、GRAPE（初出 [Sugimoto et al. (1990) PASJ 42(5), 717](https://academic.oup.com/pasj/article/42/5/717) ※同論文では「浮動小数点」＝LNS の意、[Okumura et al. (1993)](https://academic.oup.com/pasj/article/45/3/329/8052501) GRAPE-3 一次論文、[Kawai et al. 1999](https://arxiv.org/abs/astro-ph/9905101) GRAPE-5・ツリーコード 1999 年 Gordon Bell エントリー・7.0 ドル/Mflops）/PROGRAPE-1～3/PGPG/PGR の系譜、Nakasato et al. (2006) SPH、Chamomile Scheme（GPU）、Hamada et al. (2009) 42 TFlops・多重ウォーク法・2009 年ゴードン・ベル賞、牧野「スーパーコンピューティングの将来」、先行研究、**5 節 低精度計算AI専用チップと開発競争**（低精度計算の技術的背景、量子化・NVFP4、AI専用チップ例・Tensor Core（テンサーコア）、開発競争の様相、GRAPE時代の日本と現代の対比・Preferred Networks）、結語（2026 年 AI ブームと低精度計算チップ、若い世代へのメッセージ）。末尾に最終更新日付を表示 |
 | **FAQ** | [faq/pgpg-influence-and-history.md](../faq/pgpg-influence-and-history.md) — PGPG の影響、GPU・TPU との思想的共通点、GRAPE が GPU に負けた理由、日本が AI チップで遅れた背景、MN-Core 開発者（牧野淳一郎＝GRAPE 開発者）の系譜 |
 | **論文計画** | SPH、BEM（Boundary Element Method）のサポート、浮動小数点拡張、Xilinx FPGA 対応 |
 
