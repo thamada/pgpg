@@ -120,16 +120,19 @@ void force(double x[][3], double m[], double eps2, double a[][3], int n);
 
 ## システムアーキテクチャ
 
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                        PGPG コンパイルフロー                                  │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                             │
-│   PGDL ──┬──▶ pgpgct ──▶ pg_pipe.c (エミュレータ)                           │
-│          ├──▶ pgpgcm ──▶ pg_module.c (演算器エミュレータ)                    │
-│          └──▶ pgpgvt/vm ──▶ *.vhd (VHDL)                                    │
-│                                                                             │
-└─────────────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart LR
+    A[PGDL] --> B[pgpgct]
+    A --> C[pgpgcm]
+    A --> D[pgpgvt/vm]
+    B --> E[pg_pipe.c<br/>エミュレータAPI]
+    C --> F[pg_module.c<br/>演算器エミュレータ]
+    D --> G[*.vhd<br/>VHDL]
+    
+    style A fill:#e1f5ff
+    style E fill:#fff4e1
+    style F fill:#fff4e1
+    style G fill:#fff4e1
 ```
 
 ### ディレクトリ構成

@@ -59,26 +59,18 @@ PROGRAPE は FPGA チップと粒子メモリから構成される再構成可�
 PGPGは以下の3つの主要コンポーネントから構成される。
 
 ```mermaid
-flowchart TB
-    subgraph flow["PGPG コンパイルフロー"]
-        A["PGDL"]
+flowchart LR
+    A[PGDL] --> B[pgpgct]
+    A --> C[pgpgcm]
+    A --> D[pgpgvt/vm]
+    B --> E[pg_pipe.c<br/>エミュレータ]
+    C --> F[pg_module.c<br/>演算器エミュレータ]
+    D --> G[*.vhd<br/>VHDL]
 
-        A --> D
-        A --> E
-        A --> F
-
-        D["pgpgct<br/>Cエミュレータトランスパイラ"]
-        E["pgpgcm<br/>C演算器エミュレータトランスパイラ"]
-        F["pgpgv (pgpgvt/vm)<br/>VHDLトランスパイラ"]
-
-        D --> G
-        E --> H
-        F --> I
-
-        G["pg_pipe.c<br/>エミュレータトップレベル"]
-        H["pg_module.c<br/>C演算器エミュレータ群"]
-        I["pg_module.vhd, pg_pipe.vhd<br/>*.mif, *.vhd等 FPGA合成用ファイル群"]
-    end
+    style A fill:#e1f5ff
+    style E fill:#fff4e1
+    style F fill:#fff4e1
+    style G fill:#fff4e1
 ```
 
 ### 2.2 コンパイルパイプライン

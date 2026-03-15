@@ -4,6 +4,14 @@
 >   本ドキュメントは変更履歴です。日付はdateコマンドで確認して2026-01-23 12:34:55のように年-月-日 時:分:秒のようにします。
 >   最も最新のものから順に並べて記入します。
 
+## 2026-03-16 (update-doc)
+
+### README のコンパイルフロー図 Mermaid 化を doc に反映
+
+- **README.md**（変更元）: システムアーキテクチャの「PGPG コンパイルフロー」を ASCII 図から Mermaid の `flowchart LR` に変更済み
+- **doc/design.md**
+  - 2.1 節「全体構成」: PGPG コンパイルフロー図を README と同一の Mermaid に統一（`flowchart LR`、PGDL → pgpgct / pgpgcm / pgpgvt/vm → 各出力、同じスタイル指定）
+
 ## 2026-03-15 (update-doc)
 
 ### 変更点の doc 反映確認
