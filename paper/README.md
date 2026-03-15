@@ -29,23 +29,32 @@ SPH（Smoothed Particle Hydrodynamics）流体シミュレーションでも、�
 
 この「ホスト＋専用アクセラレータ」構成は、PGPG が生成する PROGRAPE システムと同一である。GRAPE はユーザーから見れば「ハードウェアサブルーチン」として扱える（Makino & Funato 1993）。
 
-#### GRAPE の系譜（Ebisuzaki et al. 1993, [Kawai et al. 1999](https://arxiv.org/abs/astro-ph/9909116) より）
+#### GRAPE の系譜（Ebisuzaki et al. 1993, [Okumura et al. (1993)](https://academic.oup.com/pasj/article/45/3/329/8052501), [Kawai et al. 1999](https://arxiv.org/abs/astro-ph/9909116) より）
 
 GRAPE は **低精度型**（奇数番号）と **高精度型**（偶数番号）に分かれる。
 
 | 型 | 用途 | マシン | 特徴 |
 |----|------|--------|------|
-| 低精度 | 無衝突系（銀河、銀河団） | GRAPE-1, 1A, 3, 3A, 5 | LNS: Logarithmic Number System (対数形式)、固定小数点、開発コスト低 |
+| 低精度 | 無衝突系（銀河、銀河団） | GRAPE-1, 1A, 3, 3A, 5 | LNS (Logarithmic Number System)、固定小数点、開発コスト低 |
 | 高精度 | 衝突系（球状星団、惑星系） | GRAPE-2, 2A, 4 | 浮動小数点、近接遭遇を正確に計算 |
 
 - **GRAPE-1**（1989）: ワイヤラップ、8 MHz、240 Mflops、約 5 ヶ月で開発、約 30 万円。**LNS**（8 bit）を採用し、乗除算を加算に変換。
 - **GRAPE-1A**（1990）: ツリー法・SPH 対応、近傍粒子リスト、VME バス。
-- **GRAPE-3**（Okumura et al. 1993）: 8 個の GRAPE チップ（各 1 パイプライン、20 MHz）、4.8 Gflops ピーク。LNS 12 bit。ペアワイズ力の相対誤差約 2%。VME バス。
+- **GRAPE-3**（[Okumura et al. (1993)](https://academic.oup.com/pasj/article/45/3/329/8052501)）: **2 枚の VME ボード**に **24 個ずつ、計 48 個の GRAPE チップ**を搭載。各チップは **10 MHz** で動作し、1 クロックごとに 1 つの重力相互作用を計算する。システム全体の **理論ピークは 15 Gflops 相当、持続性能は 10 Gflops 相当**。位置は **20 bit 固定小数点**、質量は **14 bit LNS**、力・ポテンシャルは **56 bit 固定小数点**で累積し、**近傍粒子リスト**もサポートする。
 - **GRAPE-2A**（1992）: 分子動力学・天体両用。補間テーブルで van der Waals、Coulomb、Ewald 法の実空間成分を計算可能。
 - **GRAPE-4**（計画）: 約 1,600 パイプライン、ピーク約 1 Tflops、1995 年完成予定、約 1 億円。
 - **GRAPE-5**（[Kawai et al. 1999](https://arxiv.org/abs/astro-ph/9909116)）: GRAPE-3 の後継。8 個の G5 チップ（各 2 パイプライン、90 MHz、1 クロックあたり 2 ペア相互作用）、**理論ピーク 109.44 Gflops**（32 パイプライン、1 相互作用あたり 38 演算）。仮想マルチパイプライン（実パイプライン 1 本あたり 6 仮想パイプライン、計 12 仮想パイプライン）でメモリ帯域を削減。PCI バス（VME の約 10 倍の通信速度）。純粋 1/r に加え**任意の cutoff 関数**（オンチップ RAM テーブル）で Ewald 法・P³M 法に対応。セルインデックス法で PP 力の計算コストを削減。ペアワイズ力の相対誤差約 0.3%（GRAPE-3 の**約 10 倍**の精度）、動的範囲は **10³ 倍**。LNS 17 bit（符号 1 bit、非ゼロ 1 bit、指数部 7 bit、仮数部 8 bit）。メモリ最大 131,072 粒子。128k 体直接和で 14 秒/タイムステップ、100 万体 Barnes-Hut（θ=0.75）で 16 秒/タイムステップ。[Kawai et al. (1999)](https://arxiv.org/abs/astro-ph/9905101) では、**1999 年 Gordon Bell 価格性能部門**のエントリーとして、宇宙論的 N 体シミュレーション（210 万粒子、半径 50 Mpc、z=24 から現在まで 999 タイムステップ）を COMPAQ AlphaServer DS10 をホストとして 8.37 時間で実行し、**持続性能 5.92 Gflops**、**価格性能 7.0 ドル/Mflops**（総コスト 40,900 ドル）を達成した。Barnes の修正ツリー法を採用し、最適なグループサイズ \(n_g \approx 2000\) でホストと GRAPE の負荷バランスを取っている。
 
 GRAPE システムは、汎用スーパーコンピュータと比べて **価格性能比で 100〜10,000 倍** 優れていた（Ebisuzaki et al. 1993）。
+
+#### GRAPE-3 の一次論文から見える要点
+
+[Okumura et al. (1993)](https://academic.oup.com/pasj/article/45/3/329/8052501) は、GRAPE-3 を「**ホストが通信と時間積分を担い、専用ハードウェアが O(N²) の重力計算だけを処理する**」システムとして記述している。これは、後の PROGRAPE/PGPG が継承する基本分業そのものである。
+
+- **ボード構成**: 2 枚の同一ボードで 48 粒子分の力を並列計算し、各ボードは最大 **32,768 粒子**を保持できる。
+- **通信隠蔽**: 論文は 2 種類の並列アルゴリズムを比較し、ボードごとに計算開始を早める方式で通信待ちを隠し、**大規模問題で約 10%**高速化できることを示している。
+- **近傍粒子検出**: `NB` フラグと neighbor list unit により \((i,j)\) の近傍ペアを FIFO に記録でき、局所密度評価や **SPH の近傍探索**に利用できる。
+- **十分な精度**: ペアワイズ力の相対誤差は距離が十分大きいとき約 **2%** だが、無衝突系で重要な総力誤差は \(N=10^5\)〜\(10^6\) で **\(10^{-3}\) 程度**に抑えられ、有限粒子数誤差より小さい。
 
 #### GRAPE-4 の実績と GRAPE-6
 
@@ -57,7 +66,7 @@ GRAPE システムは、汎用スーパーコンピュータと比べて **価�
 
 ### 1.3 PROGRAPE-1：Programmable GRAPE の初実装（1998/1999）
 
-GRAPE の課題は、**1/r ポテンシャル以外の相互作用を扱えない**ことだった。GRAPE-2A は補間テーブルで分子動力学にも対応したが（Ito et al. 1993）、重力と SPH の両方を同一ハードウェアで扱う設計は困難だった。GRAPE-3 は Plummer ソフトニングのみ対応していたが、[GRAPE-5](https://arxiv.org/abs/astro-ph/9909116) では **任意の cutoff 関数**をオンチップ RAM テーブルで実装し、Ewald 法・P³M 法に対応した（Kawai et al. 1999）。従来の GRAPE では、SPH の近傍粒子探索は GRAPE 上で行えたが、**実際の SPH 相互作用の計算はホスト計算機**で行われており、これがボトルネックとなっていた（Yokono et al. 1999）。
+GRAPE の課題は、**1/r ポテンシャル以外の相互作用を扱えない**ことだった。GRAPE-2A は補間テーブルで分子動力学にも対応したが（Ito et al. 1993）、重力と SPH の両方を同一ハードウェアで扱う設計は困難だった。GRAPE-3 は **Plummer ソフトニング付き重力・ポテンシャル計算**と、`r_{ij} < h_i` を検出する **neighbor list unit** まではハードウェア化していたが（[Okumura et al. (1993)](https://academic.oup.com/pasj/article/45/3/329/8052501)）、相互作用関数自体をユーザーが差し替えることはできなかった。[GRAPE-5](https://arxiv.org/abs/astro-ph/9909116) では **任意の cutoff 関数**をオンチップ RAM テーブルで実装し、Ewald 法・P³M 法に対応した（Kawai et al. 1999）。従来の GRAPE では、SPH の**近傍探索**は GRAPE 上で加速できた一方、**実際の SPH 相互作用の計算はホスト計算機**で行われており、これがボトルネックとなっていた（Yokono et al. 1999）。
 
 **PROGRAPE-1**（PROgrammable GRAPE-1）は、[日本天文学会 1998 年春季年会](https://www.asj.or.jp/nenkai/archive/1998a/pdf/X02a.pdf)で初めて発表され（Hamada et al. 1998）、[**Hamada et al. (1999/2000)**](https://arxiv.org/abs/astro-ph/9906419) で詳細論文として公表された。PROGRAPE-1 は、従来のハードワイヤードな GRAPE と異なり、**FPGA**（Field-Programmable Gate Array）を処理要素として用いる。FPGA の論理は再構成可能であるため、**重力に加えて van der Waals 力、SPH の流体力学相互作用など、様々な相互作用**を同一ハードウェアで計算できる。
 
@@ -115,6 +124,7 @@ Cold Collapse テスト（N=50 万）では、SPH を PROGRAPE、重力をツリ
 |------|------|
 | Sugimoto et al. (1990) | GRAPE プロジェクト開始（Nature） |
 | [Ebisuzaki et al. (1993)](https://articles.adsabs.harvard.edu/cgi-bin/nph-iarticle_query?1993PASJ...45..269E&defaultprint=YES&filetype=.pdf) | GRAPE プロジェクト概要（GRAPE-1〜4、アーキテクチャ、低/高精度型） |
+| [**Okumura et al. (1993)**](https://academic.oup.com/pasj/article/45/3/329/8052501) | **GRAPE-3 の一次論文**。2 ボード 48 チップ、理論ピーク 15 Gflops、持続 10 Gflops、近傍粒子リスト、数値精度解析 |
 | Ito et al. (1993), Fukushige et al. (1996) | 分子動力学用 GRAPE（GRAPE-2A 系） |
 | Brieu et al. (1995) | GRAPE-3 上で P³M 法を実装（Plummer のみのため 3 回呼び出しで 1 つの PP 力を近似） |
 | [Fukushige & Makino (1996)](https://arxiv.org/abs/astro-ph/9612090) | GRAPE-4 による銀河形成 N 体シミュレーション（78 万粒子、332 Gflops、1996 年ゴードン・ベル賞） |
@@ -184,9 +194,9 @@ PGDL プログラムは次の 4 セクションで構成される。
 
 ### 3.4 数値表現と GRAPE との継承
 
-PGPG 1.0 は **固定小数点**（fix/ufix）と **LNS（Logarithmic Number System）**（log）をサポートする。LNS では乗除算が加減算になるため、ハードウェアの複雑さと遅延を削減できる。この設計思想は **GRAPE-1** 以来の伝統であり（Ebisuzaki et al. 1993）、GRAPE-3 では 12 bit、[PROGRAPE-1](https://arxiv.org/abs/astro-ph/9906419) では 14 bit（7 bit 指数・5 bit 仮数）の LNS、[GRAPE-5](https://arxiv.org/abs/astro-ph/9909116) では **17 bit**（符号 1 bit、非ゼロ 1 bit、指数部 7 bit、仮数部 8 bit）が用いられた（Kawai et al. 1999）。G5 チップは位置ベクトルに 32 bit 固定小数点、力の累積に 64 bit 固定小数点を採用している。PGPG は GRAPE-5 と同様の設計を採用している。
+PGPG 1.0 は **固定小数点**（fix/ufix）と **LNS（Logarithmic Number System）**（log）をサポートする。LNS では乗除算が加減算になるため、ハードウェアの複雑さと遅延を削減できる。この設計思想は **GRAPE-1** 以来の伝統であり（Ebisuzaki et al. 1993）、GRAPE-3 では **位置 20 bit 固定小数点、質量 14 bit LNS、ソフトニング半径・近傍半径 13 bit 符号なし LNS、力とポテンシャルの累積 56 bit 固定小数点**が用いられた（[Okumura et al. (1993)](https://academic.oup.com/pasj/article/45/3/329/8052501)）。[PROGRAPE-1](https://arxiv.org/abs/astro-ph/9906419) では 14 bit log（7 bit 指数・5 bit 仮数）、[GRAPE-5](https://arxiv.org/abs/astro-ph/9909116) では **17 bit**（符号 1 bit、非ゼロ 1 bit、指数部 7 bit、仮数部 8 bit）が用いられた（Kawai et al. 1999）。G5 チップは位置ベクトルに 32 bit 固定小数点、力の累積に 64 bit 固定小数点を採用している。PGPG は GRAPE-5 と同様の設計を採用している。
 
-PGPG 論文（Table 2, 3, 4）における PGPG 生成ハードウェアモデルの数値表現は次のとおりである。G3 は GRAPE-3 相当モデル（実機 GRAPE-3 は 12 bit LNS、PGPG G3 および PROGRAPE-1 は 14 bit で同等の用途を実現）、G5 は GRAPE-5 相当、G5+ は高精度モデルである。
+PGPG 論文（Table 2, 3, 4）における PGPG 生成ハードウェアモデルの数値表現は次のとおりである。G3 は **GRAPE-3 相当モデル**（実機 GRAPE-3 の混合固定小数点／LNS の設計思想を、PGPG 側では 14 bit log 中心の表現として整理したもの）、G5 は GRAPE-5 相当、G5+ は高精度モデルである。
 
 | モデル | 位置 | 内部（LNS） | アキュム | 備考 |
 |--------|------|------------------|----------|------|
@@ -426,6 +436,7 @@ NVIDIA の CUDA への依存を弱めるため、**Intel、Google、Arm、Qualco
 - Barnes, J., & Hut, P. (1986). Barnes-Hut ツリー法
 - Sugimoto, D., et al. (1990). GRAPE プロジェクト開始
 - [Ebisuzaki, T., Makino, J., Fukushige, T., Taiji, M., Sugimoto, D., Ito, T., & Okumura, S. K. (1993). GRAPE Project: An Overview. *PASJ*, 45, 269–278](https://articles.adsabs.harvard.edu/cgi-bin/nph-iarticle_query?1993PASJ...45..269E&defaultprint=YES&filetype=.pdf)
+- [**Okumura, S. K., Makino, J., Ebisuzaki, T., Fukushige, T., Ito, T., Sugimoto, D., Hashimoto, E., Tomida, K., & Miyakawa, N. (1993). Highly Parallelized Special-Purpose Computer, GRAPE-3. *PASJ*, 45(3), 329–338**](https://academic.oup.com/pasj/article/45/3/329/8052501) — **GRAPE-3 の一次論文。2 ボード 48 チップ、理論ピーク 15 Gflops、近傍粒子リスト、誤差解析**
 - [**Kawai, A., Fukushige, T., Makino, J., & Taiji, M. (1999). GRAPE-5: A Special-Purpose Computer for N-body Simulation. arXiv:astro-ph/9909116**](https://arxiv.org/abs/astro-ph/9909116) — GRAPE-3 の後継。G5 チップ、理論ピーク 109.44 Gflops、PCI バス、任意 cutoff で Ewald/P³M 対応
 - [**Kawai, A., Fukushige, T., & Makino, J. (1999). $7.0/Mflops Astrophysical N-Body Simulation with Treecode on GRAPE-5. arXiv:astro-ph/9905101**](https://arxiv.org/abs/astro-ph/9905101) — 1999 年 Gordon Bell 価格性能部門エントリー。210 万粒子宇宙論 N 体、持続 5.92 Gflops、7.0 ドル/Mflops、Barnes 修正ツリー法
 - [Fukushige, T., & Makino, J. (1996). N-body Simulation of Galaxy Formation on GRAPE-4 Special-Purpose Computer. arXiv:astro-ph/9612090](https://arxiv.org/abs/astro-ph/9612090)
@@ -455,4 +466,4 @@ NVIDIA の CUDA への依存を弱めるため、**Intel、Google、Arm、Qualco
 
 2026年現在、AIブームに伴う低精度計算AI専用チップの開発競争が全世界で活況を呈している。この状況を1990年代の低精度天文計算専用チップ（GRAPE 等）の開発と照らし合わせると、当時の日本は同分野において世界を牽引する先進的な技術力を有していたことが窺われる。他方、現在の低精度計算AIチップ開発競争において日本が十分な存在感を示し得ていない現状は、技術の継承、産業構造の変容、および国際競争環境の変貌といった観点から、今後の考察が待たれるところである。本稿が扱うPGPGやGRAPEの系譜は、日本が低精度計算専用ハードウェアの分野で築いた知の遺産であり、次代を担う若い研究者・技術者たちにとって、単なる過去の記録ではなく新たな挑戦の足がかりとなり得る。先人たちが「不可能」を「可能」に変えてきたように、今度は若い世代の手で次の時代を切り拓く創造が始まることを、心より期待する。
 
-最終更新: 2025年3月14日
+最終更新: 2026年3月15日
